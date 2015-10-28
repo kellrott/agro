@@ -1,33 +1,19 @@
 package agro_engine
 
-//import "fmt"
-
-type TaskState int
-
-const (
-	WAITING  TaskState = iota
-	READY
-	RUNNING
-	ERROR
-	DONE
+import (
+	"agro/proto/agro.go"
 )
 
 type WorkflowInputs map[string] interface {}
 
-type Task struct {
-	Id        string
-	Label     string
-	DependsOn map[string]*Task
-}
-
 type TaskInstance struct {
 	State TaskState
-	Task  *Task
+	agro_pb.Task  *Task
 }
 
 type Workflow struct {
 	Id       string
-    Tasks    map[string]*Task
+  Tasks    map[string]*Task
 	Engine   *Engine
 }
 
@@ -62,6 +48,9 @@ func NewEngine() *Engine {
 	}
 }
 
+func NewInputs() WorkflowInputs {
+	return make(map[string]interface{})
+}
 /*
 func (w *Workflow) AddTask(task *Task) error {
 	return nil

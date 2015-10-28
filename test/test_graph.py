@@ -14,9 +14,9 @@ class TestGraphOps(unittest.TestCase):
 	task_2 = workflow.NewTask("task-2")
 	task_2.AddDepends(task_1)
 
-	workflow.NewInstance("instance-1",
-		{}
-	)
+	inputs  = pyagro.WorkflowInputs()
+	inputs.Add("test", "value")
+	workflow.NewInstance("instance-1", inputs)
 
 	for n in engine.Scan():
 		print("Ready", n.Task.Id)
@@ -26,6 +26,6 @@ class TestGraphOps(unittest.TestCase):
 		print("Ready", n.Task.Id)
 		n.SetDone()
 
-	for n := range engine.Scan() {
+	for n in engine.Scan():
 		print("Ready", n.Task.Id)
 		n.SetDone()

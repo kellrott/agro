@@ -1,0 +1,62 @@
+
+syntax = "proto2";
+
+package agro_pb;
+
+
+message IDQuery {
+    required string ID = 1;
+}
+
+enum State {
+  ERROR = 0;
+  WAITING = 1;
+  QUEUED = 2;
+  PAUSED = 3;
+  RUNNING = 4;
+  OK = 5;
+}
+
+message JobStatus {
+  required string ID = 1;  
+  required State State = 2;
+}
+
+message TaskStatus {
+  required string ID = 1;  
+  required State State = 2;
+  optional string CompletedJob = 6;
+  repeated JobStatus Runs = 7;  
+}
+
+message Task {
+  required string ID = 1;
+  repeated string TaskDepends = 2;
+  repeated string DataDepends = 3;
+  optional string CommandLine = 4;
+  optional string Container = 5;
+  optional TaskStatus Status = 6;
+}
+
+message Job {
+  required string ID = 1;
+  required Task Info = 2;
+  required State State = 3;
+}
+
+message Workflow {
+  required string ID = 1;
+  repeated Task tasks = 2;
+}
+
+message WorkflowStatus {
+  required string ID = 1;
+  repeated Task Tasks = 2;
+}
+
+service Tasks {
+  rpc AddTask(Task) returns (TaskStatus) {}
+  rpc AddWorkflow(Workflow) returns (WorkflowStatus) {}
+  rpc GetTaskStatus(IDQuery) returns (TaskStatus) {}
+  rpc GetJobStatus(IDQuery) returns (JobStatus) {}
+}

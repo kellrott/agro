@@ -12,6 +12,9 @@ def go_prep():
     cmd="go build github.com/go-python/gopy"
     subprocess.check_call(cmd, shell=True, env=env)
 
+    cmd="./gopy bind pywrapper"
+    subprocess.check_call(cmd, shell=True, env=env)
+
 
 if __name__ == "__main__":
     go_prep()
