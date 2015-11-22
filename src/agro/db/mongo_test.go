@@ -15,7 +15,7 @@ func dump(msg string, a interface{}) {
   fmt.Printf("%s\t%s\n", msg, a_text)
 }
 
-func doProtoConvert(a proto.Message) {
+func doProtoConvert_task(a proto.Message) {
   b := ProtoToMongo(a, true)
   b_str, _ := json.Marshal(b)
   c := make(map[string]interface{})
@@ -37,24 +37,48 @@ func TestProtoConvert_1(t *testing.T) {
   container := "ubuntu"
   a := &agro_pb.Task{
     ID : &id,
-    DataDepends : []string{ "1234", "6789"},
-    CommandLine : &cmd,
+    Command : &cmd,
     Container: &container,
-    Status: &agro_pb.TaskStatus {
-      ID: &id,
-      State: &state,
-      Runs:[]*agro_pb.JobStatus{ &agro_pb.JobStatus{ ID:&id } },
-    },
+    State: &state,
+    Args : []*agro_pb.CmdArgument{&agro_pb.CmdArgument{Value:&agro_pb.CmdArgument_Arg{"hello"}}},
   }
-  doProtoConvert(a)
+  doProtoConvert_task(a)
 }
 
 
 func TestProtoConvert_2(t *testing.T) {
   a := &agro_pb.Task{
     ID:proto.String("test"),
-    CommandLine:proto.String("/bin/echo Testing"),
+    Command:proto.String("/bin/echo Testing"),
     Container:proto.String("ubuntu"),
   }
-  doProtoConvert(a)
+  doProtoConvert_task(a)
+}
+
+func TestProtoConvert_3(t *testing.T) {
+  a := map[string]interface{}{
+    "_id" : "test",
+    "State" : 5,
+  }
+  d := agro_pb.Job{}
+  MongoToProto(a, &d, true)
+  dump("Json", a)
+  dump("Copy", d)
+}
+
+
+
+func TestProtoConvert_4(t *testing.T) {
+  a := map[string]interface{}{
+    "_id" : "test",
+    "State" : 5,
+    "Info" : map[string]interface{}{
+      "ID" : "test_task",
+      "State" : 0,
+    },
+  }
+  d := agro_pb.Job{}
+  MongoToProto(a, &d, true)
+  dump("Json", a)
+  dump("Copy", d)
 }

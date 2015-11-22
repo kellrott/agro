@@ -10,6 +10,7 @@ import (
   "log"
   "fmt"
   "agro/proto"
+  "agro/engine"
 	"github.com/golang/protobuf/proto"
 	mesos "github.com/mesos/mesos-go/mesosproto"
 	sched "github.com/mesos/mesos-go/scheduler"
@@ -25,17 +26,16 @@ func Inet_itoa(a uint32) string {
 }
 
 type MesosManager struct {
-  readyJobs map[string]*agro_pb.Job
-  runningJobs map[string]*agro_pb.Job
   computeCount int
+  engine *agro_engine.WorkEngine
   executor *mesos.ExecutorInfo
+  master string
 }
 
-func NewMesosManager() (*MesosManager, error) {
+func NewMesosManager(master string) (*MesosManager, error) {
 	return &MesosManager{
-      readyJobs:make(map[string]*agro_pb.Job),
-      runningJobs:make(map[string]*agro_pb.Job),
       computeCount:0,
+      master:master,
   }, nil
 }
 
@@ -43,50 +43,61 @@ func NewMesosManager() (*MesosManager, error) {
 /*
 Code for the Agro JobManager interface
 */
-func (self *MesosManager) GetReadyJobCount() int {
-  return len(self.readyJobs)
-}
-
-func (self *MesosManager) GetRunningJobCount() int {
-  return len(self.runningJobs)
-}
 
 func (self *MesosManager) GetComputeCount() int {
   return self.computeCount
 }
 
-func (self *MesosManager) AddJob(job agro_pb.Job) {
-  self.readyJobs[*job.Info.ID] = &job
-}
-
-func (self *MesosManager) GetJobState(jobID string) *agro_pb.State {
-  if _, ok := self.readyJobs[jobID]; ok {
-    out :=  agro_pb.State_QUEUED
-    return &out
+func (self *MesosManager) Start(engine *agro_engine.WorkEngine) {
+  self.engine = engine
+  self.executor = self.BuildExecutorInfo()
+  
+	//frameworkIdStr := FRAMEWORK_ID
+  failoverTimeout := 0.0
+	//frameworkId := &mesos.FrameworkID{Value: &frameworkIdStr}
+	config := sched.DriverConfig{
+		Master: self.master,
+		Framework: &mesos.FrameworkInfo{
+			Name:            proto.String("AgroFramework"),
+			User:            proto.String(""),
+			FailoverTimeout: &failoverTimeout,
+			//Id:              frameworkId,
+		},
+		Scheduler: self,		
+	}
+	
+	driver, err := sched.NewMesosSchedulerDriver(config)
+  if err != nil {
+    log.Printf("Driver Error: %s", err)
+    panic(err)
   }
-  return nil
+	//driver.Init()
+	//defer driver.Destroy()
+	//go self.EventLoop()
+
+	status, err := driver.Start()
+  log.Printf("Driver Status:%s", status)
+  if err != nil {
+    log.Printf("Mesos Start Error: %s", err)
+    panic(err)
+  }
+	//<-self.exit
+	//log.Printf("Mesos Exit")
+	//driver.Stop(false)
 }
 
-func (self *MesosManager) GetReadyJob() *agro_pb.Job {  
-  for id, job := range self.readyJobs {
-    delete(self.readyJobs, id)
-    self.runningJobs[id] = job
-    return job
-  }  
-  return nil
-}
 
 /*
-
+Mesos Scheduler interface
 */
 
 func (self *MesosManager) BuildTaskInfo(job *agro_pb.Job, offer *mesos.Offer) *mesos.TaskInfo {
-  task_data, _ := json.Marshal( map[string]string{ "command_line" : *job.Info.CommandLine } )
+  task_data, _ := json.Marshal( map[string]string{ "command_line" : *job.CommandLine } )
   
   return &mesos.TaskInfo{
-    Name: job.Info.ID,
+    Name: job.TaskID,
     TaskId:  &mesos.TaskID{
-				Value: job.Info.ID,
+				Value: job.ID,
 		},
     SlaveId: offer.SlaveId,
     Executor: self.executor,
@@ -134,7 +145,7 @@ func (self *MesosManager) ResourceOffers(driver sched.SchedulerDriver, offers []
     tasks := make([]*mesos.TaskInfo, 0, computeCount)
     
     for offer_cpus_taken := 0; offer_cpus_taken < offer_cpus; {
-        job := self.GetReadyJob()
+        job := self.engine.GetJobToRun()
         if job != nil {
           log.Printf("Launch job: %s", job)
           mesos_taskinfo := self.BuildTaskInfo(job, offer)
@@ -155,11 +166,22 @@ func (self *MesosManager) ResourceOffers(driver sched.SchedulerDriver, offers []
     }
   }
   self.computeCount = computeCount
-  log.Printf("JobsReady:%d JobsRunning:%d CPUsOffered: %d", self.GetReadyJobCount(), self.GetRunningJobCount(), self.computeCount)
+  log.Printf("JobsReady:%d JobsRunning:%d CPUsOffered: %d", 
+    self.engine.GetReadyJobCount(), self.engine.GetRunningJobCount(), 
+    self.computeCount)
 }
 
 func (self *MesosManager) StatusUpdate(driver sched.SchedulerDriver, status *mesos.TaskStatus) {
-  log.Printf("StatusUpdate")
+  switch (*status.State) {
+  case mesos.TaskState_TASK_RUNNING:
+    self.engine.UpdateJobState(status.TaskId.GetValue(), agro_pb.State_RUNNING)
+  case mesos.TaskState_TASK_FINISHED:
+    //self.engine.UpdateJobState(status.TaskId.GetValue(), agro_pb.State_OK)
+    self.engine.FinishJob(status.TaskId.GetValue())
+  case mesos.TaskState_TASK_FAILED:
+    self.engine.UpdateJobState(status.TaskId.GetValue(), agro_pb.State_ERROR)    
+  }
+  log.Printf("StatusUpdate: %s", status)
 }
 
 func (self *MesosManager) Error(driver sched.SchedulerDriver, err string) {
@@ -197,40 +219,3 @@ func (self *MesosManager) Reregistered(driver sched.SchedulerDriver, mi *mesos.M
 	log.Printf("OnReregisterd master:%v:%v", Inet_itoa(mi.GetIp()), mi.GetPort())	
 }
 
-func (self *MesosManager) Run(master string) {
-  
-  self.executor = self.BuildExecutorInfo()
-  
-	//frameworkIdStr := FRAMEWORK_ID
-  failoverTimeout := 0.0
-	//frameworkId := &mesos.FrameworkID{Value: &frameworkIdStr}
-	config := sched.DriverConfig{
-		Master: master,
-		Framework: &mesos.FrameworkInfo{
-			Name:            proto.String("AgroFramework"),
-			User:            proto.String(""),
-			FailoverTimeout: &failoverTimeout,
-			//Id:              frameworkId,
-		},
-		Scheduler: self,		
-	}
-	
-	driver, err := sched.NewMesosSchedulerDriver(config)
-  if err != nil {
-    log.Printf("Driver Error: %s", err)
-    panic(err)
-  }
-	//driver.Init()
-	//defer driver.Destroy()
-	//go self.EventLoop()
-
-	status, err := driver.Start()
-  log.Printf("Driver Status:%s", status)
-  if err != nil {
-    log.Printf("Mesos Start Error: %s", err)
-    panic(err)
-  }
-	//<-self.exit
-	//log.Printf("Mesos Exit")
-	//driver.Stop(false)
-}

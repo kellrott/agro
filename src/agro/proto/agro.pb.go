@@ -12,10 +12,16 @@ It has these top-level messages:
 	IDQuery
 	JobStatus
 	TaskStatus
+	CmdArgument
 	Task
 	Job
-	Workflow
-	WorkflowStatus
+	TagArray
+	TaskInfo
+	DataBlock
+	FileInfo
+	FileID
+	FileState
+	ReadRequest
 */
 package agro_pb
 
@@ -77,21 +83,23 @@ func (x *State) UnmarshalJSON(data []byte) error {
 	*x = State(value)
 	return nil
 }
+func (State) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 type IDQuery struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	IDs              []string `protobuf:"bytes,1,rep,name=IDs" json:"IDs,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *IDQuery) Reset()         { *m = IDQuery{} }
-func (m *IDQuery) String() string { return proto.CompactTextString(m) }
-func (*IDQuery) ProtoMessage()    {}
+func (m *IDQuery) Reset()                    { *m = IDQuery{} }
+func (m *IDQuery) String() string            { return proto.CompactTextString(m) }
+func (*IDQuery) ProtoMessage()               {}
+func (*IDQuery) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
-func (m *IDQuery) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *IDQuery) GetIDs() []string {
+	if m != nil {
+		return m.IDs
 	}
-	return ""
+	return nil
 }
 
 type JobStatus struct {
@@ -100,9 +108,10 @@ type JobStatus struct {
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *JobStatus) Reset()         { *m = JobStatus{} }
-func (m *JobStatus) String() string { return proto.CompactTextString(m) }
-func (*JobStatus) ProtoMessage()    {}
+func (m *JobStatus) Reset()                    { *m = JobStatus{} }
+func (m *JobStatus) String() string            { return proto.CompactTextString(m) }
+func (*JobStatus) ProtoMessage()               {}
+func (*JobStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 func (m *JobStatus) GetID() string {
 	if m != nil && m.ID != nil {
@@ -119,16 +128,17 @@ func (m *JobStatus) GetState() State {
 }
 
 type TaskStatus struct {
-	ID               *string      `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	State            *State       `protobuf:"varint,2,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
-	CompletedJob     *string      `protobuf:"bytes,6,opt,name=CompletedJob" json:"CompletedJob,omitempty"`
-	Runs             []*JobStatus `protobuf:"bytes,7,rep,name=Runs" json:"Runs,omitempty"`
-	XXX_unrecognized []byte       `json:"-"`
+	ID               *string  `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
+	State            *State   `protobuf:"varint,2,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
+	CompletedJob     *string  `protobuf:"bytes,3,opt,name=CompletedJob" json:"CompletedJob,omitempty"`
+	Runs             []string `protobuf:"bytes,4,rep,name=Runs" json:"Runs,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *TaskStatus) Reset()         { *m = TaskStatus{} }
-func (m *TaskStatus) String() string { return proto.CompactTextString(m) }
-func (*TaskStatus) ProtoMessage()    {}
+func (m *TaskStatus) Reset()                    { *m = TaskStatus{} }
+func (m *TaskStatus) String() string            { return proto.CompactTextString(m) }
+func (*TaskStatus) ProtoMessage()               {}
+func (*TaskStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 func (m *TaskStatus) GetID() string {
 	if m != nil && m.ID != nil {
@@ -151,26 +161,126 @@ func (m *TaskStatus) GetCompletedJob() string {
 	return ""
 }
 
-func (m *TaskStatus) GetRuns() []*JobStatus {
+func (m *TaskStatus) GetRuns() []string {
 	if m != nil {
 		return m.Runs
 	}
 	return nil
 }
 
-type Task struct {
-	ID               *string     `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	TaskDepends      []string    `protobuf:"bytes,2,rep,name=TaskDepends" json:"TaskDepends,omitempty"`
-	DataDepends      []string    `protobuf:"bytes,3,rep,name=DataDepends" json:"DataDepends,omitempty"`
-	CommandLine      *string     `protobuf:"bytes,4,opt,name=CommandLine" json:"CommandLine,omitempty"`
-	Container        *string     `protobuf:"bytes,5,opt,name=Container" json:"Container,omitempty"`
-	Status           *TaskStatus `protobuf:"bytes,6,opt,name=Status" json:"Status,omitempty"`
-	XXX_unrecognized []byte      `json:"-"`
+type CmdArgument struct {
+	// Types that are valid to be assigned to Value:
+	//	*CmdArgument_Arg
+	//	*CmdArgument_File
+	Value            isCmdArgument_Value `protobuf_oneof:"Value"`
+	XXX_unrecognized []byte              `json:"-"`
 }
 
-func (m *Task) Reset()         { *m = Task{} }
-func (m *Task) String() string { return proto.CompactTextString(m) }
-func (*Task) ProtoMessage()    {}
+func (m *CmdArgument) Reset()                    { *m = CmdArgument{} }
+func (m *CmdArgument) String() string            { return proto.CompactTextString(m) }
+func (*CmdArgument) ProtoMessage()               {}
+func (*CmdArgument) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+
+type isCmdArgument_Value interface {
+	isCmdArgument_Value()
+}
+
+type CmdArgument_Arg struct {
+	Arg string `protobuf:"bytes,1,opt,name=Arg,oneof"`
+}
+type CmdArgument_File struct {
+	File *FileID `protobuf:"bytes,2,opt,name=File,oneof"`
+}
+
+func (*CmdArgument_Arg) isCmdArgument_Value()  {}
+func (*CmdArgument_File) isCmdArgument_Value() {}
+
+func (m *CmdArgument) GetValue() isCmdArgument_Value {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
+func (m *CmdArgument) GetArg() string {
+	if x, ok := m.GetValue().(*CmdArgument_Arg); ok {
+		return x.Arg
+	}
+	return ""
+}
+
+func (m *CmdArgument) GetFile() *FileID {
+	if x, ok := m.GetValue().(*CmdArgument_File); ok {
+		return x.File
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*CmdArgument) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), []interface{}) {
+	return _CmdArgument_OneofMarshaler, _CmdArgument_OneofUnmarshaler, []interface{}{
+		(*CmdArgument_Arg)(nil),
+		(*CmdArgument_File)(nil),
+	}
+}
+
+func _CmdArgument_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*CmdArgument)
+	// Value
+	switch x := m.Value.(type) {
+	case *CmdArgument_Arg:
+		b.EncodeVarint(1<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.Arg)
+	case *CmdArgument_File:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.File); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CmdArgument.Value has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _CmdArgument_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*CmdArgument)
+	switch tag {
+	case 1: // Value.Arg
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Value = &CmdArgument_Arg{x}
+		return true, err
+	case 2: // Value.File
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(FileID)
+		err := b.DecodeMessage(msg)
+		m.Value = &CmdArgument_File{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+type Task struct {
+	ID               *string        `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
+	TaskDepends      []string       `protobuf:"bytes,2,rep,name=TaskDepends" json:"TaskDepends,omitempty"`
+	Command          *string        `protobuf:"bytes,3,req,name=Command" json:"Command,omitempty"`
+	Args             []*CmdArgument `protobuf:"bytes,4,rep,name=Args" json:"Args,omitempty"`
+	Container        *string        `protobuf:"bytes,5,opt,name=Container" json:"Container,omitempty"`
+	Tags             []string       `protobuf:"bytes,6,rep,name=Tags" json:"Tags,omitempty"`
+	State            *State         `protobuf:"varint,7,opt,name=State,enum=agro_pb.State" json:"State,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *Task) Reset()                    { *m = Task{} }
+func (m *Task) String() string            { return proto.CompactTextString(m) }
+func (*Task) ProtoMessage()               {}
+func (*Task) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *Task) GetID() string {
 	if m != nil && m.ID != nil {
@@ -186,18 +296,18 @@ func (m *Task) GetTaskDepends() []string {
 	return nil
 }
 
-func (m *Task) GetDataDepends() []string {
-	if m != nil {
-		return m.DataDepends
-	}
-	return nil
-}
-
-func (m *Task) GetCommandLine() string {
-	if m != nil && m.CommandLine != nil {
-		return *m.CommandLine
+func (m *Task) GetCommand() string {
+	if m != nil && m.Command != nil {
+		return *m.Command
 	}
 	return ""
+}
+
+func (m *Task) GetArgs() []*CmdArgument {
+	if m != nil {
+		return m.Args
+	}
+	return nil
 }
 
 func (m *Task) GetContainer() string {
@@ -207,23 +317,36 @@ func (m *Task) GetContainer() string {
 	return ""
 }
 
-func (m *Task) GetStatus() *TaskStatus {
+func (m *Task) GetTags() []string {
 	if m != nil {
-		return m.Status
+		return m.Tags
 	}
 	return nil
 }
 
-type Job struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	Info             *Task   `protobuf:"bytes,2,req,name=Info" json:"Info,omitempty"`
-	State            *State  `protobuf:"varint,3,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+func (m *Task) GetState() State {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return State_ERROR
 }
 
-func (m *Job) Reset()         { *m = Job{} }
-func (m *Job) String() string { return proto.CompactTextString(m) }
-func (*Job) ProtoMessage()    {}
+type Job struct {
+	ID               *string        `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
+	TaskID           *string        `protobuf:"bytes,2,req,name=TaskID" json:"TaskID,omitempty"`
+	Command          *string        `protobuf:"bytes,3,req,name=Command" json:"Command,omitempty"`
+	Args             []*CmdArgument `protobuf:"bytes,4,rep,name=Args" json:"Args,omitempty"`
+	Container        *string        `protobuf:"bytes,5,opt,name=Container" json:"Container,omitempty"`
+	State            *State         `protobuf:"varint,6,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
+	Stdout           *string        `protobuf:"bytes,7,req,name=Stdout" json:"Stdout,omitempty"`
+	Stderr           *string        `protobuf:"bytes,8,req,name=Stderr" json:"Stderr,omitempty"`
+	XXX_unrecognized []byte         `json:"-"`
+}
+
+func (m *Job) Reset()                    { *m = Job{} }
+func (m *Job) String() string            { return proto.CompactTextString(m) }
+func (*Job) ProtoMessage()               {}
+func (*Job) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
 func (m *Job) GetID() string {
 	if m != nil && m.ID != nil {
@@ -232,11 +355,32 @@ func (m *Job) GetID() string {
 	return ""
 }
 
-func (m *Job) GetInfo() *Task {
+func (m *Job) GetTaskID() string {
+	if m != nil && m.TaskID != nil {
+		return *m.TaskID
+	}
+	return ""
+}
+
+func (m *Job) GetCommand() string {
+	if m != nil && m.Command != nil {
+		return *m.Command
+	}
+	return ""
+}
+
+func (m *Job) GetArgs() []*CmdArgument {
 	if m != nil {
-		return m.Info
+		return m.Args
 	}
 	return nil
+}
+
+func (m *Job) GetContainer() string {
+	if m != nil && m.Container != nil {
+		return *m.Container
+	}
+	return ""
 }
 
 func (m *Job) GetState() State {
@@ -246,55 +390,209 @@ func (m *Job) GetState() State {
 	return State_ERROR
 }
 
-type Workflow struct {
+func (m *Job) GetStdout() string {
+	if m != nil && m.Stdout != nil {
+		return *m.Stdout
+	}
+	return ""
+}
+
+func (m *Job) GetStderr() string {
+	if m != nil && m.Stderr != nil {
+		return *m.Stderr
+	}
+	return ""
+}
+
+type TagArray struct {
+	Tags             []string `protobuf:"bytes,1,rep,name=Tags" json:"Tags,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *TagArray) Reset()                    { *m = TagArray{} }
+func (m *TagArray) String() string            { return proto.CompactTextString(m) }
+func (*TagArray) ProtoMessage()               {}
+func (*TagArray) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
+
+func (m *TagArray) GetTags() []string {
+	if m != nil {
+		return m.Tags
+	}
+	return nil
+}
+
+type TaskInfo struct {
 	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	Tasks            []*Task `protobuf:"bytes,2,rep,name=tasks" json:"tasks,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *Workflow) Reset()         { *m = Workflow{} }
-func (m *Workflow) String() string { return proto.CompactTextString(m) }
-func (*Workflow) ProtoMessage()    {}
+func (m *TaskInfo) Reset()                    { *m = TaskInfo{} }
+func (m *TaskInfo) String() string            { return proto.CompactTextString(m) }
+func (*TaskInfo) ProtoMessage()               {}
+func (*TaskInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
 
-func (m *Workflow) GetID() string {
+func (m *TaskInfo) GetID() string {
 	if m != nil && m.ID != nil {
 		return *m.ID
 	}
 	return ""
 }
 
-func (m *Workflow) GetTasks() []*Task {
-	if m != nil {
-		return m.Tasks
-	}
-	return nil
-}
-
-type WorkflowStatus struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	Tasks            []*Task `protobuf:"bytes,2,rep,name=Tasks" json:"Tasks,omitempty"`
+type DataBlock struct {
+	UUID             *string `protobuf:"bytes,1,req,name=UUID" json:"UUID,omitempty"`
+	Start            *int64  `protobuf:"varint,2,req,name=Start" json:"Start,omitempty"`
+	Len              *int64  `protobuf:"varint,3,req,name=Len" json:"Len,omitempty"`
+	Data             []byte  `protobuf:"bytes,4,req,name=Data" json:"Data,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
-func (m *WorkflowStatus) Reset()         { *m = WorkflowStatus{} }
-func (m *WorkflowStatus) String() string { return proto.CompactTextString(m) }
-func (*WorkflowStatus) ProtoMessage()    {}
+func (m *DataBlock) Reset()                    { *m = DataBlock{} }
+func (m *DataBlock) String() string            { return proto.CompactTextString(m) }
+func (*DataBlock) ProtoMessage()               {}
+func (*DataBlock) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
 
-func (m *WorkflowStatus) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *DataBlock) GetUUID() string {
+	if m != nil && m.UUID != nil {
+		return *m.UUID
 	}
 	return ""
 }
 
-func (m *WorkflowStatus) GetTasks() []*Task {
+func (m *DataBlock) GetStart() int64 {
+	if m != nil && m.Start != nil {
+		return *m.Start
+	}
+	return 0
+}
+
+func (m *DataBlock) GetLen() int64 {
+	if m != nil && m.Len != nil {
+		return *m.Len
+	}
+	return 0
+}
+
+func (m *DataBlock) GetData() []byte {
 	if m != nil {
-		return m.Tasks
+		return m.Data
 	}
 	return nil
+}
+
+type FileInfo struct {
+	Name             *string `protobuf:"bytes,1,req,name=Name" json:"Name,omitempty"`
+	UUID             *string `protobuf:"bytes,2,req,name=UUID" json:"UUID,omitempty"`
+	Size             *int64  `protobuf:"varint,3,opt,name=Size" json:"Size,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *FileInfo) Reset()                    { *m = FileInfo{} }
+func (m *FileInfo) String() string            { return proto.CompactTextString(m) }
+func (*FileInfo) ProtoMessage()               {}
+func (*FileInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{9} }
+
+func (m *FileInfo) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *FileInfo) GetUUID() string {
+	if m != nil && m.UUID != nil {
+		return *m.UUID
+	}
+	return ""
+}
+
+func (m *FileInfo) GetSize() int64 {
+	if m != nil && m.Size != nil {
+		return *m.Size
+	}
+	return 0
+}
+
+type FileID struct {
+	UUID             *string `protobuf:"bytes,1,req,name=UUID" json:"UUID,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *FileID) Reset()                    { *m = FileID{} }
+func (m *FileID) String() string            { return proto.CompactTextString(m) }
+func (*FileID) ProtoMessage()               {}
+func (*FileID) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{10} }
+
+func (m *FileID) GetUUID() string {
+	if m != nil && m.UUID != nil {
+		return *m.UUID
+	}
+	return ""
+}
+
+type FileState struct {
+	State            *State `protobuf:"varint,1,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
+	XXX_unrecognized []byte `json:"-"`
+}
+
+func (m *FileState) Reset()                    { *m = FileState{} }
+func (m *FileState) String() string            { return proto.CompactTextString(m) }
+func (*FileState) ProtoMessage()               {}
+func (*FileState) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{11} }
+
+func (m *FileState) GetState() State {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return State_ERROR
+}
+
+type ReadRequest struct {
+	UUID             *string `protobuf:"bytes,1,req,name=UUID" json:"UUID,omitempty"`
+	Start            *int64  `protobuf:"varint,2,req,name=Start" json:"Start,omitempty"`
+	Size             *int64  `protobuf:"varint,3,req,name=Size" json:"Size,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *ReadRequest) Reset()                    { *m = ReadRequest{} }
+func (m *ReadRequest) String() string            { return proto.CompactTextString(m) }
+func (*ReadRequest) ProtoMessage()               {}
+func (*ReadRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{12} }
+
+func (m *ReadRequest) GetUUID() string {
+	if m != nil && m.UUID != nil {
+		return *m.UUID
+	}
+	return ""
+}
+
+func (m *ReadRequest) GetStart() int64 {
+	if m != nil && m.Start != nil {
+		return *m.Start
+	}
+	return 0
+}
+
+func (m *ReadRequest) GetSize() int64 {
+	if m != nil && m.Size != nil {
+		return *m.Size
+	}
+	return 0
 }
 
 func init() {
+	proto.RegisterType((*IDQuery)(nil), "agro_pb.IDQuery")
+	proto.RegisterType((*JobStatus)(nil), "agro_pb.JobStatus")
+	proto.RegisterType((*TaskStatus)(nil), "agro_pb.TaskStatus")
+	proto.RegisterType((*CmdArgument)(nil), "agro_pb.CmdArgument")
+	proto.RegisterType((*Task)(nil), "agro_pb.Task")
+	proto.RegisterType((*Job)(nil), "agro_pb.Job")
+	proto.RegisterType((*TagArray)(nil), "agro_pb.TagArray")
+	proto.RegisterType((*TaskInfo)(nil), "agro_pb.TaskInfo")
+	proto.RegisterType((*DataBlock)(nil), "agro_pb.DataBlock")
+	proto.RegisterType((*FileInfo)(nil), "agro_pb.FileInfo")
+	proto.RegisterType((*FileID)(nil), "agro_pb.FileID")
+	proto.RegisterType((*FileState)(nil), "agro_pb.FileState")
+	proto.RegisterType((*ReadRequest)(nil), "agro_pb.ReadRequest")
 	proto.RegisterEnum("agro_pb.State", State_name, State_value)
 }
 
@@ -302,140 +600,452 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
-// Client API for Tasks service
+// Client API for Agro service
 
-type TasksClient interface {
+type AgroClient interface {
+	SearchTasks(ctx context.Context, in *TagArray, opts ...grpc.CallOption) (Agro_SearchTasksClient, error)
 	AddTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskStatus, error)
-	AddWorkflow(ctx context.Context, in *Workflow, opts ...grpc.CallOption) (*WorkflowStatus, error)
-	GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (*TaskStatus, error)
-	GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (*JobStatus, error)
+	GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetTaskStatusClient, error)
+	GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetJobStatusClient, error)
 }
 
-type tasksClient struct {
+type agroClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewTasksClient(cc *grpc.ClientConn) TasksClient {
-	return &tasksClient{cc}
+func NewAgroClient(cc *grpc.ClientConn) AgroClient {
+	return &agroClient{cc}
 }
 
-func (c *tasksClient) AddTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskStatus, error) {
+func (c *agroClient) SearchTasks(ctx context.Context, in *TagArray, opts ...grpc.CallOption) (Agro_SearchTasksClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_Agro_serviceDesc.Streams[0], c.cc, "/agro_pb.Agro/SearchTasks", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &agroSearchTasksClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Agro_SearchTasksClient interface {
+	Recv() (*TaskInfo, error)
+	grpc.ClientStream
+}
+
+type agroSearchTasksClient struct {
+	grpc.ClientStream
+}
+
+func (x *agroSearchTasksClient) Recv() (*TaskInfo, error) {
+	m := new(TaskInfo)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *agroClient) AddTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskStatus, error) {
 	out := new(TaskStatus)
-	err := grpc.Invoke(ctx, "/agro_pb.Tasks/AddTask", in, out, c.cc, opts...)
+	err := grpc.Invoke(ctx, "/agro_pb.Agro/AddTask", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *tasksClient) AddWorkflow(ctx context.Context, in *Workflow, opts ...grpc.CallOption) (*WorkflowStatus, error) {
-	out := new(WorkflowStatus)
-	err := grpc.Invoke(ctx, "/agro_pb.Tasks/AddWorkflow", in, out, c.cc, opts...)
+func (c *agroClient) GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetTaskStatusClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_Agro_serviceDesc.Streams[1], c.cc, "/agro_pb.Agro/GetTaskStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &agroGetTaskStatusClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
 }
 
-func (c *tasksClient) GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (*TaskStatus, error) {
-	out := new(TaskStatus)
-	err := grpc.Invoke(ctx, "/agro_pb.Tasks/GetTaskStatus", in, out, c.cc, opts...)
+type Agro_GetTaskStatusClient interface {
+	Recv() (*TaskStatus, error)
+	grpc.ClientStream
+}
+
+type agroGetTaskStatusClient struct {
+	grpc.ClientStream
+}
+
+func (x *agroGetTaskStatusClient) Recv() (*TaskStatus, error) {
+	m := new(TaskStatus)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *agroClient) GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetJobStatusClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_Agro_serviceDesc.Streams[2], c.cc, "/agro_pb.Agro/GetJobStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
-}
-
-func (c *tasksClient) GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (*JobStatus, error) {
-	out := new(JobStatus)
-	err := grpc.Invoke(ctx, "/agro_pb.Tasks/GetJobStatus", in, out, c.cc, opts...)
-	if err != nil {
+	x := &agroGetJobStatusClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
-	return out, nil
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
 }
 
-// Server API for Tasks service
+type Agro_GetJobStatusClient interface {
+	Recv() (*JobStatus, error)
+	grpc.ClientStream
+}
 
-type TasksServer interface {
+type agroGetJobStatusClient struct {
+	grpc.ClientStream
+}
+
+func (x *agroGetJobStatusClient) Recv() (*JobStatus, error) {
+	m := new(JobStatus)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// Server API for Agro service
+
+type AgroServer interface {
+	SearchTasks(*TagArray, Agro_SearchTasksServer) error
 	AddTask(context.Context, *Task) (*TaskStatus, error)
-	AddWorkflow(context.Context, *Workflow) (*WorkflowStatus, error)
-	GetTaskStatus(context.Context, *IDQuery) (*TaskStatus, error)
-	GetJobStatus(context.Context, *IDQuery) (*JobStatus, error)
+	GetTaskStatus(*IDQuery, Agro_GetTaskStatusServer) error
+	GetJobStatus(*IDQuery, Agro_GetJobStatusServer) error
 }
 
-func RegisterTasksServer(s *grpc.Server, srv TasksServer) {
-	s.RegisterService(&_Tasks_serviceDesc, srv)
+func RegisterAgroServer(s *grpc.Server, srv AgroServer) {
+	s.RegisterService(&_Agro_serviceDesc, srv)
 }
 
-func _Tasks_AddTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Agro_SearchTasks_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(TagArray)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(AgroServer).SearchTasks(m, &agroSearchTasksServer{stream})
+}
+
+type Agro_SearchTasksServer interface {
+	Send(*TaskInfo) error
+	grpc.ServerStream
+}
+
+type agroSearchTasksServer struct {
+	grpc.ServerStream
+}
+
+func (x *agroSearchTasksServer) Send(m *TaskInfo) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Agro_AddTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
 	in := new(Task)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(TasksServer).AddTask(ctx, in)
+	out, err := srv.(AgroServer).AddTask(ctx, in)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func _Tasks_AddWorkflow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(Workflow)
-	if err := dec(in); err != nil {
-		return nil, err
+func _Agro_GetTaskStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(IDQuery)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
 	}
-	out, err := srv.(TasksServer).AddWorkflow(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	return srv.(AgroServer).GetTaskStatus(m, &agroGetTaskStatusServer{stream})
 }
 
-func _Tasks_GetTaskStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(IDQuery)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(TasksServer).GetTaskStatus(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+type Agro_GetTaskStatusServer interface {
+	Send(*TaskStatus) error
+	grpc.ServerStream
 }
 
-func _Tasks_GetJobStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
-	in := new(IDQuery)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	out, err := srv.(TasksServer).GetJobStatus(ctx, in)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+type agroGetTaskStatusServer struct {
+	grpc.ServerStream
 }
 
-var _Tasks_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "agro_pb.Tasks",
-	HandlerType: (*TasksServer)(nil),
+func (x *agroGetTaskStatusServer) Send(m *TaskStatus) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Agro_GetJobStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(IDQuery)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(AgroServer).GetJobStatus(m, &agroGetJobStatusServer{stream})
+}
+
+type Agro_GetJobStatusServer interface {
+	Send(*JobStatus) error
+	grpc.ServerStream
+}
+
+type agroGetJobStatusServer struct {
+	grpc.ServerStream
+}
+
+func (x *agroGetJobStatusServer) Send(m *JobStatus) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _Agro_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "agro_pb.Agro",
+	HandlerType: (*AgroServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddTask",
-			Handler:    _Tasks_AddTask_Handler,
+			Handler:    _Agro_AddTask_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "SearchTasks",
+			Handler:       _Agro_SearchTasks_Handler,
+			ServerStreams: true,
 		},
 		{
-			MethodName: "AddWorkflow",
-			Handler:    _Tasks_AddWorkflow_Handler,
+			StreamName:    "GetTaskStatus",
+			Handler:       _Agro_GetTaskStatus_Handler,
+			ServerStreams: true,
 		},
 		{
-			MethodName: "GetTaskStatus",
-			Handler:    _Tasks_GetTaskStatus_Handler,
+			StreamName:    "GetJobStatus",
+			Handler:       _Agro_GetJobStatus_Handler,
+			ServerStreams: true,
+		},
+	},
+}
+
+// Client API for FileStore service
+
+type FileStoreClient interface {
+	Create(ctx context.Context, in *FileInfo, opts ...grpc.CallOption) (*FileState, error)
+	Write(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*FileState, error)
+	FileCommit(ctx context.Context, in *FileID, opts ...grpc.CallOption) (*FileState, error)
+	GetFileInfo(ctx context.Context, in *FileID, opts ...grpc.CallOption) (*FileInfo, error)
+	ReadFile(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (*DataBlock, error)
+}
+
+type fileStoreClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewFileStoreClient(cc *grpc.ClientConn) FileStoreClient {
+	return &fileStoreClient{cc}
+}
+
+func (c *fileStoreClient) Create(ctx context.Context, in *FileInfo, opts ...grpc.CallOption) (*FileState, error) {
+	out := new(FileState)
+	err := grpc.Invoke(ctx, "/agro_pb.FileStore/Create", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileStoreClient) Write(ctx context.Context, in *DataBlock, opts ...grpc.CallOption) (*FileState, error) {
+	out := new(FileState)
+	err := grpc.Invoke(ctx, "/agro_pb.FileStore/Write", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileStoreClient) FileCommit(ctx context.Context, in *FileID, opts ...grpc.CallOption) (*FileState, error) {
+	out := new(FileState)
+	err := grpc.Invoke(ctx, "/agro_pb.FileStore/FileCommit", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileStoreClient) GetFileInfo(ctx context.Context, in *FileID, opts ...grpc.CallOption) (*FileInfo, error) {
+	out := new(FileInfo)
+	err := grpc.Invoke(ctx, "/agro_pb.FileStore/GetFileInfo", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fileStoreClient) ReadFile(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (*DataBlock, error) {
+	out := new(DataBlock)
+	err := grpc.Invoke(ctx, "/agro_pb.FileStore/ReadFile", in, out, c.cc, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for FileStore service
+
+type FileStoreServer interface {
+	Create(context.Context, *FileInfo) (*FileState, error)
+	Write(context.Context, *DataBlock) (*FileState, error)
+	FileCommit(context.Context, *FileID) (*FileState, error)
+	GetFileInfo(context.Context, *FileID) (*FileInfo, error)
+	ReadFile(context.Context, *ReadRequest) (*DataBlock, error)
+}
+
+func RegisterFileStoreServer(s *grpc.Server, srv FileStoreServer) {
+	s.RegisterService(&_FileStore_serviceDesc, srv)
+}
+
+func _FileStore_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(FileInfo)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(FileStoreServer).Create(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _FileStore_Write_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(DataBlock)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(FileStoreServer).Write(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _FileStore_FileCommit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(FileID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(FileStoreServer).FileCommit(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _FileStore_GetFileInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(FileID)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(FileStoreServer).GetFileInfo(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func _FileStore_ReadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+	in := new(ReadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	out, err := srv.(FileStoreServer).ReadFile(ctx, in)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+var _FileStore_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "agro_pb.FileStore",
+	HandlerType: (*FileStoreServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Create",
+			Handler:    _FileStore_Create_Handler,
 		},
 		{
-			MethodName: "GetJobStatus",
-			Handler:    _Tasks_GetJobStatus_Handler,
+			MethodName: "Write",
+			Handler:    _FileStore_Write_Handler,
+		},
+		{
+			MethodName: "FileCommit",
+			Handler:    _FileStore_FileCommit_Handler,
+		},
+		{
+			MethodName: "GetFileInfo",
+			Handler:    _FileStore_GetFileInfo_Handler,
+		},
+		{
+			MethodName: "ReadFile",
+			Handler:    _FileStore_ReadFile_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{},
+}
+
+var fileDescriptor0 = []byte{
+	// 680 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x4e, 0xdb, 0x40,
+	0x10, 0x8e, 0xed, 0xc4, 0x8e, 0xc7, 0x09, 0x84, 0x05, 0x21, 0x0b, 0xa9, 0x2a, 0xf2, 0x29, 0xe2,
+	0x00, 0x25, 0xad, 0x28, 0xea, 0x2d, 0xc4, 0xfc, 0xa4, 0x45, 0xa1, 0x38, 0xa4, 0x1c, 0x7a, 0xa8,
+	0x0c, 0xde, 0xd2, 0x88, 0xc4, 0x4e, 0xd7, 0xeb, 0x03, 0x7d, 0x8d, 0x5e, 0xfb, 0x00, 0x7d, 0xb2,
+	0x3e, 0x47, 0x67, 0x9c, 0x64, 0x93, 0x34, 0x50, 0xa9, 0x52, 0x6f, 0x3b, 0xb3, 0xf3, 0xcd, 0x7c,
+	0xdf, 0xec, 0xcc, 0x42, 0x6d, 0x24, 0x12, 0x99, 0xec, 0x85, 0x77, 0x22, 0xd9, 0xcd, 0x8f, 0xcc,
+	0xa2, 0xf3, 0xa7, 0xd1, 0x8d, 0xb7, 0x09, 0x56, 0xdb, 0xbf, 0xcc, 0xb8, 0x78, 0x60, 0x0e, 0x18,
+	0x6d, 0x3f, 0x75, 0xb5, 0x6d, 0xa3, 0x6e, 0x7b, 0x07, 0x60, 0xbf, 0x4d, 0x6e, 0xba, 0x32, 0x94,
+	0x59, 0xca, 0x00, 0xf4, 0xb6, 0x8f, 0x17, 0x7a, 0xdd, 0x66, 0xcf, 0xa0, 0x44, 0x5e, 0xee, 0xea,
+	0x68, 0xae, 0x34, 0x56, 0x76, 0x27, 0x99, 0x76, 0x73, 0xaf, 0xf7, 0x11, 0xe0, 0x2a, 0x4c, 0xef,
+	0xff, 0x19, 0xc8, 0x36, 0xa0, 0xd2, 0x4a, 0x86, 0xa3, 0x01, 0x97, 0x3c, 0xc2, 0xca, 0xae, 0xb1,
+	0xad, 0x21, 0xa8, 0x02, 0xc5, 0x20, 0x8b, 0x53, 0xb7, 0x98, 0x93, 0x3a, 0x01, 0xa7, 0x35, 0x8c,
+	0x9a, 0xe2, 0x2e, 0x1b, 0xf2, 0x58, 0xb2, 0x2a, 0x18, 0x78, 0xc6, 0xf4, 0x18, 0x79, 0x56, 0x60,
+	0xcf, 0xa1, 0x78, 0xd2, 0x1f, 0x50, 0x7e, 0xad, 0xee, 0x34, 0x56, 0x55, 0x7e, 0x72, 0xb6, 0xfd,
+	0xb3, 0xc2, 0x91, 0x05, 0xa5, 0x0f, 0xe1, 0x20, 0xe3, 0xde, 0x0f, 0x0d, 0x8a, 0xc4, 0x72, 0x81,
+	0xdf, 0x3a, 0x38, 0xe4, 0xf3, 0xf9, 0x88, 0xc7, 0x51, 0x8a, 0x59, 0xb0, 0x22, 0x5b, 0x05, 0x0b,
+	0x59, 0x0d, 0xc3, 0x38, 0x42, 0x42, 0x14, 0xe5, 0x41, 0x11, 0x6b, 0x8e, 0x09, 0x39, 0x8d, 0x0d,
+	0x55, 0x64, 0x9e, 0xd7, 0x1a, 0xd8, 0xad, 0x24, 0x96, 0x61, 0x3f, 0xe6, 0xc2, 0x2d, 0x4d, 0x75,
+	0x5c, 0x85, 0x08, 0x33, 0xf3, 0xac, 0xaa, 0x15, 0x16, 0x5e, 0x2e, 0xf7, 0xf0, 0xa7, 0x06, 0x06,
+	0xb6, 0x60, 0x81, 0xdd, 0x0a, 0x98, 0xc4, 0x0e, 0x6d, 0x3d, 0xb7, 0xff, 0x17, 0x31, 0x45, 0xc5,
+	0x7c, 0xf4, 0x55, 0xb0, 0x6c, 0x57, 0x46, 0x49, 0x26, 0x91, 0xea, 0x84, 0x06, 0xda, 0x5c, 0x08,
+	0xb7, 0x4c, 0xb6, 0xe7, 0x42, 0x19, 0x75, 0x35, 0x85, 0x08, 0x1f, 0x94, 0xc6, 0xf1, 0x00, 0x6d,
+	0xd2, 0x0d, 0x12, 0x8e, 0x3f, 0x27, 0xf3, 0x42, 0xbc, 0x16, 0xd8, 0x7e, 0x28, 0xc3, 0xa3, 0x41,
+	0x72, 0x7b, 0x4f, 0x90, 0x5e, 0x4f, 0x69, 0xac, 0xe6, 0x5c, 0x84, 0xcc, 0x25, 0x1a, 0x34, 0x8f,
+	0xe7, 0x3c, 0xce, 0xe5, 0x19, 0x14, 0x49, 0x30, 0x94, 0xa7, 0xd7, 0x2b, 0xde, 0x2b, 0x28, 0xe7,
+	0xaf, 0x4a, 0xc9, 0xf1, 0xa6, 0x13, 0x0e, 0xf9, 0x24, 0xc7, 0x34, 0xa3, 0x3e, 0xb5, 0xba, 0xfd,
+	0x6f, 0x3c, 0x1f, 0x26, 0x03, 0x29, 0x99, 0xe3, 0x59, 0x58, 0xac, 0xeb, 0xed, 0x80, 0x4d, 0xfe,
+	0xb1, 0x62, 0xd5, 0x10, 0xed, 0xd1, 0xf9, 0x3e, 0x04, 0x27, 0xe0, 0x61, 0x14, 0xf0, 0xaf, 0x19,
+	0x4f, 0xe5, 0xdf, 0x05, 0xcc, 0xaa, 0xa3, 0xb5, 0x73, 0x3e, 0x49, 0xcc, 0x6c, 0x28, 0x1d, 0x07,
+	0xc1, 0x45, 0x50, 0x2b, 0xa0, 0x44, 0xeb, 0xba, 0xd9, 0xbe, 0x6a, 0x77, 0x4e, 0x6b, 0x1a, 0x76,
+	0xc9, 0xbc, 0xec, 0x1d, 0xf7, 0x8e, 0xfd, 0x9a, 0x4e, 0xe7, 0xf7, 0xcd, 0x5e, 0x17, 0xcf, 0xd4,
+	0x07, 0x2b, 0xe8, 0x75, 0x3a, 0x14, 0x54, 0x64, 0x26, 0xe8, 0x17, 0xef, 0x6a, 0xa5, 0xc6, 0x2f,
+	0x1c, 0xe1, 0x26, 0x32, 0x63, 0xaf, 0xc1, 0xe9, 0xf2, 0x50, 0xdc, 0x7e, 0xa1, 0x6e, 0xa7, 0x6c,
+	0x4d, 0xf1, 0x9d, 0xbe, 0xcb, 0xd6, 0xbc, 0x6b, 0xfc, 0x20, 0x5e, 0xe1, 0x85, 0xc6, 0xf6, 0xc0,
+	0x6a, 0x46, 0x51, 0xbe, 0x06, 0xd5, 0x85, 0x88, 0xad, 0xf5, 0x05, 0x73, 0xbc, 0xca, 0x5e, 0x81,
+	0xbd, 0x81, 0xea, 0x29, 0x97, 0x73, 0xdb, 0x5d, 0x53, 0x71, 0x93, 0x2f, 0xe4, 0x09, 0x24, 0x16,
+	0x3b, 0x84, 0x0a, 0x62, 0x67, 0x3f, 0xca, 0x32, 0x94, 0x29, 0x8f, 0x8a, 0x22, 0x64, 0xe3, 0xbb,
+	0x3e, 0x7d, 0x9d, 0x44, 0x70, 0xb6, 0x0f, 0x66, 0x4b, 0x70, 0xea, 0xe2, 0xda, 0xe2, 0x7e, 0xa3,
+	0xaa, 0xb9, 0x14, 0xea, 0x39, 0x91, 0xf6, 0x3e, 0x94, 0xae, 0x45, 0x1f, 0x11, 0xb3, 0x6b, 0x35,
+	0x80, 0x4f, 0x40, 0x5e, 0x02, 0x90, 0x49, 0x0b, 0xd6, 0x97, 0xec, 0xcf, 0x9f, 0xe4, 0x49, 0x90,
+	0x83, 0x12, 0xd5, 0x58, 0x2e, 0xa1, 0x96, 0x09, 0x23, 0xe8, 0x00, 0xca, 0x34, 0x4e, 0xe4, 0x61,
+	0xb3, 0x9d, 0x9d, 0x9b, 0xb0, 0xad, 0x47, 0x58, 0x7b, 0x85, 0xdf, 0x01, 0x00, 0x00, 0xff, 0xff,
+	0x40, 0xdd, 0x58, 0x28, 0xd2, 0x05, 0x00, 0x00,
 }

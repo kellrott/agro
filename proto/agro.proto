@@ -5,7 +5,7 @@ package agro_pb;
 
 
 message IDQuery {
-    required string ID = 1;
+    repeated string IDs = 1;
 }
 
 enum State {
@@ -25,38 +25,86 @@ message JobStatus {
 message TaskStatus {
   required string ID = 1;  
   required State State = 2;
-  optional string CompletedJob = 6;
-  repeated JobStatus Runs = 7;  
+  optional string CompletedJob = 3;
+  repeated string Runs = 4;  
+}
+
+message CmdArgument {
+  oneof Value {
+    string Arg = 1;
+    FileID File = 2;
+  }
 }
 
 message Task {
   required string ID = 1;
   repeated string TaskDepends = 2;
-  repeated string DataDepends = 3;
-  optional string CommandLine = 4;
+  required string Command = 3;
+  repeated CmdArgument Args = 4; 
   optional string Container = 5;
-  optional TaskStatus Status = 6;
+  repeated string Tags = 6;
+  optional State State = 7;
 }
 
 message Job {
   required string ID = 1;
-  required Task Info = 2;
-  required State State = 3;
+  required string TaskID = 2;
+  required string Command = 3;
+  repeated CmdArgument Args = 4; 
+  optional string Container = 5;
+  required State State = 6;
+  required string Stdout = 7;
+  required string Stderr = 8;
 }
 
-message Workflow {
+message TagArray {
+  repeated string Tags = 1;
+}
+
+message TaskInfo {
   required string ID = 1;
-  repeated Task tasks = 2;
 }
 
-message WorkflowStatus {
-  required string ID = 1;
-  repeated Task Tasks = 2;
-}
+service Agro {
+  rpc SearchTasks(TagArray) returns (stream TaskInfo) {}
 
-service Tasks {
   rpc AddTask(Task) returns (TaskStatus) {}
-  rpc AddWorkflow(Workflow) returns (WorkflowStatus) {}
-  rpc GetTaskStatus(IDQuery) returns (TaskStatus) {}
-  rpc GetJobStatus(IDQuery) returns (JobStatus) {}
+
+  rpc GetTaskStatus(IDQuery) returns (stream TaskStatus) {}
+  rpc GetJobStatus(IDQuery) returns (stream JobStatus) {}
+}
+
+message DataBlock {
+  required string UUID = 1;
+  required int64 Start = 2;
+  required int64 Len = 3;
+  required bytes Data = 4;
+}
+
+message FileInfo {
+  required string Name = 1;
+  required string UUID = 2;
+  optional int64  Size = 3;
+}
+
+message FileID {
+  required string UUID = 1;
+}
+
+message FileState {
+  required State State = 1;
+}
+
+message ReadRequest {
+  required string UUID  = 1;
+  required int64  Start = 2;  
+  required int64  Size  = 3;
+}
+
+service FileStore {
+  rpc Create(FileInfo) returns (FileState) {}
+  rpc Write(DataBlock) returns (FileState) {}
+  rpc FileCommit(FileID) returns (FileState) {}
+  rpc GetFileInfo(FileID) returns (FileInfo) {}
+  rpc ReadFile(ReadRequest) returns (DataBlock) {}
 }
