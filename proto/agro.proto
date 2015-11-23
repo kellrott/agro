@@ -67,28 +67,26 @@ message TaskInfo {
 
 service Agro {
   rpc SearchTasks(TagArray) returns (stream TaskInfo) {}
-
   rpc AddTask(Task) returns (TaskStatus) {}
-
   rpc GetTaskStatus(IDQuery) returns (stream TaskStatus) {}
   rpc GetJobStatus(IDQuery) returns (stream JobStatus) {}
 }
 
 message DataBlock {
-  required string UUID = 1;
+  required string ID   = 1;
   required int64 Start = 2;
-  required int64 Len = 3;
-  required bytes Data = 4;
+  required int64 Len   = 3;
+  required bytes Data  = 4;
 }
 
 message FileInfo {
   required string Name = 1;
-  required string UUID = 2;
+  required string ID = 2;
   optional int64  Size = 3;
 }
 
 message FileID {
-  required string UUID = 1;
+  required string ID = 1;
 }
 
 message FileState {
@@ -96,15 +94,15 @@ message FileState {
 }
 
 message ReadRequest {
-  required string UUID  = 1;
+  required string ID    = 1;
   required int64  Start = 2;  
   required int64  Size  = 3;
 }
 
 service FileStore {
-  rpc Create(FileInfo) returns (FileState) {}
-  rpc Write(DataBlock) returns (FileState) {}
-  rpc FileCommit(FileID) returns (FileState) {}
+  rpc CreateFile(FileInfo) returns (FileState) {}
+  rpc WriteFile(DataBlock) returns (FileState) {}
+  rpc CommitFile(FileID) returns (FileState) {}
   rpc GetFileInfo(FileID) returns (FileInfo) {}
   rpc ReadFile(ReadRequest) returns (DataBlock) {}
 }

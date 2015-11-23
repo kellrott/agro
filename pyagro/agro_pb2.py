@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='agro.proto',
   package='agro_pb',
   syntax='proto2',
-  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\x16\n\x07IDQuery\x12\x0b\n\x03IDs\x18\x01 \x03(\t\"6\n\tJobStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"[\n\nTaskStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x14\n\x0c\x43ompletedJob\x18\x03 \x01(\t\x12\x0c\n\x04Runs\x18\x04 \x03(\t\"F\n\x0b\x43mdArgument\x12\r\n\x03\x41rg\x18\x01 \x01(\tH\x00\x12\x1f\n\x04\x46ile\x18\x02 \x01(\x0b\x32\x0f.agro_pb.FileIDH\x00\x42\x07\n\x05Value\"\x9c\x01\n\x04Task\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x13\n\x0bTaskDepends\x18\x02 \x03(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x0c\n\x04Tags\x18\x06 \x03(\t\x12\x1d\n\x05State\x18\x07 \x01(\x0e\x32\x0e.agro_pb.State\"\xa8\x01\n\x03Job\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x0e\n\x06TaskID\x18\x02 \x02(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x1d\n\x05State\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06Stdout\x18\x07 \x02(\t\x12\x0e\n\x06Stderr\x18\x08 \x02(\t\"\x18\n\x08TagArray\x12\x0c\n\x04Tags\x18\x01 \x03(\t\"\x16\n\x08TaskInfo\x12\n\n\x02ID\x18\x01 \x02(\t\"C\n\tDataBlock\x12\x0c\n\x04UUID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0b\n\x03Len\x18\x03 \x02(\x03\x12\x0c\n\x04\x44\x61ta\x18\x04 \x02(\x0c\"4\n\x08\x46ileInfo\x12\x0c\n\x04Name\x18\x01 \x02(\t\x12\x0c\n\x04UUID\x18\x02 \x02(\t\x12\x0c\n\x04Size\x18\x03 \x01(\x03\"\x16\n\x06\x46ileID\x12\x0c\n\x04UUID\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05State\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"8\n\x0bReadRequest\x12\x0c\n\x04UUID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0c\n\x04Size\x18\x03 \x02(\x03*L\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\n\n\x06QUEUED\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\x0b\n\x07RUNNING\x10\x04\x12\x06\n\x02OK\x10\x05\x32\xe6\x01\n\x04\x41gro\x12\x37\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\x11.agro_pb.TaskInfo\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x32\x93\x02\n\tFileStore\x12\x31\n\x06\x43reate\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x31\n\x05Write\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nFileCommit\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
+  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\x16\n\x07IDQuery\x12\x0b\n\x03IDs\x18\x01 \x03(\t\"6\n\tJobStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"[\n\nTaskStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x14\n\x0c\x43ompletedJob\x18\x03 \x01(\t\x12\x0c\n\x04Runs\x18\x04 \x03(\t\"F\n\x0b\x43mdArgument\x12\r\n\x03\x41rg\x18\x01 \x01(\tH\x00\x12\x1f\n\x04\x46ile\x18\x02 \x01(\x0b\x32\x0f.agro_pb.FileIDH\x00\x42\x07\n\x05Value\"\x9c\x01\n\x04Task\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x13\n\x0bTaskDepends\x18\x02 \x03(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x0c\n\x04Tags\x18\x06 \x03(\t\x12\x1d\n\x05State\x18\x07 \x01(\x0e\x32\x0e.agro_pb.State\"\xa8\x01\n\x03Job\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x0e\n\x06TaskID\x18\x02 \x02(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x1d\n\x05State\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06Stdout\x18\x07 \x02(\t\x12\x0e\n\x06Stderr\x18\x08 \x02(\t\"\x18\n\x08TagArray\x12\x0c\n\x04Tags\x18\x01 \x03(\t\"\x16\n\x08TaskInfo\x12\n\n\x02ID\x18\x01 \x02(\t\"A\n\tDataBlock\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0b\n\x03Len\x18\x03 \x02(\x03\x12\x0c\n\x04\x44\x61ta\x18\x04 \x02(\x0c\"2\n\x08\x46ileInfo\x12\x0c\n\x04Name\x18\x01 \x02(\t\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04Size\x18\x03 \x01(\x03\"\x14\n\x06\x46ileID\x12\n\n\x02ID\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05State\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0c\n\x04Size\x18\x03 \x02(\x03*L\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\n\n\x06QUEUED\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\x0b\n\x07RUNNING\x10\x04\x12\x06\n\x02OK\x10\x05\x32\xe6\x01\n\x04\x41gro\x12\x37\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\x11.agro_pb.TaskInfo\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x32\x9b\x02\n\tFileStore\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -55,8 +55,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=897,
-  serialized_end=973,
+  serialized_start=889,
+  serialized_end=965,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -455,7 +455,7 @@ _DATABLOCK = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='UUID', full_name='agro_pb.DataBlock.UUID', index=0,
+      name='ID', full_name='agro_pb.DataBlock.ID', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -495,7 +495,7 @@ _DATABLOCK = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=648,
-  serialized_end=715,
+  serialized_end=713,
 )
 
 
@@ -514,7 +514,7 @@ _FILEINFO = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='UUID', full_name='agro_pb.FileInfo.UUID', index=1,
+      name='ID', full_name='agro_pb.FileInfo.ID', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -539,8 +539,8 @@ _FILEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=717,
-  serialized_end=769,
+  serialized_start=715,
+  serialized_end=765,
 )
 
 
@@ -552,7 +552,7 @@ _FILEID = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='UUID', full_name='agro_pb.FileID.UUID', index=0,
+      name='ID', full_name='agro_pb.FileID.ID', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -570,8 +570,8 @@ _FILEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=771,
-  serialized_end=793,
+  serialized_start=767,
+  serialized_end=787,
 )
 
 
@@ -601,8 +601,8 @@ _FILESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=795,
-  serialized_end=837,
+  serialized_start=789,
+  serialized_end=831,
 )
 
 
@@ -614,7 +614,7 @@ _READREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='UUID', full_name='agro_pb.ReadRequest.UUID', index=0,
+      name='ID', full_name='agro_pb.ReadRequest.ID', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -646,8 +646,8 @@ _READREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=839,
-  serialized_end=895,
+  serialized_start=833,
+  serialized_end=887,
 )
 
 _JOBSTATUS.fields_by_name['State'].enum_type = _STATE
@@ -977,13 +977,13 @@ class EarlyAdopterFileStoreServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
-  def Create(self, request, context):
+  def CreateFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
-  def Write(self, request, context):
+  def WriteFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
-  def FileCommit(self, request, context):
+  def CommitFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
   def GetFileInfo(self, request, context):
@@ -1004,17 +1004,17 @@ class EarlyAdopterFileStoreStub(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
-  def Create(self, request):
+  def CreateFile(self, request):
     raise NotImplementedError()
-  Create.async = None
+  CreateFile.async = None
   @abc.abstractmethod
-  def Write(self, request):
+  def WriteFile(self, request):
     raise NotImplementedError()
-  Write.async = None
+  WriteFile.async = None
   @abc.abstractmethod
-  def FileCommit(self, request):
+  def CommitFile(self, request):
     raise NotImplementedError()
-  FileCommit.async = None
+  CommitFile.async = None
   @abc.abstractmethod
   def GetFileInfo(self, request):
     raise NotImplementedError()
@@ -1035,14 +1035,14 @@ def early_adopter_create_FileStore_server(servicer, port, private_key=None, cert
   import agro_pb2
   import agro_pb2
   method_service_descriptions = {
-    "Create": alpha_utilities.unary_unary_service_description(
-      servicer.Create,
-      agro_pb2.FileInfo.FromString,
+    "CommitFile": alpha_utilities.unary_unary_service_description(
+      servicer.CommitFile,
+      agro_pb2.FileID.FromString,
       agro_pb2.FileState.SerializeToString,
     ),
-    "FileCommit": alpha_utilities.unary_unary_service_description(
-      servicer.FileCommit,
-      agro_pb2.FileID.FromString,
+    "CreateFile": alpha_utilities.unary_unary_service_description(
+      servicer.CreateFile,
+      agro_pb2.FileInfo.FromString,
       agro_pb2.FileState.SerializeToString,
     ),
     "GetFileInfo": alpha_utilities.unary_unary_service_description(
@@ -1055,8 +1055,8 @@ def early_adopter_create_FileStore_server(servicer, port, private_key=None, cert
       agro_pb2.ReadRequest.FromString,
       agro_pb2.DataBlock.SerializeToString,
     ),
-    "Write": alpha_utilities.unary_unary_service_description(
-      servicer.Write,
+    "WriteFile": alpha_utilities.unary_unary_service_description(
+      servicer.WriteFile,
       agro_pb2.DataBlock.FromString,
       agro_pb2.FileState.SerializeToString,
     ),
@@ -1074,12 +1074,12 @@ def early_adopter_create_FileStore_stub(host, port, metadata_transformer=None, s
   import agro_pb2
   import agro_pb2
   method_invocation_descriptions = {
-    "Create": alpha_utilities.unary_unary_invocation_description(
-      agro_pb2.FileInfo.SerializeToString,
+    "CommitFile": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.FileID.SerializeToString,
       agro_pb2.FileState.FromString,
     ),
-    "FileCommit": alpha_utilities.unary_unary_invocation_description(
-      agro_pb2.FileID.SerializeToString,
+    "CreateFile": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.FileInfo.SerializeToString,
       agro_pb2.FileState.FromString,
     ),
     "GetFileInfo": alpha_utilities.unary_unary_invocation_description(
@@ -1090,7 +1090,7 @@ def early_adopter_create_FileStore_stub(host, port, metadata_transformer=None, s
       agro_pb2.ReadRequest.SerializeToString,
       agro_pb2.DataBlock.FromString,
     ),
-    "Write": alpha_utilities.unary_unary_invocation_description(
+    "WriteFile": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.DataBlock.SerializeToString,
       agro_pb2.FileState.FromString,
     ),
@@ -1101,13 +1101,13 @@ class BetaFileStoreServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
-  def Create(self, request, context):
+  def CreateFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
-  def Write(self, request, context):
+  def WriteFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
-  def FileCommit(self, request, context):
+  def CommitFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
   def GetFileInfo(self, request, context):
@@ -1120,17 +1120,17 @@ class BetaFileStoreStub(object):
   """The interface to which stubs will conform."""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
-  def Create(self, request, timeout):
+  def CreateFile(self, request, timeout):
     raise NotImplementedError()
-  Create.future = None
+  CreateFile.future = None
   @abc.abstractmethod
-  def Write(self, request, timeout):
+  def WriteFile(self, request, timeout):
     raise NotImplementedError()
-  Write.future = None
+  WriteFile.future = None
   @abc.abstractmethod
-  def FileCommit(self, request, timeout):
+  def CommitFile(self, request, timeout):
     raise NotImplementedError()
-  FileCommit.future = None
+  CommitFile.future = None
   @abc.abstractmethod
   def GetFileInfo(self, request, timeout):
     raise NotImplementedError()
@@ -1152,25 +1152,25 @@ def beta_create_FileStore_server(servicer, pool=None, pool_size=None, default_ti
   import agro_pb2
   import agro_pb2
   request_deserializers = {
-    ('agro_pb.FileStore', 'Create'): agro_pb2.FileInfo.FromString,
-    ('agro_pb.FileStore', 'FileCommit'): agro_pb2.FileID.FromString,
+    ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileID.FromString,
+    ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileInfo.FromString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileID.FromString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.ReadRequest.FromString,
-    ('agro_pb.FileStore', 'Write'): agro_pb2.DataBlock.FromString,
+    ('agro_pb.FileStore', 'WriteFile'): agro_pb2.DataBlock.FromString,
   }
   response_serializers = {
-    ('agro_pb.FileStore', 'Create'): agro_pb2.FileState.SerializeToString,
-    ('agro_pb.FileStore', 'FileCommit'): agro_pb2.FileState.SerializeToString,
+    ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileState.SerializeToString,
+    ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileState.SerializeToString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileInfo.SerializeToString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.DataBlock.SerializeToString,
-    ('agro_pb.FileStore', 'Write'): agro_pb2.FileState.SerializeToString,
+    ('agro_pb.FileStore', 'WriteFile'): agro_pb2.FileState.SerializeToString,
   }
   method_implementations = {
-    ('agro_pb.FileStore', 'Create'): face_utilities.unary_unary_inline(servicer.Create),
-    ('agro_pb.FileStore', 'FileCommit'): face_utilities.unary_unary_inline(servicer.FileCommit),
+    ('agro_pb.FileStore', 'CommitFile'): face_utilities.unary_unary_inline(servicer.CommitFile),
+    ('agro_pb.FileStore', 'CreateFile'): face_utilities.unary_unary_inline(servicer.CreateFile),
     ('agro_pb.FileStore', 'GetFileInfo'): face_utilities.unary_unary_inline(servicer.GetFileInfo),
     ('agro_pb.FileStore', 'ReadFile'): face_utilities.unary_unary_inline(servicer.ReadFile),
-    ('agro_pb.FileStore', 'Write'): face_utilities.unary_unary_inline(servicer.Write),
+    ('agro_pb.FileStore', 'WriteFile'): face_utilities.unary_unary_inline(servicer.WriteFile),
   }
   server_options = beta_implementations.server_options(request_deserializers=request_deserializers, response_serializers=response_serializers, thread_pool=pool, thread_pool_size=pool_size, default_timeout=default_timeout, maximum_timeout=maximum_timeout)
   return beta_implementations.server(method_implementations, options=server_options)
@@ -1187,25 +1187,25 @@ def beta_create_FileStore_stub(channel, host=None, metadata_transformer=None, po
   import agro_pb2
   import agro_pb2
   request_serializers = {
-    ('agro_pb.FileStore', 'Create'): agro_pb2.FileInfo.SerializeToString,
-    ('agro_pb.FileStore', 'FileCommit'): agro_pb2.FileID.SerializeToString,
+    ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileID.SerializeToString,
+    ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileInfo.SerializeToString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileID.SerializeToString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.ReadRequest.SerializeToString,
-    ('agro_pb.FileStore', 'Write'): agro_pb2.DataBlock.SerializeToString,
+    ('agro_pb.FileStore', 'WriteFile'): agro_pb2.DataBlock.SerializeToString,
   }
   response_deserializers = {
-    ('agro_pb.FileStore', 'Create'): agro_pb2.FileState.FromString,
-    ('agro_pb.FileStore', 'FileCommit'): agro_pb2.FileState.FromString,
+    ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileState.FromString,
+    ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileState.FromString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileInfo.FromString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.DataBlock.FromString,
-    ('agro_pb.FileStore', 'Write'): agro_pb2.FileState.FromString,
+    ('agro_pb.FileStore', 'WriteFile'): agro_pb2.FileState.FromString,
   }
   cardinalities = {
-    'Create': cardinality.Cardinality.UNARY_UNARY,
-    'FileCommit': cardinality.Cardinality.UNARY_UNARY,
+    'CommitFile': cardinality.Cardinality.UNARY_UNARY,
+    'CreateFile': cardinality.Cardinality.UNARY_UNARY,
     'GetFileInfo': cardinality.Cardinality.UNARY_UNARY,
     'ReadFile': cardinality.Cardinality.UNARY_UNARY,
-    'Write': cardinality.Cardinality.UNARY_UNARY,
+    'WriteFile': cardinality.Cardinality.UNARY_UNARY,
   }
   stub_options = beta_implementations.stub_options(host=host, metadata_transformer=metadata_transformer, request_serializers=request_serializers, response_deserializers=response_deserializers, thread_pool=pool, thread_pool_size=pool_size)
   return beta_implementations.dynamic_stub(channel, 'agro_pb.FileStore', cardinalities, options=stub_options)

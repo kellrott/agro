@@ -21,7 +21,10 @@ func main() {
     manager, _ = agro_local.NewLocalManager(4)
     
     engine, _ := agro_engine.NewEngine(dbi, manager, 4)
-    server := agro.NewAgroServer(dbi, engine)
+    server := agro.NewAgroServer()
+    server.RegisterEngine(engine)
+    server.RegisterFileStore(dbi)
+    
     engine.Start()
     
     server.Run()

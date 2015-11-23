@@ -360,28 +360,31 @@ func (self *MongoInterface) UpdateTaskState(taskID string, state agro_pb.State) 
   self.db.C("task").Update(bson.M{"_id" : taskID}, bson.M{"$set" : bson.M{"State" : state.String()}})
 }
 
-func (self *MongoInterface) CreateFile(info agro_pb.FileInfo) {
+func (self *MongoInterface) CreateFile(info agro_pb.FileInfo) agro_pb.FileState {
   f,_ := self.db.GridFS("fs").Create(*info.Name)
-  f.SetId(info.UUID)
+  f.SetId(info.ID)
   f.SetChunkSize(16777216)
-  self.openFiles[*info.UUID] = f
+  self.openFiles[*info.ID] = f
+  return agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }
 }
 
-func (self *MongoInterface) WriteFile(block agro_pb.DataBlock) {
-  self.openFiles[*block.UUID].Write(block.Data)
+func (self *MongoInterface) WriteFile(block agro_pb.DataBlock) agro_pb.FileState {
+  self.openFiles[*block.ID].Write(block.Data)
   log.Printf("Writing: %s", block.Data)
+  return agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }
 }
 
-func (self *MongoInterface) CommitFile(f agro_pb.FileID) {
-  self.openFiles[*f.UUID].Close()
-  delete(self.openFiles, *f.UUID)
+func (self *MongoInterface) CommitFile(f agro_pb.FileID) agro_pb.FileState {
+  self.openFiles[*f.ID].Close()
+  delete(self.openFiles, *f.ID)
+  return agro_pb.FileState{ State:agro_pb.State_OK.Enum() }
 }
 
 func (self *MongoInterface) GetFileInfo(i agro_pb.FileID) agro_pb.FileInfo {
-  f,_ := self.db.GridFS("fs").OpenId(*i.UUID)
+  f,_ := self.db.GridFS("fs").OpenId(*i.ID)
   o := agro_pb.FileInfo{
     Name: proto.String(f.Name()),
-    UUID: proto.String(f.Id().(string)),
+    ID:   proto.String(f.Id().(string)),
     Size: proto.Int64(f.Size()),
   }
   f.Close()
@@ -389,13 +392,13 @@ func (self *MongoInterface) GetFileInfo(i agro_pb.FileID) agro_pb.FileInfo {
 }
 
 func (self *MongoInterface) ReadFile(req agro_pb.ReadRequest) agro_pb.DataBlock {
-  f,_ := self.db.GridFS("fs").OpenId(*req.UUID)
+  f,_ := self.db.GridFS("fs").OpenId(*req.ID)
   f.Seek(*req.Start, 0)
   data := make([]byte, *req.Size)
   l, _ := f.Read(data)
   log.Printf("GridRead: %d (%d)", l, *req.Size)
   o := agro_pb.DataBlock{
-    UUID:req.UUID,
+    ID:req.ID,
     Start:req.Start,
     Len:proto.Int64(int64(l)),
     Data:data,

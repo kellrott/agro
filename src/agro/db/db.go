@@ -23,7 +23,9 @@ type AgroDB interface {
   
   SetJobLogs(jobID string,stdout []byte,stderr []byte)
 
-  CreateFile(agro_pb.FileInfo)
-  WriteFile(agro_pb.DataBlock)
-  CommitFile(agro_pb.FileID)
+  CreateFile(agro_pb.FileInfo) agro_pb.FileState
+  WriteFile(agro_pb.DataBlock) agro_pb.FileState
+  CommitFile(agro_pb.FileID) agro_pb.FileState
+  GetFileInfo(agro_pb.FileID) agro_pb.FileInfo
+  ReadFile(req agro_pb.ReadRequest) agro_pb.DataBlock
 }
