@@ -24,7 +24,7 @@ class TestAgroClient(utilities.ServerTest):
         task = agro_pb2.Task()
         task_id = str(uuid.uuid4())
         task.ID = task_id
-        task.Command = "/sbin/md5"
+        task.Command = "/usr/bin/md5sum"
         task.Container = "ubuntu"
         file_id = str(uuid.uuid4())
         

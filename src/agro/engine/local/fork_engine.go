@@ -20,14 +20,14 @@ func (self *ForkManager) worker(inchan chan agro_pb.Job) {
     log.Printf("Launch job: %s", job)
     self.engine.UpdateJobState(*job.ID, agro_pb.State_RUNNING)
 
-    err := agro_engine.RunJob(&job, self.engine.GetDBI())
+    err := agro_engine.RunJob(&job, "/tmp/agro-local", self.engine.GetDBI())
 
     if err != nil {
       self.engine.UpdateJobState(*job.ID, agro_pb.State_OK)
-      self.engine.FinishJob(*job.ID)
     } else {
       self.engine.UpdateJobState(*job.ID, agro_pb.State_ERROR)      
     }
+    self.engine.FinishJob(*job.ID)
   }
 }
 
