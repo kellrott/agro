@@ -8,18 +8,40 @@ import (
   "log"
   "fmt"
   "github.com/fsouza/go-dockerclient"
-
+  "io/ioutil"
+  proto "github.com/golang/protobuf/proto"
+  //"path"
 )
 
+const BLOCK_SIZE = int64(10485760)
 
 func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
+  wdir, err := ioutil.TempDir(workdir, "agrojob_")
+  if err != nil {
+    log.Printf("Unable to create workdir")
+    return err
+  }
   args := make([]string, 0, len(job.Args) + 1)
   args = append(args, *job.Command)
   for _,i := range(job.Args) {
     if i.GetFile() != nil {
-      log.Printf("Setting up file")
-      //args = append(args, i.GetFile())
-      args = append(args, "test")
+      f, err := ioutil.TempFile(wdir, "workfile_")
+      if err != nil {
+        log.Printf("Unable to create workfile")
+        return err
+      }
+      log.Printf("Setting up file: %s", f.Name())
+      info := dbi.GetFileInfo(*i.GetFile())
+      for i := int64(0); i < *info.Size; i+= BLOCK_SIZE {
+        block := dbi.ReadFile(agro_pb.ReadRequest{
+          ID: info.ID,
+          Start: &i, 
+          Size: proto.Int64(BLOCK_SIZE),
+        })
+        f.Write(block.Data)
+      }
+      f.Close()
+      args = append(args, f.Name())
     } else {
       args = append(args, i.GetArg())        
     }
@@ -48,8 +70,14 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
     return err
   }
   
+  binds := []string{
+    fmt.Sprintf("%s:%s", wdir, wdir),
+  }
   var stdout,stderr bytes.Buffer
-  err = client.StartContainer(container.ID, &docker.HostConfig{})
+  err = client.StartContainer(container.ID, &docker.HostConfig{
+		Binds: binds,
+	})
+
   if err != nil {
     log.Printf("Docker run Error: %s", err)
     return err    

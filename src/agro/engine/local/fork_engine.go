@@ -12,6 +12,7 @@ type ForkManager struct {
   procCount int
   running bool
   engine *agro_engine.WorkEngine
+  workdir string
 }
 
 
@@ -20,7 +21,7 @@ func (self *ForkManager) worker(inchan chan agro_pb.Job) {
     log.Printf("Launch job: %s", job)
     self.engine.UpdateJobState(*job.ID, agro_pb.State_RUNNING)
 
-    err := agro_engine.RunJob(&job, "/tmp/agro-local", self.engine.GetDBI())
+    err := agro_engine.RunJob(&job, self.workdir, self.engine.GetDBI())
 
     if err != nil {
       self.engine.UpdateJobState(*job.ID, agro_pb.State_OK)
@@ -59,9 +60,10 @@ func (self *ForkManager) Start(engine *agro_engine.WorkEngine) {
   go self.watcher(engine)
 }
 
-func NewLocalManager(procCount int) (*ForkManager, error) {
+func NewLocalManager(procCount int, workdir string) (*ForkManager, error) {
   return &ForkManager{
     procCount:procCount,
     running:true,
+    workdir:workdir,
   }, nil
 }
