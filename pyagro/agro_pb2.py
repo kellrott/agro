@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='agro.proto',
   package='agro_pb',
   syntax='proto2',
-  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\x16\n\x07IDQuery\x12\x0b\n\x03IDs\x18\x01 \x03(\t\"6\n\tJobStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"[\n\nTaskStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x14\n\x0c\x43ompletedJob\x18\x03 \x01(\t\x12\x0c\n\x04Runs\x18\x04 \x03(\t\"F\n\x0b\x43mdArgument\x12\r\n\x03\x41rg\x18\x01 \x01(\tH\x00\x12\x1f\n\x04\x46ile\x18\x02 \x01(\x0b\x32\x0f.agro_pb.FileIDH\x00\x42\x07\n\x05Value\"\x9c\x01\n\x04Task\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x13\n\x0bTaskDepends\x18\x02 \x03(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x0c\n\x04Tags\x18\x06 \x03(\t\x12\x1d\n\x05State\x18\x07 \x01(\x0e\x32\x0e.agro_pb.State\"\xa8\x01\n\x03Job\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x0e\n\x06TaskID\x18\x02 \x02(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x1d\n\x05State\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06Stdout\x18\x07 \x02(\t\x12\x0e\n\x06Stderr\x18\x08 \x02(\t\"\x18\n\x08TagArray\x12\x0c\n\x04Tags\x18\x01 \x03(\t\"\x16\n\x08TaskInfo\x12\n\n\x02ID\x18\x01 \x02(\t\"A\n\tDataBlock\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0b\n\x03Len\x18\x03 \x02(\x03\x12\x0c\n\x04\x44\x61ta\x18\x04 \x02(\x0c\"2\n\x08\x46ileInfo\x12\x0c\n\x04Name\x18\x01 \x02(\t\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04Size\x18\x03 \x01(\x03\"\x14\n\x06\x46ileID\x12\n\n\x02ID\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05State\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0c\n\x04Size\x18\x03 \x02(\x03*L\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\n\n\x06QUEUED\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\x0b\n\x07RUNNING\x10\x04\x12\x06\n\x02OK\x10\x05\x32\xe6\x01\n\x04\x41gro\x12\x37\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\x11.agro_pb.TaskInfo\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x32\x9b\x02\n\tFileStore\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
+  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\x16\n\x07IDQuery\x12\x0b\n\x03IDs\x18\x01 \x03(\t\"6\n\tJobStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"[\n\nTaskStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x14\n\x0c\x43ompletedJob\x18\x03 \x01(\t\x12\x0c\n\x04Runs\x18\x04 \x03(\t\"\xd0\x01\n\x0c\x46ileArgument\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Input\x18\x02 \x02(\x08\x12/\n\x04Type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04Name\x18\x04 \x01(\t\x12\x0f\n\x07NameKey\x18\x05 \x01(\t\x12\x0e\n\x06Silent\x18\x06 \x01(\x08\"E\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\"O\n\x0b\x43mdArgument\x12\r\n\x03\x41rg\x18\x01 \x01(\tH\x00\x12(\n\x07\x46ileArg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\x9c\x01\n\x04Task\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x13\n\x0bTaskDepends\x18\x02 \x03(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x0c\n\x04Tags\x18\x06 \x03(\t\x12\x1d\n\x05State\x18\x07 \x01(\x0e\x32\x0e.agro_pb.State\"\xa8\x01\n\x03Job\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x0e\n\x06TaskID\x18\x02 \x02(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x1d\n\x05State\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06Stdout\x18\x07 \x02(\t\x12\x0e\n\x06Stderr\x18\x08 \x02(\t\"\x18\n\x08TagArray\x12\x0c\n\x04Tags\x18\x01 \x03(\t\"\x16\n\x08TaskInfo\x12\n\n\x02ID\x18\x01 \x02(\t\"A\n\tDataBlock\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0b\n\x03Len\x18\x03 \x02(\x03\x12\x0c\n\x04\x44\x61ta\x18\x04 \x02(\x0c\"2\n\x08\x46ileInfo\x12\x0c\n\x04Name\x18\x01 \x02(\t\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04Size\x18\x03 \x01(\x03\"\x14\n\x06\x46ileID\x12\n\n\x02ID\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05State\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0c\n\x04Size\x18\x03 \x02(\x03*L\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\n\n\x06QUEUED\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\x0b\n\x07RUNNING\x10\x04\x12\x06\n\x02OK\x10\x05\x32\xe6\x01\n\x04\x41gro\x12\x37\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\x11.agro_pb.TaskInfo\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x32\x9b\x02\n\tFileStore\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -55,8 +55,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=889,
-  serialized_end=965,
+  serialized_start=1109,
+  serialized_end=1185,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -68,6 +68,40 @@ PAUSED = 3
 RUNNING = 4
 OK = 5
 
+
+_FILEARGUMENT_FILEARGTYPE = _descriptor.EnumDescriptor(
+  name='FileArgType',
+  full_name='agro_pb.FileArgument.FileArgType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='PATH', index=0, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='NAMED', index=1, number=2,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='REGEX', index=2, number=3,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='STDOUT', index=3, number=4,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='STDERR', index=4, number=5,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=336,
+  serialized_end=405,
+)
+_sym_db.RegisterEnumDescriptor(_FILEARGUMENT_FILEARGTYPE)
 
 
 _IDQUERY = _descriptor.Descriptor(
@@ -191,6 +225,73 @@ _TASKSTATUS = _descriptor.Descriptor(
 )
 
 
+_FILEARGUMENT = _descriptor.Descriptor(
+  name='FileArgument',
+  full_name='agro_pb.FileArgument',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='ID', full_name='agro_pb.FileArgument.ID', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Input', full_name='agro_pb.FileArgument.Input', index=1,
+      number=2, type=8, cpp_type=7, label=2,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Type', full_name='agro_pb.FileArgument.Type', index=2,
+      number=3, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Name', full_name='agro_pb.FileArgument.Name', index=3,
+      number=4, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='NameKey', full_name='agro_pb.FileArgument.NameKey', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='Silent', full_name='agro_pb.FileArgument.Silent', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _FILEARGUMENT_FILEARGTYPE,
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=197,
+  serialized_end=405,
+)
+
+
 _CMDARGUMENT = _descriptor.Descriptor(
   name='CmdArgument',
   full_name='agro_pb.CmdArgument',
@@ -206,7 +307,7 @@ _CMDARGUMENT = _descriptor.Descriptor(
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='File', full_name='agro_pb.CmdArgument.File', index=1,
+      name='FileArg', full_name='agro_pb.CmdArgument.FileArg', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -227,8 +328,8 @@ _CMDARGUMENT = _descriptor.Descriptor(
       name='Value', full_name='agro_pb.CmdArgument.Value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=196,
-  serialized_end=266,
+  serialized_start=407,
+  serialized_end=486,
 )
 
 
@@ -300,8 +401,8 @@ _TASK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=269,
-  serialized_end=425,
+  serialized_start=489,
+  serialized_end=645,
 )
 
 
@@ -380,8 +481,8 @@ _JOB = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=428,
-  serialized_end=596,
+  serialized_start=648,
+  serialized_end=816,
 )
 
 
@@ -411,8 +512,8 @@ _TAGARRAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=598,
-  serialized_end=622,
+  serialized_start=818,
+  serialized_end=842,
 )
 
 
@@ -442,8 +543,8 @@ _TASKINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=624,
-  serialized_end=646,
+  serialized_start=844,
+  serialized_end=866,
 )
 
 
@@ -494,8 +595,8 @@ _DATABLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=648,
-  serialized_end=713,
+  serialized_start=868,
+  serialized_end=933,
 )
 
 
@@ -539,8 +640,8 @@ _FILEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=715,
-  serialized_end=765,
+  serialized_start=935,
+  serialized_end=985,
 )
 
 
@@ -570,8 +671,8 @@ _FILEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=767,
-  serialized_end=787,
+  serialized_start=987,
+  serialized_end=1007,
 )
 
 
@@ -601,8 +702,8 @@ _FILESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=789,
-  serialized_end=831,
+  serialized_start=1009,
+  serialized_end=1051,
 )
 
 
@@ -646,19 +747,21 @@ _READREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=833,
-  serialized_end=887,
+  serialized_start=1053,
+  serialized_end=1107,
 )
 
 _JOBSTATUS.fields_by_name['State'].enum_type = _STATE
 _TASKSTATUS.fields_by_name['State'].enum_type = _STATE
-_CMDARGUMENT.fields_by_name['File'].message_type = _FILEID
+_FILEARGUMENT.fields_by_name['Type'].enum_type = _FILEARGUMENT_FILEARGTYPE
+_FILEARGUMENT_FILEARGTYPE.containing_type = _FILEARGUMENT
+_CMDARGUMENT.fields_by_name['FileArg'].message_type = _FILEARGUMENT
 _CMDARGUMENT.oneofs_by_name['Value'].fields.append(
   _CMDARGUMENT.fields_by_name['Arg'])
 _CMDARGUMENT.fields_by_name['Arg'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
 _CMDARGUMENT.oneofs_by_name['Value'].fields.append(
-  _CMDARGUMENT.fields_by_name['File'])
-_CMDARGUMENT.fields_by_name['File'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
+  _CMDARGUMENT.fields_by_name['FileArg'])
+_CMDARGUMENT.fields_by_name['FileArg'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
 _TASK.fields_by_name['Args'].message_type = _CMDARGUMENT
 _TASK.fields_by_name['State'].enum_type = _STATE
 _JOB.fields_by_name['Args'].message_type = _CMDARGUMENT
@@ -667,6 +770,7 @@ _FILESTATE.fields_by_name['State'].enum_type = _STATE
 DESCRIPTOR.message_types_by_name['IDQuery'] = _IDQUERY
 DESCRIPTOR.message_types_by_name['JobStatus'] = _JOBSTATUS
 DESCRIPTOR.message_types_by_name['TaskStatus'] = _TASKSTATUS
+DESCRIPTOR.message_types_by_name['FileArgument'] = _FILEARGUMENT
 DESCRIPTOR.message_types_by_name['CmdArgument'] = _CMDARGUMENT
 DESCRIPTOR.message_types_by_name['Task'] = _TASK
 DESCRIPTOR.message_types_by_name['Job'] = _JOB
@@ -699,6 +803,13 @@ TaskStatus = _reflection.GeneratedProtocolMessageType('TaskStatus', (_message.Me
   # @@protoc_insertion_point(class_scope:agro_pb.TaskStatus)
   ))
 _sym_db.RegisterMessage(TaskStatus)
+
+FileArgument = _reflection.GeneratedProtocolMessageType('FileArgument', (_message.Message,), dict(
+  DESCRIPTOR = _FILEARGUMENT,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.FileArgument)
+  ))
+_sym_db.RegisterMessage(FileArgument)
 
 CmdArgument = _reflection.GeneratedProtocolMessageType('CmdArgument', (_message.Message,), dict(
   DESCRIPTOR = _CMDARGUMENT,

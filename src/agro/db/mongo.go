@@ -401,7 +401,7 @@ func (self *MongoInterface) ReadFile(req agro_pb.ReadRequest) agro_pb.DataBlock 
     ID:req.ID,
     Start:req.Start,
     Len:proto.Int64(int64(l)),
-    Data:data,
+    Data:data[:l],
   }
   f.Close()
   return o

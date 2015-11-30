@@ -29,10 +29,26 @@ message TaskStatus {
   repeated string Runs = 4;  
 }
 
+message FileArgument {
+  enum FileArgType {
+    PATH   = 1;
+    NAMED  = 2;
+    REGEX  = 3;
+    STDOUT = 4;
+    STDERR = 5;
+  }
+  required string ID = 1;
+  required bool Input = 2;
+  required FileArgType Type = 3;
+  optional string Name = 4;
+  optional string NameKey = 5;
+  optional bool Silent = 6;
+}
+
 message CmdArgument {
   oneof Value {
     string Arg = 1;
-    FileID File = 2;
+    FileArgument FileArg = 2;
   }
 }
 

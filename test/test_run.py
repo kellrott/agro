@@ -30,7 +30,19 @@ class TestAgroClient(utilities.ServerTest):
         
         pyagro.upload_file(filestore, file_id, os.path.join(BASE_DIR, "..", "README"))
         
-        task.Args.add( File=agro_pb2.FileID(ID=file_id) ) 
+        task.Args.add( FileArg=agro_pb2.FileArgument(
+            ID=file_id, 
+            Input=True, 
+            Silent=False,
+            Type=agro_pb2.FileArgument.PATH),
+        ) 
+        output_uuid = str(uuid.uuid4())
+        task.Args.add( FileArg=agro_pb2.FileArgument(
+            ID=output_uuid, 
+            Input=False,
+            Silent=False,
+            Type=agro_pb2.FileArgument.STDOUT),
+        ) 
         task.Tags.extend( ['testing'] )
         print "Adding task"
         sched.AddTask(task, 10)
@@ -38,10 +50,12 @@ class TestAgroClient(utilities.ServerTest):
         while True:
             status_list = list(sched.GetTaskStatus(agro_pb2.IDQuery(IDs=[task_id]), 10))
             print status_list
-            
             if sum(list( status.State == agro_pb2.OK for status in status_list )) == len(status_list):
                 break
             time.sleep(1)
+        
+        print "Result File", output_uuid
+        
         sched = None
         filestore = None
         
