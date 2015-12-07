@@ -3,122 +3,197 @@ syntax = "proto2";
 
 package agro_pb;
 
-
-message IDQuery {
-    repeated string IDs = 1;
-}
-
-enum State {
-  ERROR = 0;
-  WAITING = 1;
-  QUEUED = 2;
-  PAUSED = 3;
-  RUNNING = 4;
-  OK = 5;
-}
-
-message JobStatus {
-  required string ID = 1;  
-  required State State = 2;
-}
-
-message TaskStatus {
-  required string ID = 1;  
-  required State State = 2;
-  optional string CompletedJob = 3;
-  repeated string Runs = 4;  
-}
-
-message FileArgument {
-  enum FileArgType {
-    PATH   = 1;
-    NAMED  = 2;
-    REGEX  = 3;
-    STDOUT = 4;
-    STDERR = 5;
-  }
-  required string ID = 1;
-  required bool Input = 2;
-  required FileArgType Type = 3;
-  optional string Name = 4;
-  optional string NameKey = 5;
-  optional bool Silent = 6;
-}
-
-message CmdArgument {
-  oneof Value {
-    string Arg = 1;
-    FileArgument FileArg = 2;
-  }
-}
-
+/**
+ * The Task Record
+ * A task is a request for work to be done, it does not represent a specific 
+ * invocation of that work. It is abstract, and describes the request and its 
+ * dependencies. A Job represents a real instance of a Task, and there may be 
+ * multiple jobs for associated with a single task.
+ */ 
 message Task {
-  required string ID = 1;
-  repeated string TaskDepends = 2;
-  required string Command = 3;
-  repeated CmdArgument Args = 4; 
-  optional string Container = 5;
-  repeated string Tags = 6;
-  optional State State = 7;
+  required string id = 1;          /// ID of the task (UUID)
+  repeated string task_depends = 2; /// Array of task IDs that must be State==OK before this Task can be invoked
+  required string command = 3;     /// The path of the executable to be run
+  repeated CmdArgument args = 4;   /// The array of command line arguments
+  optional string container = 5;   /// Container ID to run the code in
+  repeated string tags = 6;        /// An array of customizable tags to enable task queries
+  optional State state = 7;        /// The State of the Task
 }
 
+/**
+ * The Job Record
+ * A job is a specific instance of a Task, representing a real invocation the will
+ * be or has been run on the system. 
+ */
 message Job {
-  required string ID = 1;
-  required string TaskID = 2;
-  required string Command = 3;
-  repeated CmdArgument Args = 4; 
-  optional string Container = 5;
-  required State State = 6;
-  required string Stdout = 7;
-  required string Stderr = 8;
+  required string id = 1;          /// ID of the job (UUID)
+  required string task_id = 2;      /// ID of the task this job is associated with
+  required string command = 3;     /// The path of the executable to be run
+  repeated CmdArgument args = 4;   /// The array of command line arguments
+  optional string container = 5;   /// Container ID to run the code in
+  required State state = 6;        /// The State of the Job
+  required string stdout = 7;      /// Captured Stdout
+  required string stderr = 8;      /// Captured Stderr
 }
 
+
+/**
+ * The different states a job or a task can be in
+ */
+enum State {
+  ERROR = 0;    /// Error state
+  WAITING = 1;  /// Cannot yet be run, dependencies are not yet ready
+  QUEUED = 2;   /// Ready to run, but waiting for scheduling
+  PAUSED = 3;   /// Cannot yet be run, and will not become available without intervention, dependencies may be in error state
+  RUNNING = 4;  /// Current running
+  OK = 5;       /// Completed with no errors
+}
+
+/**
+ * Job Status information
+ */
+message JobStatus {
+  required string id = 1;    /// ID of the Job
+  required State state = 2;  /// The state of the job
+}
+
+/**
+ * Task status
+*/
+message TaskStatus {
+  required string id = 1;            /// ID of the Task
+  required State state = 2;          /// The State of the Task
+  optional string completed_job = 3;  /// If in State=OK, which Job ID represents the successful run
+  repeated string runs = 4;          /// An array of all State != OK jobs that have been attempted
+}
+
+/**
+ * CmdArgument
+ * The arguments to be passed into the running program are passed in as an array of 
+ * strings or file arguments
+ */
+message CmdArgument {
+  oneof Value {                 /// The command line will be 'oneof': a String or a FileArgument
+    string arg = 1;             /// A string argument to be copied into the command argument array
+    FileArgument file_arg = 2;   /// A file that will be mapped into a command line argument
+  }
+}
+
+/**
+ * FileArgument
+ * Represents a file that is part of the command line execution. The location of the file may be embedded 
+ * into the command line, or be treated as a fixed or silent argument.
+ */
+message FileArgument {
+  enum FileArgType {  /// The type of file argument
+    PATH   = 1;       /// Pass the full path of the file into the command line
+    NAMED  = 2;       /// Create a fixed name symlink in the current working directory to the input file
+    REGEX  = 3;       /// Create the command line argument by applying a regular expression to the users string and replacing their variable with the file path
+    STDOUT = 4;       /// The output file represents the captured STDOUT, typically associated with a 'silent output' argument
+    STDERR = 5;       /// The output file represents the captured STDERR, typically associated with a 'silent output' argument
+    STDIN  = 6;       /// The input file represents a pipe of the input file, typically associated with a 'silent input' argument
+  }
+  required string id = 1;         /// ID of the file
+  required bool input = 2;        /// If True, the file is used for input, otherwise it is an output file
+  required FileArgType type = 3;  /// The type of argument this file represents
+  optional string name = 4;       /// if fileargtype=PATH replace 'NameKey' with path of file. if fileargtype=NAMED, "input.txt" will create a symlink 'input.txt' in the working directory
+  optional string name_key = 5;    /// The regex search pattern to use on Name to place file location into argument
+  optional bool silent = 6;       /// This argument is not copied into the command line
+}
+
+
+/**
+ * Structures used for Queries
+ *
+ */ 
+
+/**
+ * An array of tags to search for tasks
+ */
 message TagArray {
-  repeated string Tags = 1;
+  repeated string tags = 1;
 }
 
-message TaskInfo {
-  required string ID = 1;
+/**
+ * An array of ids to retrieve information about
+ */
+message IDQuery {
+    repeated string ids = 1;
 }
 
-service Agro {
-  rpc SearchTasks(TagArray) returns (stream TaskInfo) {}
-  rpc AddTask(Task) returns (TaskStatus) {}
-  rpc GetTaskStatus(IDQuery) returns (stream TaskStatus) {}
-  rpc GetJobStatus(IDQuery) returns (stream JobStatus) {}
+
+/**
+ * Scheduler Service
+ */
+service Scheduler {
+  rpc SearchTasks(TagArray) returns (stream Task) {} /// Search for tasks that match a set of tags
+  rpc AddTask(Task) returns (TaskStatus) {}          /// Add a new task request
+  rpc GetTaskStatus(IDQuery) returns (stream TaskStatus) {}  /// Get the status if a Task
+  rpc GetJobStatus(IDQuery) returns (stream JobStatus) {}    /// Get information about a specific job
 }
 
+/**
+ * File Access Structures and Methods
+ */
+ 
+/**
+ * A block of data from a file
+ */
 message DataBlock {
-  required string ID   = 1;
-  required int64 Start = 2;
-  required int64 Len   = 3;
-  required bytes Data  = 4;
+  required string id   = 1;  /// ID of the file (UUID)
+  required int64 start = 2;  /// Start position of the data block
+  required int64 len   = 3;  /// Length of data block
+  required bytes data  = 4;  /// The bytes of data
 }
 
+/**
+ * Basic meta-data about a file
+ */
 message FileInfo {
-  required string Name = 1;
-  required string ID = 2;
-  optional int64  Size = 3;
+  required string name = 1; /// Name of file, not unique
+  required string id = 2;   /// Unique ID of file, UUID
+  optional int64  size = 3; /// Size of file
+  repeated string urls = 4; /// Alternate locations where the file can be downloaded
 }
 
+/**
+ * Request structures for the API
+ */
+
+/**
+ * Identify a file for operations
+ */
 message FileID {
-  required string ID = 1;
+  required string id = 1; // ID of file
 }
 
+/**
+ * The State of a file.
+ * Possible states:
+ *  - RUNNING : The file has been created, but is not ready to be read (still uploading)
+ *  - OK : The file is ready for use 
+ *  - ERROR :  File data is damaged
+ */
 message FileState {
-  required State State = 1;
+  required State state = 1; /// State of the file
 }
 
+/**
+ * Request to get part of a file to read
+ */
 message ReadRequest {
-  required string ID    = 1;
-  required int64  Start = 2;  
-  required int64  Size  = 3;
+  required string id    = 1; /// ID of the file to read
+  required int64  start = 2; /// Start position of the read block
+  required int64  size  = 3; /// Size of the requested read
 }
 
+/**
+ * API to work with files
+ */
 service FileStore {
-  rpc CreateFile(FileInfo) returns (FileState) {}
-  rpc WriteFile(DataBlock) returns (FileState) {}
-  rpc CommitFile(FileID) returns (FileState) {}
-  rpc GetFileInfo(FileID) returns (FileInfo) {}
-  rpc ReadFile(ReadRequest) returns (DataBlock) {}
+  rpc CreateFile(FileInfo) returns (FileState) {}  /// Request the creation of a file, the file does not need to be made available until CommitFile is called
+  rpc WriteFile(DataBlock) returns (FileState) {}  /// Append a datablock to the end of a file
+  rpc CommitFile(FileID) returns (FileState) {}    /// Mark the end of the data upload, now the file should be available for reading
+  rpc GetFileInfo(FileID) returns (FileInfo) {}    /// Get information about the file
+  rpc ReadFile(ReadRequest) returns (DataBlock) {} /// Read a block of data from a file
 }

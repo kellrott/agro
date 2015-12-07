@@ -3,17 +3,11 @@ package main
 
 import (
     "log"
-    //"io/ioutil"
-    "net"
     "flag"
-    //"github.com/gorilla/mux"
-    //"github.com/golang/protobuf/jsonpb"
-    "google.golang.org/grpc"
     "agro/db"
-    "agro/proto"
     "agro/engine"
     "agro/engine/mesos"
-    context "golang.org/x/net/context"
+    "agro"
 )
 
 
@@ -28,18 +22,10 @@ func main() {
     manager, _ = agro_mesos.NewMesosManager(*mesos_master)
     
     engine, _ := agro_engine.NewEngine(dbi, manager, 4)
-    server := AgroServer {
-      dbi : dbi,
-      engine: engine,
-    }
-    engine.Start()
-    lis, err := net.Listen("tcp", ":9713")
-    if err != nil {
-      panic("Cannot open port")
-    }
-    grpcServer := grpc.NewServer()
-  	agro_pb.RegisterAgroServer(grpcServer, server)
-    log.Println("Starting Server")
-  	grpcServer.Serve(lis)
     
+    server := agro.NewAgroServer()
+    server.RegisterEngine(engine)
+    server.RegisterFileStore(dbi)    
+    engine.Start()
+    server.Run()    
 }

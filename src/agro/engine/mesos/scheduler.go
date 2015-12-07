@@ -92,12 +92,12 @@ Mesos Scheduler interface
 */
 
 func (self *MesosManager) BuildTaskInfo(job *agro_pb.Job, offer *mesos.Offer) *mesos.TaskInfo {
-  task_data, _ := json.Marshal( map[string]string{ "command_line" : *job.CommandLine } )
+  task_data, _ := json.Marshal( map[string]string{ "command_line" : *job.Command } )
   
   return &mesos.TaskInfo{
-    Name: job.TaskID,
+    Name: job.TaskId,
     TaskId:  &mesos.TaskID{
-				Value: job.ID,
+				Value: job.Id,
 		},
     SlaveId: offer.SlaveId,
     Executor: self.executor,
@@ -166,9 +166,7 @@ func (self *MesosManager) ResourceOffers(driver sched.SchedulerDriver, offers []
     }
   }
   self.computeCount = computeCount
-  log.Printf("JobsReady:%d JobsRunning:%d CPUsOffered: %d", 
-    self.engine.GetReadyJobCount(), self.engine.GetRunningJobCount(), 
-    self.computeCount)
+  log.Printf("CPUsOffered: %d", self.computeCount)
 }
 
 func (self *MesosManager) StatusUpdate(driver sched.SchedulerDriver, status *mesos.TaskStatus) {

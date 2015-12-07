@@ -35,7 +35,7 @@ class TestAgroClient(utilities.ServerTest):
             Input=True, 
             Silent=False,
             Type=agro_pb2.FileArgument.PATH),
-        ) 
+        )
         output_uuid = str(uuid.uuid4())
         task.Args.add( FileArg=agro_pb2.FileArgument(
             ID=output_uuid, 

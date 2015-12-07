@@ -29,9 +29,9 @@ func ProtoToMongo(pb proto.Message, idFix bool) map[string]interface{} {
     out := make(map[string]interface{})
     json.Unmarshal([]byte(s), &out)
     if idFix {
-      if _, ok := out["ID"]; ok {
-        out["_id"] = out["ID"]
-        delete(out, "ID")
+      if _, ok := out["id"]; ok {
+        out["_id"] = out["id"]
+        delete(out, "id")
       }
     }
     return out
@@ -40,7 +40,7 @@ func ProtoToMongo(pb proto.Message, idFix bool) map[string]interface{} {
 func MongoToProto(in map[string]interface{}, pb proto.Message, idFix bool) {
     if idFix {
       if _, ok := in["_id"]; ok {
-        in["ID"] = in["_id"]
+        in["id"] = in["_id"]
         delete(in, "_id")
       }
     }
@@ -209,7 +209,7 @@ func (self *MongoInterface) TaskQuery(state *agro_pb.State) chan agro_pb.Task {
     go func() {
       i := self.db.C("task").Find( 
           bson.M{
-            "State" : agro_pb.State_QUEUED.String(),
+            "state" : agro_pb.State_QUEUED.String(),
           }).Iter()
       result := make(map[string]interface{})
       for i.Next(&result) {
@@ -232,7 +232,7 @@ func (self *MongoInterface) JobQuery(state *agro_pb.State) chan agro_pb.Job {
     //log.Printf("Scanning For QUEUED jobs")
     out := make(chan agro_pb.Job)
     go func() {
-      i := self.db.C("job").Find( bson.M{"State" : agro_pb.State_QUEUED.String()} ).Iter()
+      i := self.db.C("job").Find( bson.M{"state" : agro_pb.State_QUEUED.String()} ).Iter()
       result := make(map[string]interface{})
       for i.Next(&result) {
         pout := agro_pb.Job{}
@@ -249,8 +249,8 @@ func (self *MongoInterface) JobQuery(state *agro_pb.State) chan agro_pb.Job {
   return out
 }
 
-func (self *MongoInterface) SearchTasks(tags *agro_pb.TagArray) chan agro_pb.TaskInfo {
-  out := make(chan agro_pb.TaskInfo)
+func (self *MongoInterface) SearchTasks(tags *agro_pb.TagArray) chan agro_pb.Task {
+  out := make(chan agro_pb.Task)
   go func() {
     var iter *mgo.Iter = nil
     if (len(tags.Tags) > 0) {
@@ -262,9 +262,7 @@ func (self *MongoInterface) SearchTasks(tags *agro_pb.TagArray) chan agro_pb.Tas
     for iter.Next(&result) {
       pout := agro_pb.Task{}
       MongoToProto(result,&pout, true)
-      out <- agro_pb.TaskInfo{
-        ID:pout.ID,
-      }
+      out <- pout
     }
     close(out)
   } ()
@@ -282,7 +280,7 @@ func (self *MongoInterface) GetTask(taskID string) agro_pb.Task {
 func (self *MongoInterface) GetTaskJobs(taskID string) chan agro_pb.Job {
   out := make(chan agro_pb.Job)
   go func() {
-    var iter = self.db.C("job").Find( bson.M{"TaskID" : taskID} ).Iter()
+    var iter = self.db.C("job").Find( bson.M{"task_id" : taskID} ).Iter()
     result := make(map[string]interface{})    
     for iter.Next(&result) {
       pout := agro_pb.Job{}
@@ -300,9 +298,9 @@ func (self *MongoInterface) GetTaskStatus(taskID string) agro_pb.TaskStatus {
   var completed *string = nil
   var state = agro_pb.State_QUEUED
   for job := range self.GetTaskJobs(taskID) {
-    runs = append(runs, *job.ID)
+    runs = append(runs, *job.Id)
     if *job.State == agro_pb.State_OK {
-      completed = job.ID
+      completed = job.Id
       state = *job.State
     }
     if state != agro_pb.State_OK {
@@ -317,7 +315,7 @@ func (self *MongoInterface) GetTaskStatus(taskID string) agro_pb.TaskStatus {
   }
   
   out := &agro_pb.TaskStatus{
-    ID: &taskID,
+    Id: &taskID,
     State: &state,
     CompletedJob: completed,
     Runs: runs,
@@ -342,7 +340,7 @@ func (self *MongoInterface) SetJobLogs(jobID string,stdout []byte,stderr []byte)
 
 func (self *MongoInterface) UpdateJobState(jobID string, state agro_pb.State) {
   log.Printf("Job %s to %s", jobID, state)
-  self.db.C("job").Update(bson.M{"_id" : jobID}, bson.M{"$set" : bson.M{"State" : state.String()}})
+  self.db.C("job").Update(bson.M{"_id" : jobID}, bson.M{"$set" : bson.M{"state" : state.String()}})
 }
 
 func (self *MongoInterface) GetJobState(jobID string) *agro_pb.State {
@@ -351,40 +349,40 @@ func (self *MongoInterface) GetJobState(jobID string) *agro_pb.State {
   if err != nil {
     return nil
   }
-  a := agro_pb.State(agro_pb.State_value[result["State"].(string)])
+  a := agro_pb.State(agro_pb.State_value[result["state"].(string)])
   return &a
 }
 
 func (self *MongoInterface) UpdateTaskState(taskID string, state agro_pb.State) {
   log.Printf("Task %s to %s", taskID, state)
-  self.db.C("task").Update(bson.M{"_id" : taskID}, bson.M{"$set" : bson.M{"State" : state.String()}})
+  self.db.C("task").Update(bson.M{"_id" : taskID}, bson.M{"$set" : bson.M{"state" : state.String()}})
 }
 
 func (self *MongoInterface) CreateFile(info agro_pb.FileInfo) agro_pb.FileState {
   f,_ := self.db.GridFS("fs").Create(*info.Name)
-  f.SetId(info.ID)
+  f.SetId(info.Id)
   f.SetChunkSize(16777216)
-  self.openFiles[*info.ID] = f
+  self.openFiles[*info.Id] = f
   return agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }
 }
 
 func (self *MongoInterface) WriteFile(block agro_pb.DataBlock) agro_pb.FileState {
-  self.openFiles[*block.ID].Write(block.Data)
+  self.openFiles[*block.Id].Write(block.Data)
   log.Printf("Writing: %s", block.Data)
   return agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }
 }
 
 func (self *MongoInterface) CommitFile(f agro_pb.FileID) agro_pb.FileState {
-  self.openFiles[*f.ID].Close()
-  delete(self.openFiles, *f.ID)
+  self.openFiles[*f.Id].Close()
+  delete(self.openFiles, *f.Id)
   return agro_pb.FileState{ State:agro_pb.State_OK.Enum() }
 }
 
 func (self *MongoInterface) GetFileInfo(i agro_pb.FileID) agro_pb.FileInfo {
-  f,_ := self.db.GridFS("fs").OpenId(*i.ID)
+  f,_ := self.db.GridFS("fs").OpenId(*i.Id)
   o := agro_pb.FileInfo{
     Name: proto.String(f.Name()),
-    ID:   proto.String(f.Id().(string)),
+    Id:   proto.String(f.Id().(string)),
     Size: proto.Int64(f.Size()),
   }
   f.Close()
@@ -392,13 +390,13 @@ func (self *MongoInterface) GetFileInfo(i agro_pb.FileID) agro_pb.FileInfo {
 }
 
 func (self *MongoInterface) ReadFile(req agro_pb.ReadRequest) agro_pb.DataBlock {
-  f,_ := self.db.GridFS("fs").OpenId(*req.ID)
+  f,_ := self.db.GridFS("fs").OpenId(*req.Id)
   f.Seek(*req.Start, 0)
   data := make([]byte, *req.Size)
   l, _ := f.Read(data)
   log.Printf("GridRead: %d (%d)", l, *req.Size)
   o := agro_pb.DataBlock{
-    ID:req.ID,
+    Id:req.Id,
     Start:req.Start,
     Len:proto.Int64(int64(l)),
     Data:data[:l],

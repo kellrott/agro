@@ -9,15 +9,14 @@ It is generated from these files:
 	proto/agro.proto
 
 It has these top-level messages:
-	IDQuery
-	JobStatus
-	TaskStatus
-	FileArgument
-	CmdArgument
 	Task
 	Job
+	JobStatus
+	TaskStatus
+	CmdArgument
+	FileArgument
 	TagArray
-	TaskInfo
+	IDQuery
 	DataBlock
 	FileInfo
 	FileID
@@ -40,6 +39,8 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// *
+// The different states a job or a task can be in
 type State int32
 
 const (
@@ -94,6 +95,7 @@ const (
 	FileArgument_REGEX  FileArgument_FileArgType = 3
 	FileArgument_STDOUT FileArgument_FileArgType = 4
 	FileArgument_STDERR FileArgument_FileArgType = 5
+	FileArgument_STDIN  FileArgument_FileArgType = 6
 )
 
 var FileArgument_FileArgType_name = map[int32]string{
@@ -102,6 +104,7 @@ var FileArgument_FileArgType_name = map[int32]string{
 	3: "REGEX",
 	4: "STDOUT",
 	5: "STDERR",
+	6: "STDIN",
 }
 var FileArgument_FileArgType_value = map[string]int32{
 	"PATH":   1,
@@ -109,6 +112,7 @@ var FileArgument_FileArgType_value = map[string]int32{
 	"REGEX":  3,
 	"STDOUT": 4,
 	"STDERR": 5,
+	"STDIN":  6,
 }
 
 func (x FileArgument_FileArgType) Enum() *FileArgument_FileArgType {
@@ -127,265 +131,33 @@ func (x *FileArgument_FileArgType) UnmarshalJSON(data []byte) error {
 	*x = FileArgument_FileArgType(value)
 	return nil
 }
-func (FileArgument_FileArgType) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{3, 0} }
+func (FileArgument_FileArgType) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{5, 0} }
 
-type IDQuery struct {
-	IDs              []string `protobuf:"bytes,1,rep,name=IDs" json:"IDs,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (m *IDQuery) Reset()                    { *m = IDQuery{} }
-func (m *IDQuery) String() string            { return proto.CompactTextString(m) }
-func (*IDQuery) ProtoMessage()               {}
-func (*IDQuery) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
-
-func (m *IDQuery) GetIDs() []string {
-	if m != nil {
-		return m.IDs
-	}
-	return nil
-}
-
-type JobStatus struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	State            *State  `protobuf:"varint,2,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
-}
-
-func (m *JobStatus) Reset()                    { *m = JobStatus{} }
-func (m *JobStatus) String() string            { return proto.CompactTextString(m) }
-func (*JobStatus) ProtoMessage()               {}
-func (*JobStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
-
-func (m *JobStatus) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
-	}
-	return ""
-}
-
-func (m *JobStatus) GetState() State {
-	if m != nil && m.State != nil {
-		return *m.State
-	}
-	return State_ERROR
-}
-
-type TaskStatus struct {
-	ID               *string  `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	State            *State   `protobuf:"varint,2,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
-	CompletedJob     *string  `protobuf:"bytes,3,opt,name=CompletedJob" json:"CompletedJob,omitempty"`
-	Runs             []string `protobuf:"bytes,4,rep,name=Runs" json:"Runs,omitempty"`
-	XXX_unrecognized []byte   `json:"-"`
-}
-
-func (m *TaskStatus) Reset()                    { *m = TaskStatus{} }
-func (m *TaskStatus) String() string            { return proto.CompactTextString(m) }
-func (*TaskStatus) ProtoMessage()               {}
-func (*TaskStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
-
-func (m *TaskStatus) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
-	}
-	return ""
-}
-
-func (m *TaskStatus) GetState() State {
-	if m != nil && m.State != nil {
-		return *m.State
-	}
-	return State_ERROR
-}
-
-func (m *TaskStatus) GetCompletedJob() string {
-	if m != nil && m.CompletedJob != nil {
-		return *m.CompletedJob
-	}
-	return ""
-}
-
-func (m *TaskStatus) GetRuns() []string {
-	if m != nil {
-		return m.Runs
-	}
-	return nil
-}
-
-type FileArgument struct {
-	ID               *string                   `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	Input            *bool                     `protobuf:"varint,2,req,name=Input" json:"Input,omitempty"`
-	Type             *FileArgument_FileArgType `protobuf:"varint,3,req,name=Type,enum=agro_pb.FileArgument_FileArgType" json:"Type,omitempty"`
-	Name             *string                   `protobuf:"bytes,4,opt,name=Name" json:"Name,omitempty"`
-	NameKey          *string                   `protobuf:"bytes,5,opt,name=NameKey" json:"NameKey,omitempty"`
-	Silent           *bool                     `protobuf:"varint,6,opt,name=Silent" json:"Silent,omitempty"`
-	XXX_unrecognized []byte                    `json:"-"`
-}
-
-func (m *FileArgument) Reset()                    { *m = FileArgument{} }
-func (m *FileArgument) String() string            { return proto.CompactTextString(m) }
-func (*FileArgument) ProtoMessage()               {}
-func (*FileArgument) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
-
-func (m *FileArgument) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
-	}
-	return ""
-}
-
-func (m *FileArgument) GetInput() bool {
-	if m != nil && m.Input != nil {
-		return *m.Input
-	}
-	return false
-}
-
-func (m *FileArgument) GetType() FileArgument_FileArgType {
-	if m != nil && m.Type != nil {
-		return *m.Type
-	}
-	return FileArgument_PATH
-}
-
-func (m *FileArgument) GetName() string {
-	if m != nil && m.Name != nil {
-		return *m.Name
-	}
-	return ""
-}
-
-func (m *FileArgument) GetNameKey() string {
-	if m != nil && m.NameKey != nil {
-		return *m.NameKey
-	}
-	return ""
-}
-
-func (m *FileArgument) GetSilent() bool {
-	if m != nil && m.Silent != nil {
-		return *m.Silent
-	}
-	return false
-}
-
-type CmdArgument struct {
-	// Types that are valid to be assigned to Value:
-	//	*CmdArgument_Arg
-	//	*CmdArgument_FileArg
-	Value            isCmdArgument_Value `protobuf_oneof:"Value"`
-	XXX_unrecognized []byte              `json:"-"`
-}
-
-func (m *CmdArgument) Reset()                    { *m = CmdArgument{} }
-func (m *CmdArgument) String() string            { return proto.CompactTextString(m) }
-func (*CmdArgument) ProtoMessage()               {}
-func (*CmdArgument) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
-
-type isCmdArgument_Value interface {
-	isCmdArgument_Value()
-}
-
-type CmdArgument_Arg struct {
-	Arg string `protobuf:"bytes,1,opt,name=Arg,oneof"`
-}
-type CmdArgument_FileArg struct {
-	FileArg *FileArgument `protobuf:"bytes,2,opt,name=FileArg,oneof"`
-}
-
-func (*CmdArgument_Arg) isCmdArgument_Value()     {}
-func (*CmdArgument_FileArg) isCmdArgument_Value() {}
-
-func (m *CmdArgument) GetValue() isCmdArgument_Value {
-	if m != nil {
-		return m.Value
-	}
-	return nil
-}
-
-func (m *CmdArgument) GetArg() string {
-	if x, ok := m.GetValue().(*CmdArgument_Arg); ok {
-		return x.Arg
-	}
-	return ""
-}
-
-func (m *CmdArgument) GetFileArg() *FileArgument {
-	if x, ok := m.GetValue().(*CmdArgument_FileArg); ok {
-		return x.FileArg
-	}
-	return nil
-}
-
-// XXX_OneofFuncs is for the internal use of the proto package.
-func (*CmdArgument) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), []interface{}) {
-	return _CmdArgument_OneofMarshaler, _CmdArgument_OneofUnmarshaler, []interface{}{
-		(*CmdArgument_Arg)(nil),
-		(*CmdArgument_FileArg)(nil),
-	}
-}
-
-func _CmdArgument_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
-	m := msg.(*CmdArgument)
-	// Value
-	switch x := m.Value.(type) {
-	case *CmdArgument_Arg:
-		b.EncodeVarint(1<<3 | proto.WireBytes)
-		b.EncodeStringBytes(x.Arg)
-	case *CmdArgument_FileArg:
-		b.EncodeVarint(2<<3 | proto.WireBytes)
-		if err := b.EncodeMessage(x.FileArg); err != nil {
-			return err
-		}
-	case nil:
-	default:
-		return fmt.Errorf("CmdArgument.Value has unexpected type %T", x)
-	}
-	return nil
-}
-
-func _CmdArgument_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
-	m := msg.(*CmdArgument)
-	switch tag {
-	case 1: // Value.Arg
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		x, err := b.DecodeStringBytes()
-		m.Value = &CmdArgument_Arg{x}
-		return true, err
-	case 2: // Value.FileArg
-		if wire != proto.WireBytes {
-			return true, proto.ErrInternalBadWireType
-		}
-		msg := new(FileArgument)
-		err := b.DecodeMessage(msg)
-		m.Value = &CmdArgument_FileArg{msg}
-		return true, err
-	default:
-		return false, nil
-	}
-}
-
+// *
+// The Task Record
+// A task is a request for work to be done, it does not represent a specific
+// invocation of that work. It is abstract, and describes the request and its
+// dependencies. A Job represents a real instance of a Task, and there may be
+// multiple jobs for associated with a single task.
 type Task struct {
-	ID               *string        `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	TaskDepends      []string       `protobuf:"bytes,2,rep,name=TaskDepends" json:"TaskDepends,omitempty"`
-	Command          *string        `protobuf:"bytes,3,req,name=Command" json:"Command,omitempty"`
-	Args             []*CmdArgument `protobuf:"bytes,4,rep,name=Args" json:"Args,omitempty"`
-	Container        *string        `protobuf:"bytes,5,opt,name=Container" json:"Container,omitempty"`
-	Tags             []string       `protobuf:"bytes,6,rep,name=Tags" json:"Tags,omitempty"`
-	State            *State         `protobuf:"varint,7,opt,name=State,enum=agro_pb.State" json:"State,omitempty"`
+	Id               *string        `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	TaskDepends      []string       `protobuf:"bytes,2,rep,name=task_depends" json:"task_depends,omitempty"`
+	Command          *string        `protobuf:"bytes,3,req,name=command" json:"command,omitempty"`
+	Args             []*CmdArgument `protobuf:"bytes,4,rep,name=args" json:"args,omitempty"`
+	Container        *string        `protobuf:"bytes,5,opt,name=container" json:"container,omitempty"`
+	Tags             []string       `protobuf:"bytes,6,rep,name=tags" json:"tags,omitempty"`
+	State            *State         `protobuf:"varint,7,opt,name=state,enum=agro_pb.State" json:"state,omitempty"`
 	XXX_unrecognized []byte         `json:"-"`
 }
 
 func (m *Task) Reset()                    { *m = Task{} }
 func (m *Task) String() string            { return proto.CompactTextString(m) }
 func (*Task) ProtoMessage()               {}
-func (*Task) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
+func (*Task) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
-func (m *Task) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *Task) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return ""
 }
@@ -432,33 +204,37 @@ func (m *Task) GetState() State {
 	return State_ERROR
 }
 
+// *
+// The Job Record
+// A job is a specific instance of a Task, representing a real invocation the will
+// be or has been run on the system.
 type Job struct {
-	ID               *string        `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	TaskID           *string        `protobuf:"bytes,2,req,name=TaskID" json:"TaskID,omitempty"`
-	Command          *string        `protobuf:"bytes,3,req,name=Command" json:"Command,omitempty"`
-	Args             []*CmdArgument `protobuf:"bytes,4,rep,name=Args" json:"Args,omitempty"`
-	Container        *string        `protobuf:"bytes,5,opt,name=Container" json:"Container,omitempty"`
-	State            *State         `protobuf:"varint,6,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
-	Stdout           *string        `protobuf:"bytes,7,req,name=Stdout" json:"Stdout,omitempty"`
-	Stderr           *string        `protobuf:"bytes,8,req,name=Stderr" json:"Stderr,omitempty"`
+	Id               *string        `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	TaskId           *string        `protobuf:"bytes,2,req,name=task_id" json:"task_id,omitempty"`
+	Command          *string        `protobuf:"bytes,3,req,name=command" json:"command,omitempty"`
+	Args             []*CmdArgument `protobuf:"bytes,4,rep,name=args" json:"args,omitempty"`
+	Container        *string        `protobuf:"bytes,5,opt,name=container" json:"container,omitempty"`
+	State            *State         `protobuf:"varint,6,req,name=state,enum=agro_pb.State" json:"state,omitempty"`
+	Stdout           *string        `protobuf:"bytes,7,req,name=stdout" json:"stdout,omitempty"`
+	Stderr           *string        `protobuf:"bytes,8,req,name=stderr" json:"stderr,omitempty"`
 	XXX_unrecognized []byte         `json:"-"`
 }
 
 func (m *Job) Reset()                    { *m = Job{} }
 func (m *Job) String() string            { return proto.CompactTextString(m) }
 func (*Job) ProtoMessage()               {}
-func (*Job) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
+func (*Job) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
-func (m *Job) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *Job) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return ""
 }
 
-func (m *Job) GetTaskID() string {
-	if m != nil && m.TaskID != nil {
-		return *m.TaskID
+func (m *Job) GetTaskId() string {
+	if m != nil && m.TaskId != nil {
+		return *m.TaskId
 	}
 	return ""
 }
@@ -505,15 +281,270 @@ func (m *Job) GetStderr() string {
 	return ""
 }
 
+// *
+// Job Status information
+type JobStatus struct {
+	Id               *string `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	State            *State  `protobuf:"varint,2,req,name=state,enum=agro_pb.State" json:"state,omitempty"`
+	XXX_unrecognized []byte  `json:"-"`
+}
+
+func (m *JobStatus) Reset()                    { *m = JobStatus{} }
+func (m *JobStatus) String() string            { return proto.CompactTextString(m) }
+func (*JobStatus) ProtoMessage()               {}
+func (*JobStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+func (m *JobStatus) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
+	}
+	return ""
+}
+
+func (m *JobStatus) GetState() State {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return State_ERROR
+}
+
+// *
+// Task status
+type TaskStatus struct {
+	Id               *string  `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	State            *State   `protobuf:"varint,2,req,name=state,enum=agro_pb.State" json:"state,omitempty"`
+	CompletedJob     *string  `protobuf:"bytes,3,opt,name=completed_job" json:"completed_job,omitempty"`
+	Runs             []string `protobuf:"bytes,4,rep,name=runs" json:"runs,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
+}
+
+func (m *TaskStatus) Reset()                    { *m = TaskStatus{} }
+func (m *TaskStatus) String() string            { return proto.CompactTextString(m) }
+func (*TaskStatus) ProtoMessage()               {}
+func (*TaskStatus) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+
+func (m *TaskStatus) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
+	}
+	return ""
+}
+
+func (m *TaskStatus) GetState() State {
+	if m != nil && m.State != nil {
+		return *m.State
+	}
+	return State_ERROR
+}
+
+func (m *TaskStatus) GetCompletedJob() string {
+	if m != nil && m.CompletedJob != nil {
+		return *m.CompletedJob
+	}
+	return ""
+}
+
+func (m *TaskStatus) GetRuns() []string {
+	if m != nil {
+		return m.Runs
+	}
+	return nil
+}
+
+// *
+// CmdArgument
+// The arguments to be passed into the running program are passed in as an array of
+// strings or file arguments
+type CmdArgument struct {
+	// Types that are valid to be assigned to Value:
+	//	*CmdArgument_Arg
+	//	*CmdArgument_FileArg
+	Value            isCmdArgument_Value `protobuf_oneof:"Value"`
+	XXX_unrecognized []byte              `json:"-"`
+}
+
+func (m *CmdArgument) Reset()                    { *m = CmdArgument{} }
+func (m *CmdArgument) String() string            { return proto.CompactTextString(m) }
+func (*CmdArgument) ProtoMessage()               {}
+func (*CmdArgument) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+
+type isCmdArgument_Value interface {
+	isCmdArgument_Value()
+}
+
+type CmdArgument_Arg struct {
+	Arg string `protobuf:"bytes,1,opt,name=arg,oneof"`
+}
+type CmdArgument_FileArg struct {
+	FileArg *FileArgument `protobuf:"bytes,2,opt,name=file_arg,oneof"`
+}
+
+func (*CmdArgument_Arg) isCmdArgument_Value()     {}
+func (*CmdArgument_FileArg) isCmdArgument_Value() {}
+
+func (m *CmdArgument) GetValue() isCmdArgument_Value {
+	if m != nil {
+		return m.Value
+	}
+	return nil
+}
+
+func (m *CmdArgument) GetArg() string {
+	if x, ok := m.GetValue().(*CmdArgument_Arg); ok {
+		return x.Arg
+	}
+	return ""
+}
+
+func (m *CmdArgument) GetFileArg() *FileArgument {
+	if x, ok := m.GetValue().(*CmdArgument_FileArg); ok {
+		return x.FileArg
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*CmdArgument) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _CmdArgument_OneofMarshaler, _CmdArgument_OneofUnmarshaler, _CmdArgument_OneofSizer, []interface{}{
+		(*CmdArgument_Arg)(nil),
+		(*CmdArgument_FileArg)(nil),
+	}
+}
+
+func _CmdArgument_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*CmdArgument)
+	// Value
+	switch x := m.Value.(type) {
+	case *CmdArgument_Arg:
+		b.EncodeVarint(1<<3 | proto.WireBytes)
+		b.EncodeStringBytes(x.Arg)
+	case *CmdArgument_FileArg:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		if err := b.EncodeMessage(x.FileArg); err != nil {
+			return err
+		}
+	case nil:
+	default:
+		return fmt.Errorf("CmdArgument.Value has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _CmdArgument_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*CmdArgument)
+	switch tag {
+	case 1: // Value.arg
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeStringBytes()
+		m.Value = &CmdArgument_Arg{x}
+		return true, err
+	case 2: // Value.file_arg
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		msg := new(FileArgument)
+		err := b.DecodeMessage(msg)
+		m.Value = &CmdArgument_FileArg{msg}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _CmdArgument_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*CmdArgument)
+	// Value
+	switch x := m.Value.(type) {
+	case *CmdArgument_Arg:
+		n += proto.SizeVarint(1<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(len(x.Arg)))
+		n += len(x.Arg)
+	case *CmdArgument_FileArg:
+		s := proto.Size(x.FileArg)
+		n += proto.SizeVarint(2<<3 | proto.WireBytes)
+		n += proto.SizeVarint(uint64(s))
+		n += s
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+// *
+// FileArgument
+// Represents a file that is part of the command line execution. The location of the file may be embedded
+// into the command line, or be treated as a fixed or silent argument.
+type FileArgument struct {
+	Id               *string                   `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	Input            *bool                     `protobuf:"varint,2,req,name=input" json:"input,omitempty"`
+	Type             *FileArgument_FileArgType `protobuf:"varint,3,req,name=type,enum=agro_pb.FileArgument_FileArgType" json:"type,omitempty"`
+	Name             *string                   `protobuf:"bytes,4,opt,name=name" json:"name,omitempty"`
+	NameKey          *string                   `protobuf:"bytes,5,opt,name=name_key" json:"name_key,omitempty"`
+	Silent           *bool                     `protobuf:"varint,6,opt,name=silent" json:"silent,omitempty"`
+	XXX_unrecognized []byte                    `json:"-"`
+}
+
+func (m *FileArgument) Reset()                    { *m = FileArgument{} }
+func (m *FileArgument) String() string            { return proto.CompactTextString(m) }
+func (*FileArgument) ProtoMessage()               {}
+func (*FileArgument) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
+
+func (m *FileArgument) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
+	}
+	return ""
+}
+
+func (m *FileArgument) GetInput() bool {
+	if m != nil && m.Input != nil {
+		return *m.Input
+	}
+	return false
+}
+
+func (m *FileArgument) GetType() FileArgument_FileArgType {
+	if m != nil && m.Type != nil {
+		return *m.Type
+	}
+	return FileArgument_PATH
+}
+
+func (m *FileArgument) GetName() string {
+	if m != nil && m.Name != nil {
+		return *m.Name
+	}
+	return ""
+}
+
+func (m *FileArgument) GetNameKey() string {
+	if m != nil && m.NameKey != nil {
+		return *m.NameKey
+	}
+	return ""
+}
+
+func (m *FileArgument) GetSilent() bool {
+	if m != nil && m.Silent != nil {
+		return *m.Silent
+	}
+	return false
+}
+
+// *
+// An array of tags to search for tasks
 type TagArray struct {
-	Tags             []string `protobuf:"bytes,1,rep,name=Tags" json:"Tags,omitempty"`
+	Tags             []string `protobuf:"bytes,1,rep,name=tags" json:"tags,omitempty"`
 	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *TagArray) Reset()                    { *m = TagArray{} }
 func (m *TagArray) String() string            { return proto.CompactTextString(m) }
 func (*TagArray) ProtoMessage()               {}
-func (*TagArray) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
+func (*TagArray) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
 
 func (m *TagArray) GetTags() []string {
 	if m != nil {
@@ -522,39 +553,43 @@ func (m *TagArray) GetTags() []string {
 	return nil
 }
 
-type TaskInfo struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+// *
+// An array of ids to retrieve information about
+type IDQuery struct {
+	Ids              []string `protobuf:"bytes,1,rep,name=ids" json:"ids,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
-func (m *TaskInfo) Reset()                    { *m = TaskInfo{} }
-func (m *TaskInfo) String() string            { return proto.CompactTextString(m) }
-func (*TaskInfo) ProtoMessage()               {}
-func (*TaskInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
+func (m *IDQuery) Reset()                    { *m = IDQuery{} }
+func (m *IDQuery) String() string            { return proto.CompactTextString(m) }
+func (*IDQuery) ProtoMessage()               {}
+func (*IDQuery) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{7} }
 
-func (m *TaskInfo) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *IDQuery) GetIds() []string {
+	if m != nil {
+		return m.Ids
 	}
-	return ""
+	return nil
 }
 
+// *
+// A block of data from a file
 type DataBlock struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	Start            *int64  `protobuf:"varint,2,req,name=Start" json:"Start,omitempty"`
-	Len              *int64  `protobuf:"varint,3,req,name=Len" json:"Len,omitempty"`
-	Data             []byte  `protobuf:"bytes,4,req,name=Data" json:"Data,omitempty"`
+	Id               *string `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	Start            *int64  `protobuf:"varint,2,req,name=start" json:"start,omitempty"`
+	Len              *int64  `protobuf:"varint,3,req,name=len" json:"len,omitempty"`
+	Data             []byte  `protobuf:"bytes,4,req,name=data" json:"data,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *DataBlock) Reset()                    { *m = DataBlock{} }
 func (m *DataBlock) String() string            { return proto.CompactTextString(m) }
 func (*DataBlock) ProtoMessage()               {}
-func (*DataBlock) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{9} }
+func (*DataBlock) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{8} }
 
-func (m *DataBlock) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *DataBlock) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return ""
 }
@@ -580,17 +615,20 @@ func (m *DataBlock) GetData() []byte {
 	return nil
 }
 
+// *
+// Basic meta-data about a file
 type FileInfo struct {
-	Name             *string `protobuf:"bytes,1,req,name=Name" json:"Name,omitempty"`
-	ID               *string `protobuf:"bytes,2,req,name=ID" json:"ID,omitempty"`
-	Size             *int64  `protobuf:"varint,3,opt,name=Size" json:"Size,omitempty"`
-	XXX_unrecognized []byte  `json:"-"`
+	Name             *string  `protobuf:"bytes,1,req,name=name" json:"name,omitempty"`
+	Id               *string  `protobuf:"bytes,2,req,name=id" json:"id,omitempty"`
+	Size             *int64   `protobuf:"varint,3,opt,name=size" json:"size,omitempty"`
+	Urls             []string `protobuf:"bytes,4,rep,name=urls" json:"urls,omitempty"`
+	XXX_unrecognized []byte   `json:"-"`
 }
 
 func (m *FileInfo) Reset()                    { *m = FileInfo{} }
 func (m *FileInfo) String() string            { return proto.CompactTextString(m) }
 func (*FileInfo) ProtoMessage()               {}
-func (*FileInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{10} }
+func (*FileInfo) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{9} }
 
 func (m *FileInfo) GetName() string {
 	if m != nil && m.Name != nil {
@@ -599,9 +637,9 @@ func (m *FileInfo) GetName() string {
 	return ""
 }
 
-func (m *FileInfo) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *FileInfo) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return ""
 }
@@ -613,32 +651,47 @@ func (m *FileInfo) GetSize() int64 {
 	return 0
 }
 
+func (m *FileInfo) GetUrls() []string {
+	if m != nil {
+		return m.Urls
+	}
+	return nil
+}
+
+// *
+// Identify a file for operations
 type FileID struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
+	Id               *string `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *FileID) Reset()                    { *m = FileID{} }
 func (m *FileID) String() string            { return proto.CompactTextString(m) }
 func (*FileID) ProtoMessage()               {}
-func (*FileID) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{11} }
+func (*FileID) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{10} }
 
-func (m *FileID) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *FileID) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return ""
 }
 
+// *
+// The State of a file.
+// Possible states:
+//  - RUNNING : The file has been created, but is not ready to be read (still uploading)
+//  - OK : The file is ready for use
+//  - ERROR :  File data is damaged
 type FileState struct {
-	State            *State `protobuf:"varint,1,req,name=State,enum=agro_pb.State" json:"State,omitempty"`
+	State            *State `protobuf:"varint,1,req,name=state,enum=agro_pb.State" json:"state,omitempty"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
 func (m *FileState) Reset()                    { *m = FileState{} }
 func (m *FileState) String() string            { return proto.CompactTextString(m) }
 func (*FileState) ProtoMessage()               {}
-func (*FileState) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{12} }
+func (*FileState) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{11} }
 
 func (m *FileState) GetState() State {
 	if m != nil && m.State != nil {
@@ -647,21 +700,23 @@ func (m *FileState) GetState() State {
 	return State_ERROR
 }
 
+// *
+// Request to get part of a file to read
 type ReadRequest struct {
-	ID               *string `protobuf:"bytes,1,req,name=ID" json:"ID,omitempty"`
-	Start            *int64  `protobuf:"varint,2,req,name=Start" json:"Start,omitempty"`
-	Size             *int64  `protobuf:"varint,3,req,name=Size" json:"Size,omitempty"`
+	Id               *string `protobuf:"bytes,1,req,name=id" json:"id,omitempty"`
+	Start            *int64  `protobuf:"varint,2,req,name=start" json:"start,omitempty"`
+	Size             *int64  `protobuf:"varint,3,req,name=size" json:"size,omitempty"`
 	XXX_unrecognized []byte  `json:"-"`
 }
 
 func (m *ReadRequest) Reset()                    { *m = ReadRequest{} }
 func (m *ReadRequest) String() string            { return proto.CompactTextString(m) }
 func (*ReadRequest) ProtoMessage()               {}
-func (*ReadRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{13} }
+func (*ReadRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{12} }
 
-func (m *ReadRequest) GetID() string {
-	if m != nil && m.ID != nil {
-		return *m.ID
+func (m *ReadRequest) GetId() string {
+	if m != nil && m.Id != nil {
+		return *m.Id
 	}
 	return ""
 }
@@ -681,15 +736,14 @@ func (m *ReadRequest) GetSize() int64 {
 }
 
 func init() {
-	proto.RegisterType((*IDQuery)(nil), "agro_pb.IDQuery")
-	proto.RegisterType((*JobStatus)(nil), "agro_pb.JobStatus")
-	proto.RegisterType((*TaskStatus)(nil), "agro_pb.TaskStatus")
-	proto.RegisterType((*FileArgument)(nil), "agro_pb.FileArgument")
-	proto.RegisterType((*CmdArgument)(nil), "agro_pb.CmdArgument")
 	proto.RegisterType((*Task)(nil), "agro_pb.Task")
 	proto.RegisterType((*Job)(nil), "agro_pb.Job")
+	proto.RegisterType((*JobStatus)(nil), "agro_pb.JobStatus")
+	proto.RegisterType((*TaskStatus)(nil), "agro_pb.TaskStatus")
+	proto.RegisterType((*CmdArgument)(nil), "agro_pb.CmdArgument")
+	proto.RegisterType((*FileArgument)(nil), "agro_pb.FileArgument")
 	proto.RegisterType((*TagArray)(nil), "agro_pb.TagArray")
-	proto.RegisterType((*TaskInfo)(nil), "agro_pb.TaskInfo")
+	proto.RegisterType((*IDQuery)(nil), "agro_pb.IDQuery")
 	proto.RegisterType((*DataBlock)(nil), "agro_pb.DataBlock")
 	proto.RegisterType((*FileInfo)(nil), "agro_pb.FileInfo")
 	proto.RegisterType((*FileID)(nil), "agro_pb.FileID")
@@ -703,29 +757,29 @@ func init() {
 var _ context.Context
 var _ grpc.ClientConn
 
-// Client API for Agro service
+// Client API for Scheduler service
 
-type AgroClient interface {
-	SearchTasks(ctx context.Context, in *TagArray, opts ...grpc.CallOption) (Agro_SearchTasksClient, error)
+type SchedulerClient interface {
+	SearchTasks(ctx context.Context, in *TagArray, opts ...grpc.CallOption) (Scheduler_SearchTasksClient, error)
 	AddTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskStatus, error)
-	GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetTaskStatusClient, error)
-	GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetJobStatusClient, error)
+	GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Scheduler_GetTaskStatusClient, error)
+	GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Scheduler_GetJobStatusClient, error)
 }
 
-type agroClient struct {
+type schedulerClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewAgroClient(cc *grpc.ClientConn) AgroClient {
-	return &agroClient{cc}
+func NewSchedulerClient(cc *grpc.ClientConn) SchedulerClient {
+	return &schedulerClient{cc}
 }
 
-func (c *agroClient) SearchTasks(ctx context.Context, in *TagArray, opts ...grpc.CallOption) (Agro_SearchTasksClient, error) {
-	stream, err := grpc.NewClientStream(ctx, &_Agro_serviceDesc.Streams[0], c.cc, "/agro_pb.Agro/SearchTasks", opts...)
+func (c *schedulerClient) SearchTasks(ctx context.Context, in *TagArray, opts ...grpc.CallOption) (Scheduler_SearchTasksClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_Scheduler_serviceDesc.Streams[0], c.cc, "/agro_pb.Scheduler/SearchTasks", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &agroSearchTasksClient{stream}
+	x := &schedulerSearchTasksClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -735,38 +789,38 @@ func (c *agroClient) SearchTasks(ctx context.Context, in *TagArray, opts ...grpc
 	return x, nil
 }
 
-type Agro_SearchTasksClient interface {
-	Recv() (*TaskInfo, error)
+type Scheduler_SearchTasksClient interface {
+	Recv() (*Task, error)
 	grpc.ClientStream
 }
 
-type agroSearchTasksClient struct {
+type schedulerSearchTasksClient struct {
 	grpc.ClientStream
 }
 
-func (x *agroSearchTasksClient) Recv() (*TaskInfo, error) {
-	m := new(TaskInfo)
+func (x *schedulerSearchTasksClient) Recv() (*Task, error) {
+	m := new(Task)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-func (c *agroClient) AddTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskStatus, error) {
+func (c *schedulerClient) AddTask(ctx context.Context, in *Task, opts ...grpc.CallOption) (*TaskStatus, error) {
 	out := new(TaskStatus)
-	err := grpc.Invoke(ctx, "/agro_pb.Agro/AddTask", in, out, c.cc, opts...)
+	err := grpc.Invoke(ctx, "/agro_pb.Scheduler/AddTask", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *agroClient) GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetTaskStatusClient, error) {
-	stream, err := grpc.NewClientStream(ctx, &_Agro_serviceDesc.Streams[1], c.cc, "/agro_pb.Agro/GetTaskStatus", opts...)
+func (c *schedulerClient) GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Scheduler_GetTaskStatusClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_Scheduler_serviceDesc.Streams[1], c.cc, "/agro_pb.Scheduler/GetTaskStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &agroGetTaskStatusClient{stream}
+	x := &schedulerGetTaskStatusClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -776,16 +830,16 @@ func (c *agroClient) GetTaskStatus(ctx context.Context, in *IDQuery, opts ...grp
 	return x, nil
 }
 
-type Agro_GetTaskStatusClient interface {
+type Scheduler_GetTaskStatusClient interface {
 	Recv() (*TaskStatus, error)
 	grpc.ClientStream
 }
 
-type agroGetTaskStatusClient struct {
+type schedulerGetTaskStatusClient struct {
 	grpc.ClientStream
 }
 
-func (x *agroGetTaskStatusClient) Recv() (*TaskStatus, error) {
+func (x *schedulerGetTaskStatusClient) Recv() (*TaskStatus, error) {
 	m := new(TaskStatus)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -793,12 +847,12 @@ func (x *agroGetTaskStatusClient) Recv() (*TaskStatus, error) {
 	return m, nil
 }
 
-func (c *agroClient) GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Agro_GetJobStatusClient, error) {
-	stream, err := grpc.NewClientStream(ctx, &_Agro_serviceDesc.Streams[2], c.cc, "/agro_pb.Agro/GetJobStatus", opts...)
+func (c *schedulerClient) GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc.CallOption) (Scheduler_GetJobStatusClient, error) {
+	stream, err := grpc.NewClientStream(ctx, &_Scheduler_serviceDesc.Streams[2], c.cc, "/agro_pb.Scheduler/GetJobStatus", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &agroGetJobStatusClient{stream}
+	x := &schedulerGetJobStatusClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -808,16 +862,16 @@ func (c *agroClient) GetJobStatus(ctx context.Context, in *IDQuery, opts ...grpc
 	return x, nil
 }
 
-type Agro_GetJobStatusClient interface {
+type Scheduler_GetJobStatusClient interface {
 	Recv() (*JobStatus, error)
 	grpc.ClientStream
 }
 
-type agroGetJobStatusClient struct {
+type schedulerGetJobStatusClient struct {
 	grpc.ClientStream
 }
 
-func (x *agroGetJobStatusClient) Recv() (*JobStatus, error) {
+func (x *schedulerGetJobStatusClient) Recv() (*JobStatus, error) {
 	m := new(JobStatus)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -825,117 +879,117 @@ func (x *agroGetJobStatusClient) Recv() (*JobStatus, error) {
 	return m, nil
 }
 
-// Server API for Agro service
+// Server API for Scheduler service
 
-type AgroServer interface {
-	SearchTasks(*TagArray, Agro_SearchTasksServer) error
+type SchedulerServer interface {
+	SearchTasks(*TagArray, Scheduler_SearchTasksServer) error
 	AddTask(context.Context, *Task) (*TaskStatus, error)
-	GetTaskStatus(*IDQuery, Agro_GetTaskStatusServer) error
-	GetJobStatus(*IDQuery, Agro_GetJobStatusServer) error
+	GetTaskStatus(*IDQuery, Scheduler_GetTaskStatusServer) error
+	GetJobStatus(*IDQuery, Scheduler_GetJobStatusServer) error
 }
 
-func RegisterAgroServer(s *grpc.Server, srv AgroServer) {
-	s.RegisterService(&_Agro_serviceDesc, srv)
+func RegisterSchedulerServer(s *grpc.Server, srv SchedulerServer) {
+	s.RegisterService(&_Scheduler_serviceDesc, srv)
 }
 
-func _Agro_SearchTasks_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Scheduler_SearchTasks_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(TagArray)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(AgroServer).SearchTasks(m, &agroSearchTasksServer{stream})
+	return srv.(SchedulerServer).SearchTasks(m, &schedulerSearchTasksServer{stream})
 }
 
-type Agro_SearchTasksServer interface {
-	Send(*TaskInfo) error
+type Scheduler_SearchTasksServer interface {
+	Send(*Task) error
 	grpc.ServerStream
 }
 
-type agroSearchTasksServer struct {
+type schedulerSearchTasksServer struct {
 	grpc.ServerStream
 }
 
-func (x *agroSearchTasksServer) Send(m *TaskInfo) error {
+func (x *schedulerSearchTasksServer) Send(m *Task) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _Agro_AddTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _Scheduler_AddTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
 	in := new(Task)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(AgroServer).AddTask(ctx, in)
+	out, err := srv.(SchedulerServer).AddTask(ctx, in)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func _Agro_GetTaskStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Scheduler_GetTaskStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(IDQuery)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(AgroServer).GetTaskStatus(m, &agroGetTaskStatusServer{stream})
+	return srv.(SchedulerServer).GetTaskStatus(m, &schedulerGetTaskStatusServer{stream})
 }
 
-type Agro_GetTaskStatusServer interface {
+type Scheduler_GetTaskStatusServer interface {
 	Send(*TaskStatus) error
 	grpc.ServerStream
 }
 
-type agroGetTaskStatusServer struct {
+type schedulerGetTaskStatusServer struct {
 	grpc.ServerStream
 }
 
-func (x *agroGetTaskStatusServer) Send(m *TaskStatus) error {
+func (x *schedulerGetTaskStatusServer) Send(m *TaskStatus) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-func _Agro_GetJobStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _Scheduler_GetJobStatus_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(IDQuery)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(AgroServer).GetJobStatus(m, &agroGetJobStatusServer{stream})
+	return srv.(SchedulerServer).GetJobStatus(m, &schedulerGetJobStatusServer{stream})
 }
 
-type Agro_GetJobStatusServer interface {
+type Scheduler_GetJobStatusServer interface {
 	Send(*JobStatus) error
 	grpc.ServerStream
 }
 
-type agroGetJobStatusServer struct {
+type schedulerGetJobStatusServer struct {
 	grpc.ServerStream
 }
 
-func (x *agroGetJobStatusServer) Send(m *JobStatus) error {
+func (x *schedulerGetJobStatusServer) Send(m *JobStatus) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-var _Agro_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "agro_pb.Agro",
-	HandlerType: (*AgroServer)(nil),
+var _Scheduler_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "agro_pb.Scheduler",
+	HandlerType: (*SchedulerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "AddTask",
-			Handler:    _Agro_AddTask_Handler,
+			Handler:    _Scheduler_AddTask_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "SearchTasks",
-			Handler:       _Agro_SearchTasks_Handler,
+			Handler:       _Scheduler_SearchTasks_Handler,
 			ServerStreams: true,
 		},
 		{
 			StreamName:    "GetTaskStatus",
-			Handler:       _Agro_GetTaskStatus_Handler,
+			Handler:       _Scheduler_GetTaskStatus_Handler,
 			ServerStreams: true,
 		},
 		{
 			StreamName:    "GetJobStatus",
-			Handler:       _Agro_GetJobStatus_Handler,
+			Handler:       _Scheduler_GetJobStatus_Handler,
 			ServerStreams: true,
 		},
 	},
@@ -1107,54 +1161,55 @@ var _FileStore_serviceDesc = grpc.ServiceDesc{
 }
 
 var fileDescriptor0 = []byte{
-	// 779 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x54, 0xc1, 0x6e, 0xda, 0x4c,
-	0x10, 0xc6, 0x36, 0x60, 0x3c, 0x86, 0xc4, 0xd9, 0xe4, 0x8f, 0xac, 0x48, 0xbf, 0x94, 0xfa, 0x84,
-	0x72, 0x48, 0x2a, 0xaa, 0xa4, 0x55, 0x6f, 0x0e, 0xa6, 0x09, 0x4d, 0x0a, 0x89, 0x81, 0xa6, 0x52,
-	0x0f, 0x95, 0x13, 0x6f, 0x53, 0x14, 0xb0, 0xe9, 0x62, 0x0e, 0xf4, 0x55, 0xda, 0x07, 0xe8, 0xe3,
-	0xf4, 0x29, 0xfa, 0x1c, 0x9d, 0x5d, 0xc3, 0x62, 0x0a, 0xa9, 0x54, 0xa9, 0xb7, 0x9d, 0xf5, 0x7e,
-	0xf3, 0x7d, 0x33, 0xf3, 0x8d, 0xc1, 0x1a, 0xb1, 0x38, 0x89, 0x8f, 0x82, 0x7b, 0x16, 0x1f, 0x8a,
-	0x23, 0xd1, 0xf9, 0xf9, 0xc3, 0xe8, 0xd6, 0xd9, 0x05, 0xbd, 0xe9, 0x5d, 0x4f, 0x28, 0x9b, 0x12,
-	0x13, 0xb4, 0xa6, 0x37, 0xb6, 0x95, 0x7d, 0xad, 0x6a, 0x38, 0x27, 0x60, 0xbc, 0x8e, 0x6f, 0x3b,
-	0x49, 0x90, 0x4c, 0xc6, 0x04, 0x40, 0x6d, 0x7a, 0xf8, 0x41, 0xad, 0x1a, 0xe4, 0x7f, 0x28, 0xf0,
-	0x5b, 0x6a, 0xab, 0x18, 0x6e, 0xd4, 0x36, 0x0e, 0x67, 0x99, 0x0e, 0xc5, 0xad, 0xf3, 0x1e, 0xa0,
-	0x1b, 0x8c, 0x1f, 0xfe, 0x1a, 0x48, 0x76, 0xa0, 0x5c, 0x8f, 0x87, 0xa3, 0x01, 0x4d, 0x68, 0x88,
-	0xcc, 0xb6, 0xb6, 0xaf, 0x20, 0xa8, 0x0c, 0x79, 0x7f, 0x12, 0x8d, 0xed, 0xbc, 0x10, 0xf5, 0x43,
-	0x81, 0xf2, 0xab, 0xfe, 0x80, 0xba, 0xec, 0x7e, 0x32, 0xa4, 0x51, 0xb2, 0x94, 0xbf, 0x02, 0x85,
-	0x66, 0x34, 0x9a, 0x24, 0x22, 0x7f, 0x89, 0x1c, 0x41, 0xbe, 0x3b, 0x1d, 0x51, 0xcc, 0xc3, 0xd9,
-	0x9e, 0x48, 0xb6, 0x2c, 0x7e, 0x1e, 0xf0, 0x87, 0x9c, 0xaa, 0x15, 0x0c, 0x29, 0x52, 0x71, 0xe2,
-	0x4d, 0xd0, 0x79, 0x74, 0x41, 0xa7, 0x76, 0x41, 0x5c, 0x6c, 0x40, 0xb1, 0x83, 0xaf, 0xa3, 0xc4,
-	0x2e, 0x62, 0x5c, 0x72, 0x1a, 0x60, 0x66, 0xd1, 0x25, 0xc8, 0x5f, 0xb9, 0xdd, 0x73, 0x4b, 0x21,
-	0x06, 0x14, 0x5a, 0xee, 0x9b, 0x86, 0x67, 0xa9, 0xfc, 0xe8, 0x37, 0xce, 0x1a, 0xef, 0x2c, 0x0d,
-	0x95, 0x16, 0x3b, 0x5d, 0xaf, 0xdd, 0xeb, 0x5a, 0xf9, 0xd9, 0xb9, 0xe1, 0xfb, 0x56, 0xc1, 0x69,
-	0x83, 0x59, 0x1f, 0x86, 0xb2, 0xa0, 0x0a, 0x68, 0x78, 0xc6, 0x8a, 0x90, 0xf2, 0x3c, 0x47, 0xaa,
-	0xa0, 0xcf, 0x48, 0xb0, 0x2a, 0xa5, 0x6a, 0xd6, 0xfe, 0x5b, 0x5b, 0xc7, 0x79, 0xee, 0x54, 0x87,
-	0xc2, 0xdb, 0x60, 0x30, 0xa1, 0xce, 0x37, 0x05, 0x0b, 0xc7, 0x09, 0x2c, 0xf5, 0x66, 0x1b, 0x4c,
-	0x7e, 0xe7, 0xd1, 0x11, 0x8d, 0xc2, 0x31, 0xe6, 0xd2, 0xd2, 0x12, 0xb1, 0xe3, 0xc3, 0x20, 0x0a,
-	0x45, 0x93, 0x0c, 0xe2, 0x40, 0x1e, 0x33, 0xa6, 0xcd, 0x36, 0x6b, 0x3b, 0x92, 0x2a, 0x2b, 0x70,
-	0x0b, 0x8c, 0x7a, 0x1c, 0x25, 0x41, 0x3f, 0xa2, 0x6c, 0xd6, 0x99, 0x32, 0x27, 0x44, 0x58, 0x51,
-	0x64, 0x95, 0x63, 0xd6, 0xf1, 0xe3, 0xaa, 0x3f, 0xbe, 0x2b, 0xa0, 0xe1, 0x78, 0x97, 0xd4, 0x61,
-	0x6b, 0xb9, 0x3a, 0x8c, 0x55, 0x11, 0xff, 0x2b, 0x61, 0x52, 0x4a, 0x71, 0xad, 0xe3, 0xf8, 0x44,
-	0x93, 0x30, 0x46, 0xc7, 0xe8, 0x73, 0x19, 0x18, 0x53, 0xc6, 0xec, 0x12, 0x8f, 0x1d, 0x1b, 0x4a,
-	0x58, 0x97, 0xcb, 0x58, 0x30, 0x95, 0x35, 0xa6, 0xcb, 0xb1, 0xcb, 0xbf, 0xa0, 0xe0, 0xe8, 0x63,
-	0x9c, 0x2d, 0xc4, 0x71, 0xc1, 0xf0, 0x82, 0x24, 0x38, 0x1d, 0xc4, 0x77, 0x0f, 0xbf, 0x7b, 0x13,
-	0x39, 0x59, 0xea, 0x4d, 0x8d, 0x6f, 0xda, 0x25, 0x8d, 0x44, 0x71, 0x1a, 0x4f, 0xcd, 0x41, 0x58,
-	0x9c, 0x5a, 0x2d, 0x3b, 0x35, 0x28, 0xf1, 0xc9, 0x8a, 0xd4, 0x73, 0x47, 0xa6, 0x39, 0xd2, 0x7c,
-	0x69, 0x87, 0xf0, 0x4b, 0xa7, 0xff, 0x85, 0x8a, 0x25, 0xd1, 0x9c, 0x1d, 0x28, 0x0a, 0x8c, 0xb7,
-	0x24, 0xe6, 0x00, 0x0c, 0x7e, 0x9b, 0xd6, 0x2a, 0x5b, 0xa1, 0xac, 0xdd, 0xda, 0x13, 0x30, 0x7d,
-	0x1a, 0x84, 0x3e, 0xfd, 0x3c, 0xa1, 0xe3, 0xe4, 0x4f, 0xd2, 0x17, 0xcc, 0x18, 0x1d, 0x5c, 0xce,
-	0xd2, 0x72, 0xa7, 0xa3, 0x9f, 0xdb, 0xbe, 0x95, 0xc3, 0xe2, 0xf4, 0x1b, 0xb7, 0xd9, 0x6d, 0xb6,
-	0xce, 0x70, 0x19, 0xd0, 0xea, 0xd7, 0xbd, 0x46, 0x4f, 0x6c, 0x03, 0x9e, 0xaf, 0xdc, 0x5e, 0x07,
-	0xcf, 0xbc, 0x03, 0xba, 0xdf, 0x6b, 0xb5, 0xf8, 0xa3, 0x3c, 0x29, 0x82, 0xda, 0xbe, 0xb0, 0x0a,
-	0xb5, 0x9f, 0x68, 0x5d, 0x17, 0x75, 0x91, 0xe7, 0x60, 0x76, 0x68, 0xc0, 0xee, 0x3e, 0xf1, 0x2e,
-	0x8f, 0xc9, 0x96, 0x54, 0x3b, 0x9f, 0xc7, 0x5e, 0xf6, 0x2a, 0x1d, 0x84, 0x93, 0x7b, 0xaa, 0xe0,
-	0xd2, 0xeb, 0x6e, 0x18, 0x0a, 0xfb, 0x57, 0x96, 0x5e, 0xec, 0x6d, 0x2f, 0x85, 0xe9, 0xef, 0xc9,
-	0xc9, 0x91, 0x97, 0x50, 0x39, 0xa3, 0x49, 0xe6, 0x8f, 0x65, 0xc9, 0x77, 0xb3, 0xdf, 0xe2, 0x23,
-	0x48, 0x24, 0x7b, 0x01, 0x65, 0xc4, 0x2e, 0xfe, 0x92, 0xab, 0x50, 0x22, 0x6f, 0xe4, 0x2b, 0x8e,
-	0xac, 0x7d, 0x55, 0xe7, 0xb3, 0x89, 0x19, 0x25, 0xc7, 0x00, 0x75, 0x46, 0xb1, 0x8b, 0xfc, 0x2a,
-	0x53, 0xec, 0xdc, 0x07, 0x99, 0x34, 0x72, 0xa0, 0x28, 0xfd, 0x18, 0x8c, 0x1b, 0xd6, 0x9f, 0xa1,
-	0x16, 0x4f, 0xa4, 0x01, 0x1f, 0x81, 0x3d, 0x43, 0x36, 0x5c, 0xae, 0x7e, 0x22, 0x70, 0x9b, 0xcb,
-	0x6c, 0xde, 0xa3, 0x20, 0x13, 0x4b, 0x95, 0xc6, 0x5c, 0x41, 0xad, 0x8a, 0x46, 0xd0, 0x09, 0x94,
-	0xb8, 0xa9, 0x04, 0xcf, 0x62, 0x67, 0x33, 0x3e, 0xdb, 0x5b, 0xa3, 0xda, 0xc9, 0xfd, 0x0a, 0x00,
-	0x00, 0xff, 0xff, 0x13, 0x6a, 0xfa, 0x14, 0xae, 0x06, 0x00, 0x00,
+	// 797 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0x8e, 0xed, 0x24, 0xb6, 0x27, 0x3f, 0x75, 0x97, 0x16, 0x59, 0x95, 0x90, 0x8a, 0x4f, 0xa5,
+	0x87, 0x16, 0xa5, 0x6a, 0x85, 0x38, 0xe1, 0x36, 0xa1, 0x0d, 0x3f, 0x69, 0x9b, 0x1f, 0xca, 0x01,
+	0x29, 0x72, 0xe3, 0x6d, 0x6a, 0x92, 0xd8, 0x61, 0x6d, 0x1f, 0xc2, 0xab, 0x20, 0x1e, 0x80, 0x77,
+	0xe2, 0xce, 0x6b, 0x30, 0x6b, 0xc7, 0x8e, 0x43, 0x52, 0x24, 0x24, 0x6e, 0xb3, 0xb3, 0xf3, 0x7d,
+	0xfb, 0xcd, 0x37, 0x63, 0x83, 0x36, 0x65, 0x5e, 0xe0, 0x1d, 0x5a, 0x43, 0xe6, 0x1d, 0x44, 0x21,
+	0x91, 0x79, 0xdc, 0x9f, 0xde, 0x1a, 0xdf, 0x05, 0xc8, 0x77, 0x2d, 0x7f, 0x44, 0x00, 0x44, 0xc7,
+	0xd6, 0x85, 0x5d, 0x71, 0x4f, 0x25, 0x5b, 0x50, 0x0e, 0x30, 0xd7, 0xb7, 0xe9, 0x94, 0xba, 0xb6,
+	0xaf, 0x8b, 0xbb, 0x12, 0x66, 0x37, 0x40, 0x1e, 0x78, 0x93, 0x89, 0xe5, 0xda, 0xba, 0x14, 0x95,
+	0x19, 0x90, 0xb7, 0xd8, 0xd0, 0xd7, 0xf3, 0x78, 0x5d, 0xaa, 0x6d, 0x1d, 0xcc, 0x39, 0x0f, 0xce,
+	0x26, 0xb6, 0xc9, 0x86, 0xe1, 0x84, 0xba, 0x01, 0xd9, 0x04, 0x75, 0xe0, 0xb9, 0x81, 0xe5, 0xb8,
+	0x94, 0xe9, 0x85, 0x5d, 0x01, 0x61, 0x65, 0xc8, 0x07, 0x16, 0xc2, 0x8a, 0x11, 0xeb, 0x13, 0x28,
+	0xf8, 0x81, 0x15, 0x50, 0x5d, 0xc6, 0xcb, 0x6a, 0xad, 0x9a, 0xb2, 0x74, 0x78, 0xd6, 0xf8, 0x21,
+	0x80, 0xf4, 0xc6, 0xbb, 0x5d, 0x92, 0x87, 0x42, 0x22, 0x79, 0x98, 0x10, 0x93, 0xc4, 0x7f, 0x51,
+	0x96, 0x6a, 0x29, 0x22, 0xcb, 0x8a, 0x16, 0x52, 0x85, 0xa2, 0x1f, 0xd8, 0x5e, 0x18, 0xa0, 0x56,
+	0xfe, 0x4a, 0x7c, 0xa6, 0x8c, 0xe9, 0x0a, 0x3f, 0x1b, 0x27, 0xa0, 0xa2, 0x54, 0x5e, 0x1b, 0xfa,
+	0x4b, 0x82, 0x53, 0x5e, 0x71, 0x1d, 0xaf, 0xf1, 0x09, 0x80, 0x8f, 0xe0, 0x9f, 0x81, 0x64, 0x1b,
+	0x2a, 0xd8, 0xf7, 0x74, 0x4c, 0x03, 0x6a, 0xf7, 0x3f, 0x7b, 0xb7, 0xd8, 0xfd, 0xdc, 0x60, 0x16,
+	0xba, 0x71, 0xf7, 0xaa, 0x71, 0x05, 0xa5, 0x6c, 0xdb, 0x15, 0x90, 0xd0, 0x1a, 0xe4, 0xc7, 0xca,
+	0x8b, 0x1c, 0x79, 0x06, 0xca, 0x9d, 0x33, 0xa6, 0x7d, 0x9e, 0x13, 0x31, 0x57, 0xaa, 0x6d, 0xa7,
+	0x8f, 0xbc, 0xc6, 0x8b, 0x04, 0x77, 0x91, 0x3b, 0x95, 0xa1, 0xf0, 0xc1, 0x1a, 0x87, 0xd4, 0xf8,
+	0x29, 0x40, 0x39, 0x7b, 0xb7, 0x24, 0xb9, 0x02, 0x05, 0xc7, 0x9d, 0xa2, 0x47, 0x5c, 0xb2, 0x42,
+	0x0e, 0x71, 0xd8, 0xb3, 0x29, 0x8d, 0xe6, 0x52, 0xad, 0x3d, 0x5d, 0xcb, 0x9d, 0x1c, 0xba, 0x58,
+	0xc8, 0xc5, 0xbb, 0xd6, 0x84, 0xa2, 0x78, 0xde, 0x8a, 0x06, 0x0a, 0x3f, 0xf5, 0x47, 0x74, 0x36,
+	0x9f, 0x11, 0x37, 0x1d, 0xcb, 0xdd, 0x00, 0x87, 0x24, 0xec, 0x29, 0xbc, 0xbd, 0x2c, 0x5c, 0x81,
+	0xfc, 0x95, 0xd9, 0xbd, 0xd0, 0x04, 0xa2, 0x42, 0xa1, 0x65, 0xbe, 0x6f, 0xd4, 0x35, 0x91, 0x87,
+	0xed, 0xc6, 0x79, 0xe3, 0xa3, 0x26, 0xa1, 0xd4, 0x62, 0xa7, 0x5b, 0xbf, 0xec, 0x75, 0xb5, 0xfc,
+	0x3c, 0x6e, 0xb4, 0xdb, 0x5a, 0x81, 0x97, 0x60, 0xdc, 0x6c, 0x69, 0x45, 0x43, 0x07, 0xa5, 0x6b,
+	0x0d, 0x4d, 0xc6, 0xac, 0x59, 0xba, 0xab, 0x42, 0x64, 0xe5, 0x63, 0x90, 0x9b, 0xf5, 0xeb, 0x90,
+	0xb2, 0x19, 0x29, 0x81, 0xe4, 0xd8, 0x49, 0xde, 0x04, 0xb5, 0x6e, 0x05, 0xd6, 0xe9, 0xd8, 0x1b,
+	0x8c, 0xfe, 0x34, 0x03, 0xe7, 0xc7, 0x62, 0x33, 0x24, 0x0e, 0x42, 0xe5, 0x91, 0x17, 0x12, 0xa7,
+	0xb6, 0x11, 0x84, 0x8d, 0x8a, 0x7b, 0x65, 0xe3, 0x15, 0x28, 0xbc, 0x8d, 0xa6, 0x7b, 0xe7, 0xa5,
+	0x16, 0xc4, 0x1c, 0x31, 0x5f, 0xbc, 0xe8, 0x78, 0xe3, 0x3b, 0x5f, 0x69, 0x34, 0xe7, 0x88, 0x21,
+	0x64, 0xe3, 0x64, 0xce, 0x5b, 0x50, 0x8c, 0x18, 0xea, 0x59, 0x05, 0xc6, 0x3e, 0xa8, 0x3c, 0x1b,
+	0xef, 0x4b, 0xba, 0x4e, 0xc2, 0xda, 0x3d, 0x3c, 0x81, 0x52, 0x9b, 0x5a, 0x76, 0x9b, 0x7e, 0x09,
+	0xa9, 0x1f, 0xfc, 0xad, 0x91, 0x85, 0x0e, 0x3c, 0xed, 0xbf, 0x43, 0xef, 0x22, 0x7e, 0x34, 0x11,
+	0xdd, 0xbc, 0x6c, 0x6b, 0x39, 0x6c, 0x55, 0xbe, 0x31, 0x9b, 0xdd, 0x66, 0xeb, 0x1c, 0x47, 0x81,
+	0x46, 0x5f, 0xf7, 0x1a, 0xbd, 0x68, 0x16, 0x18, 0x5f, 0x99, 0xbd, 0x0e, 0xc6, 0xdc, 0x0f, 0xb9,
+	0xdd, 0x6b, 0xb5, 0x78, 0x51, 0x9e, 0x14, 0x41, 0xbc, 0x7c, 0xab, 0x15, 0x6a, 0xbf, 0x04, 0x50,
+	0x3b, 0x83, 0x7b, 0x6a, 0x87, 0x63, 0xca, 0xc8, 0x11, 0x94, 0x3a, 0xd4, 0x62, 0x83, 0x7b, 0xfe,
+	0x85, 0xf8, 0x64, 0x33, 0x95, 0x9c, 0x8c, 0x68, 0xa7, 0x92, 0x49, 0xf9, 0x23, 0x23, 0xf7, 0x5c,
+	0xc0, 0xa5, 0x93, 0x4d, 0xdb, 0x8e, 0x7e, 0x6b, 0xcb, 0xb7, 0x3b, 0x8f, 0x96, 0x8e, 0xf1, 0x17,
+	0x67, 0xe4, 0xc8, 0x4b, 0xa8, 0x9c, 0xd3, 0x20, 0xf3, 0x11, 0x6a, 0x69, 0xdd, 0x7c, 0xe0, 0x0f,
+	0x20, 0xf1, 0xb1, 0x17, 0x50, 0x46, 0xec, 0xe2, 0xc3, 0x5f, 0x85, 0x92, 0x34, 0x93, 0x56, 0x71,
+	0x64, 0xed, 0x9b, 0x98, 0x0c, 0xc7, 0x63, 0x94, 0x1c, 0x03, 0x9c, 0x31, 0x8a, 0x36, 0xf2, 0x54,
+	0xa6, 0xd1, 0x64, 0x2d, 0x32, 0x34, 0xe9, 0x44, 0x51, 0xfa, 0x31, 0xa8, 0x37, 0xcc, 0x99, 0xa3,
+	0x16, 0x25, 0xe9, 0x3e, 0x3e, 0x00, 0x3b, 0xc2, 0xd7, 0xf0, 0x97, 0xe9, 0x04, 0x11, 0x6e, 0x63,
+	0xf9, 0xb5, 0xfa, 0x83, 0xa0, 0x12, 0xb6, 0x9a, 0xee, 0xe9, 0x0a, 0x6a, 0x55, 0x34, 0x82, 0x4e,
+	0x40, 0xe1, 0x5b, 0x15, 0xbd, 0xb3, 0xf8, 0x13, 0x67, 0x16, 0x6d, 0x67, 0x8d, 0x6a, 0x23, 0xf7,
+	0x3b, 0x00, 0x00, 0xff, 0xff, 0xbd, 0xb9, 0xee, 0xf0, 0xb5, 0x06, 0x00, 0x00,
 }

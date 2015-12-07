@@ -34,10 +34,10 @@ func download_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
     log.Printf("Unable to create workfile")
     return err
   }
-  info := dbi.GetFileInfo( agro_pb.FileID{ID: proto.String(fileID) } )
+  info := dbi.GetFileInfo( agro_pb.FileID{Id: proto.String(fileID) } )
   for i := int64(0); i < *info.Size; i+= BLOCK_SIZE {
     block := dbi.ReadFile(agro_pb.ReadRequest{
-      ID: info.ID,
+      Id: info.Id,
       Start: &i, 
       Size: proto.Int64(BLOCK_SIZE),
     })
@@ -54,7 +54,7 @@ func upload_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
   
   finfo := agro_pb.FileInfo{
     Name: proto.String(path.Base(filePath)),
-    ID: proto.String(fileID),
+    Id: proto.String(fileID),
   }
   dbi.CreateFile(finfo)
   buffer := make([]byte, BLOCK_SIZE)
@@ -63,7 +63,7 @@ func upload_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
     n, _ := file.Read(buffer)
     if n == 0 { break }
     packet := agro_pb.DataBlock {
-      ID: proto.String(fileID),
+      Id: proto.String(fileID),
       Start: proto.Int64(bytes_written),
       Len: proto.Int64(int64(n)),
       Data: buffer[:n],
@@ -72,7 +72,7 @@ func upload_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
     bytes_written += int64(n)
   }
   file.Close()
-  dbi.CommitFile( agro_pb.FileID{ID:proto.String(fileID)} )
+  dbi.CommitFile( agro_pb.FileID{Id:proto.String(fileID)} )
   return nil
 }
 
@@ -103,7 +103,7 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
         f.Close()
       }
       if arg.GetFileArg().GetInput() {
-        download_file(arg.GetFileArg().GetID(), filePath, dbi)
+        download_file(arg.GetFileArg().GetId(), filePath, dbi)
       }
       if !arg.GetFileArg().GetSilent() && file_arg_type != agro_pb.FileArgument_STDOUT && file_arg_type != agro_pb.FileArgument_STDERR {
         if file_arg_type == agro_pb.FileArgument_REGEX {
@@ -179,7 +179,7 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
   for i, arg := range(job.Args) {
     if arg.GetFileArg() != nil {
       if !arg.GetFileArg().GetInput() {
-        file_id := arg.GetFileArg().ID
+        file_id := arg.GetFileArg().Id
         if arg.GetFileArg().GetType() == agro_pb.FileArgument_STDOUT {
           upload_file(*file_id, stdout_path, dbi)
         } else if arg.GetFileArg().GetType() == agro_pb.FileArgument_STDERR {
@@ -194,6 +194,6 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
   stderr_text := read_file_head(stderr_path)
   stdout_text := read_file_head(stdout_path)
   
-  dbi.SetJobLogs(*job.ID, stdout_text, stderr_text)
+  dbi.SetJobLogs(*job.Id, stdout_text, stderr_text)
   return err
 }

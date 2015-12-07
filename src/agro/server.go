@@ -43,7 +43,7 @@ func (self *AgroServer) Run() {
   }
   grpcServer := grpc.NewServer()
   if self.schedServer != nil {
-    agro_pb.RegisterAgroServer(grpcServer, self.schedServer)
+    agro_pb.RegisterSchedulerServer(grpcServer, self.schedServer)
   }
   if self.fileServer != nil {
     agro_pb.RegisterFileStoreServer(grpcServer, self.fileServer)
@@ -62,23 +62,24 @@ func (self AgroSchedServer) AddTask(ctx context.Context, task *agro_pb.Task) (*a
   }
   state := agro_pb.State_QUEUED
   return &agro_pb.TaskStatus{
-      ID : task.ID,
+      Id : task.Id,
       State : &state,
   }, nil
 }
 
-func (self AgroSchedServer) SearchTasks(tags *agro_pb.TagArray, stream agro_pb.Agro_SearchTasksServer) (error) {
+func (self AgroSchedServer) SearchTasks(tags *agro_pb.TagArray, stream agro_pb.Scheduler_SearchTasksServer) (error) {
   log.Printf("Server Search Tasks: %s", tags)
   for i := range self.engine.GetDBI().SearchTasks(tags) {
     if err := stream.Send(&i); err != nil {
+      log.Printf("Search Error: %s", err)
       return err
     }
   }
   return nil
 }
 
-func (self AgroSchedServer) GetTaskStatus(in *agro_pb.IDQuery, stream agro_pb.Agro_GetTaskStatusServer) (error) {
-  for _, id := range in.IDs {
+func (self AgroSchedServer) GetTaskStatus(in *agro_pb.IDQuery, stream agro_pb.Scheduler_GetTaskStatusServer) (error) {
+  for _, id := range in.Ids {
     out := self.engine.GetDBI().GetTaskStatus(id)
     if err := stream.Send(&out); err != nil {
       return err
@@ -88,11 +89,11 @@ func (self AgroSchedServer) GetTaskStatus(in *agro_pb.IDQuery, stream agro_pb.Ag
   
 }
 
-func (self AgroSchedServer) GetJobStatus(in *agro_pb.IDQuery, stream agro_pb.Agro_GetJobStatusServer) (error) {
-  for _, id := range in.IDs {
+func (self AgroSchedServer) GetJobStatus(in *agro_pb.IDQuery, stream agro_pb.Scheduler_GetJobStatusServer) (error) {
+  for _, id := range in.Ids {
     out := self.engine.GetDBI().GetJob(id)
     o := agro_pb.JobStatus{
-      ID:out.ID,
+      Id:out.Id,
       State:out.State,
     }
     if err := stream.Send(&o); err != nil {

@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='agro.proto',
   package='agro_pb',
   syntax='proto2',
-  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\x16\n\x07IDQuery\x12\x0b\n\x03IDs\x18\x01 \x03(\t\"6\n\tJobStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"[\n\nTaskStatus\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x1d\n\x05State\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x14\n\x0c\x43ompletedJob\x18\x03 \x01(\t\x12\x0c\n\x04Runs\x18\x04 \x03(\t\"\xd0\x01\n\x0c\x46ileArgument\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Input\x18\x02 \x02(\x08\x12/\n\x04Type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04Name\x18\x04 \x01(\t\x12\x0f\n\x07NameKey\x18\x05 \x01(\t\x12\x0e\n\x06Silent\x18\x06 \x01(\x08\"E\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\"O\n\x0b\x43mdArgument\x12\r\n\x03\x41rg\x18\x01 \x01(\tH\x00\x12(\n\x07\x46ileArg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\x9c\x01\n\x04Task\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x13\n\x0bTaskDepends\x18\x02 \x03(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x0c\n\x04Tags\x18\x06 \x03(\t\x12\x1d\n\x05State\x18\x07 \x01(\x0e\x32\x0e.agro_pb.State\"\xa8\x01\n\x03Job\x12\n\n\x02ID\x18\x01 \x02(\t\x12\x0e\n\x06TaskID\x18\x02 \x02(\t\x12\x0f\n\x07\x43ommand\x18\x03 \x02(\t\x12\"\n\x04\x41rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tContainer\x18\x05 \x01(\t\x12\x1d\n\x05State\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06Stdout\x18\x07 \x02(\t\x12\x0e\n\x06Stderr\x18\x08 \x02(\t\"\x18\n\x08TagArray\x12\x0c\n\x04Tags\x18\x01 \x03(\t\"\x16\n\x08TaskInfo\x12\n\n\x02ID\x18\x01 \x02(\t\"A\n\tDataBlock\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0b\n\x03Len\x18\x03 \x02(\x03\x12\x0c\n\x04\x44\x61ta\x18\x04 \x02(\x0c\"2\n\x08\x46ileInfo\x12\x0c\n\x04Name\x18\x01 \x02(\t\x12\n\n\x02ID\x18\x02 \x02(\t\x12\x0c\n\x04Size\x18\x03 \x01(\x03\"\x14\n\x06\x46ileID\x12\n\n\x02ID\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05State\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02ID\x18\x01 \x02(\t\x12\r\n\x05Start\x18\x02 \x02(\x03\x12\x0c\n\x04Size\x18\x03 \x02(\x03*L\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\n\n\x06QUEUED\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\x0b\n\x07RUNNING\x10\x04\x12\x06\n\x02OK\x10\x05\x32\xe6\x01\n\x04\x41gro\x12\x37\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\x11.agro_pb.TaskInfo\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x32\x9b\x02\n\tFileStore\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
+  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\x9d\x01\n\x04Task\x12\n\n\x02id\x18\x01 \x02(\t\x12\x14\n\x0ctask_depends\x18\x02 \x03(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x0c\n\x04tags\x18\x06 \x03(\t\x12\x1d\n\x05state\x18\x07 \x01(\x0e\x32\x0e.agro_pb.State\"\xa9\x01\n\x03Job\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0f\n\x07task_id\x18\x02 \x02(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x1d\n\x05state\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06stdout\x18\x07 \x02(\t\x12\x0e\n\x06stderr\x18\x08 \x02(\t\"6\n\tJobStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"\\\n\nTaskStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x15\n\rcompleted_job\x18\x03 \x01(\t\x12\x0c\n\x04runs\x18\x04 \x03(\t\"P\n\x0b\x43mdArgument\x12\r\n\x03\x61rg\x18\x01 \x01(\tH\x00\x12)\n\x08\x66ile_arg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\xdc\x01\n\x0c\x46ileArgument\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05input\x18\x02 \x02(\x08\x12/\n\x04type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08name_key\x18\x05 \x01(\t\x12\x0e\n\x06silent\x18\x06 \x01(\x08\"P\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\x12\t\n\x05STDIN\x10\x06\"\x18\n\x08TagArray\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\x16\n\x07IDQuery\x12\x0b\n\x03ids\x18\x01 \x03(\t\"A\n\tDataBlock\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0b\n\x03len\x18\x03 \x02(\x03\x12\x0c\n\x04\x64\x61ta\x18\x04 \x02(\x0c\"@\n\x08\x46ileInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\n\n\x02id\x18\x02 \x02(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x12\x0c\n\x04urls\x18\x04 \x03(\t\"\x14\n\x06\x46ileID\x12\n\n\x02id\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05state\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0c\n\x04size\x18\x03 \x02(\x03*L\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\n\n\x06QUEUED\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\x0b\n\x07RUNNING\x10\x04\x12\x06\n\x02OK\x10\x05\x32\xe7\x01\n\tScheduler\x12\x33\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\r.agro_pb.Task\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x32\x9b\x02\n\tFileStore\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -55,8 +55,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1109,
-  serialized_end=1185,
+  serialized_start=1115,
+  serialized_end=1191,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -95,26 +95,72 @@ _FILEARGUMENT_FILEARGTYPE = _descriptor.EnumDescriptor(
       name='STDERR', index=4, number=5,
       options=None,
       type=None),
+    _descriptor.EnumValueDescriptor(
+      name='STDIN', index=5, number=6,
+      options=None,
+      type=None),
   ],
   containing_type=None,
   options=None,
-  serialized_start=336,
-  serialized_end=405,
+  serialized_start=728,
+  serialized_end=808,
 )
 _sym_db.RegisterEnumDescriptor(_FILEARGUMENT_FILEARGTYPE)
 
 
-_IDQUERY = _descriptor.Descriptor(
-  name='IDQuery',
-  full_name='agro_pb.IDQuery',
+_TASK = _descriptor.Descriptor(
+  name='Task',
+  full_name='agro_pb.Task',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='IDs', full_name='agro_pb.IDQuery.IDs', index=0,
-      number=1, type=9, cpp_type=9, label=3,
+      name='id', full_name='agro_pb.Task.id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='task_depends', full_name='agro_pb.Task.task_depends', index=1,
+      number=2, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='command', full_name='agro_pb.Task.command', index=2,
+      number=3, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='args', full_name='agro_pb.Task.args', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='container', full_name='agro_pb.Task.container', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='tags', full_name='agro_pb.Task.tags', index=5,
+      number=6, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='agro_pb.Task.state', index=6,
+      number=7, type=14, cpp_type=8, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -130,8 +176,88 @@ _IDQUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=23,
-  serialized_end=45,
+  serialized_start=24,
+  serialized_end=181,
+)
+
+
+_JOB = _descriptor.Descriptor(
+  name='Job',
+  full_name='agro_pb.Job',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='agro_pb.Job.id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='task_id', full_name='agro_pb.Job.task_id', index=1,
+      number=2, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='command', full_name='agro_pb.Job.command', index=2,
+      number=3, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='args', full_name='agro_pb.Job.args', index=3,
+      number=4, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='container', full_name='agro_pb.Job.container', index=4,
+      number=5, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='state', full_name='agro_pb.Job.state', index=5,
+      number=6, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stdout', full_name='agro_pb.Job.stdout', index=6,
+      number=7, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='stderr', full_name='agro_pb.Job.stderr', index=7,
+      number=8, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=184,
+  serialized_end=353,
 )
 
 
@@ -143,14 +269,14 @@ _JOBSTATUS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.JobStatus.ID', index=0,
+      name='id', full_name='agro_pb.JobStatus.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='State', full_name='agro_pb.JobStatus.State', index=1,
+      name='state', full_name='agro_pb.JobStatus.state', index=1,
       number=2, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -168,8 +294,8 @@ _JOBSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=47,
-  serialized_end=101,
+  serialized_start=355,
+  serialized_end=409,
 )
 
 
@@ -181,28 +307,28 @@ _TASKSTATUS = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.TaskStatus.ID', index=0,
+      name='id', full_name='agro_pb.TaskStatus.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='State', full_name='agro_pb.TaskStatus.State', index=1,
+      name='state', full_name='agro_pb.TaskStatus.state', index=1,
       number=2, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='CompletedJob', full_name='agro_pb.TaskStatus.CompletedJob', index=2,
+      name='completed_job', full_name='agro_pb.TaskStatus.completed_job', index=2,
       number=3, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Runs', full_name='agro_pb.TaskStatus.Runs', index=3,
+      name='runs', full_name='agro_pb.TaskStatus.runs', index=3,
       number=4, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -220,75 +346,8 @@ _TASKSTATUS = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=103,
-  serialized_end=194,
-)
-
-
-_FILEARGUMENT = _descriptor.Descriptor(
-  name='FileArgument',
-  full_name='agro_pb.FileArgument',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.FileArgument.ID', index=0,
-      number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Input', full_name='agro_pb.FileArgument.Input', index=1,
-      number=2, type=8, cpp_type=7, label=2,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Type', full_name='agro_pb.FileArgument.Type', index=2,
-      number=3, type=14, cpp_type=8, label=2,
-      has_default_value=False, default_value=1,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Name', full_name='agro_pb.FileArgument.Name', index=3,
-      number=4, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='NameKey', full_name='agro_pb.FileArgument.NameKey', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Silent', full_name='agro_pb.FileArgument.Silent', index=5,
-      number=6, type=8, cpp_type=7, label=1,
-      has_default_value=False, default_value=False,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-    _FILEARGUMENT_FILEARGTYPE,
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=197,
-  serialized_end=405,
+  serialized_start=411,
+  serialized_end=503,
 )
 
 
@@ -300,14 +359,14 @@ _CMDARGUMENT = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Arg', full_name='agro_pb.CmdArgument.Arg', index=0,
+      name='arg', full_name='agro_pb.CmdArgument.arg', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='FileArg', full_name='agro_pb.CmdArgument.FileArg', index=1,
+      name='file_arg', full_name='agro_pb.CmdArgument.file_arg', index=1,
       number=2, type=11, cpp_type=10, label=1,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
@@ -328,64 +387,57 @@ _CMDARGUMENT = _descriptor.Descriptor(
       name='Value', full_name='agro_pb.CmdArgument.Value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=407,
-  serialized_end=486,
+  serialized_start=505,
+  serialized_end=585,
 )
 
 
-_TASK = _descriptor.Descriptor(
-  name='Task',
-  full_name='agro_pb.Task',
+_FILEARGUMENT = _descriptor.Descriptor(
+  name='FileArgument',
+  full_name='agro_pb.FileArgument',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.Task.ID', index=0,
+      name='id', full_name='agro_pb.FileArgument.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='TaskDepends', full_name='agro_pb.Task.TaskDepends', index=1,
-      number=2, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
+      name='input', full_name='agro_pb.FileArgument.input', index=1,
+      number=2, type=8, cpp_type=7, label=2,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Command', full_name='agro_pb.Task.Command', index=2,
-      number=3, type=9, cpp_type=9, label=2,
+      name='type', full_name='agro_pb.FileArgument.type', index=2,
+      number=3, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='name', full_name='agro_pb.FileArgument.name', index=3,
+      number=4, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Args', full_name='agro_pb.Task.Args', index=3,
-      number=4, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Container', full_name='agro_pb.Task.Container', index=4,
+      name='name_key', full_name='agro_pb.FileArgument.name_key', index=4,
       number=5, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Tags', full_name='agro_pb.Task.Tags', index=5,
-      number=6, type=9, cpp_type=9, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='State', full_name='agro_pb.Task.State', index=6,
-      number=7, type=14, cpp_type=8, label=1,
-      has_default_value=False, default_value=0,
+      name='silent', full_name='agro_pb.FileArgument.silent', index=5,
+      number=6, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -394,6 +446,7 @@ _TASK = _descriptor.Descriptor(
   ],
   nested_types=[],
   enum_types=[
+    _FILEARGUMENT_FILEARGTYPE,
   ],
   options=None,
   is_extendable=False,
@@ -401,88 +454,8 @@ _TASK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=489,
-  serialized_end=645,
-)
-
-
-_JOB = _descriptor.Descriptor(
-  name='Job',
-  full_name='agro_pb.Job',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.Job.ID', index=0,
-      number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='TaskID', full_name='agro_pb.Job.TaskID', index=1,
-      number=2, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Command', full_name='agro_pb.Job.Command', index=2,
-      number=3, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Args', full_name='agro_pb.Job.Args', index=3,
-      number=4, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Container', full_name='agro_pb.Job.Container', index=4,
-      number=5, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='State', full_name='agro_pb.Job.State', index=5,
-      number=6, type=14, cpp_type=8, label=2,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Stdout', full_name='agro_pb.Job.Stdout', index=6,
-      number=7, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='Stderr', full_name='agro_pb.Job.Stderr', index=7,
-      number=8, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  syntax='proto2',
-  extension_ranges=[],
-  oneofs=[
-  ],
-  serialized_start=648,
-  serialized_end=816,
+  serialized_start=588,
+  serialized_end=808,
 )
 
 
@@ -494,7 +467,7 @@ _TAGARRAY = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Tags', full_name='agro_pb.TagArray.Tags', index=0,
+      name='tags', full_name='agro_pb.TagArray.tags', index=0,
       number=1, type=9, cpp_type=9, label=3,
       has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
@@ -512,22 +485,22 @@ _TAGARRAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=818,
-  serialized_end=842,
+  serialized_start=810,
+  serialized_end=834,
 )
 
 
-_TASKINFO = _descriptor.Descriptor(
-  name='TaskInfo',
-  full_name='agro_pb.TaskInfo',
+_IDQUERY = _descriptor.Descriptor(
+  name='IDQuery',
+  full_name='agro_pb.IDQuery',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.TaskInfo.ID', index=0,
-      number=1, type=9, cpp_type=9, label=2,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='ids', full_name='agro_pb.IDQuery.ids', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -543,8 +516,8 @@ _TASKINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=844,
-  serialized_end=866,
+  serialized_start=836,
+  serialized_end=858,
 )
 
 
@@ -556,28 +529,28 @@ _DATABLOCK = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.DataBlock.ID', index=0,
+      name='id', full_name='agro_pb.DataBlock.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Start', full_name='agro_pb.DataBlock.Start', index=1,
+      name='start', full_name='agro_pb.DataBlock.start', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Len', full_name='agro_pb.DataBlock.Len', index=2,
+      name='len', full_name='agro_pb.DataBlock.len', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Data', full_name='agro_pb.DataBlock.Data', index=3,
+      name='data', full_name='agro_pb.DataBlock.data', index=3,
       number=4, type=12, cpp_type=9, label=2,
       has_default_value=False, default_value=b"",
       message_type=None, enum_type=None, containing_type=None,
@@ -595,8 +568,8 @@ _DATABLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=868,
-  serialized_end=933,
+  serialized_start=860,
+  serialized_end=925,
 )
 
 
@@ -608,23 +581,30 @@ _FILEINFO = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='Name', full_name='agro_pb.FileInfo.Name', index=0,
+      name='name', full_name='agro_pb.FileInfo.name', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.FileInfo.ID', index=1,
+      name='id', full_name='agro_pb.FileInfo.id', index=1,
       number=2, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Size', full_name='agro_pb.FileInfo.Size', index=2,
+      name='size', full_name='agro_pb.FileInfo.size', index=2,
       number=3, type=3, cpp_type=2, label=1,
       has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='urls', full_name='agro_pb.FileInfo.urls', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -640,8 +620,8 @@ _FILEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=935,
-  serialized_end=985,
+  serialized_start=927,
+  serialized_end=991,
 )
 
 
@@ -653,7 +633,7 @@ _FILEID = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.FileID.ID', index=0,
+      name='id', full_name='agro_pb.FileID.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -671,8 +651,8 @@ _FILEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=987,
-  serialized_end=1007,
+  serialized_start=993,
+  serialized_end=1013,
 )
 
 
@@ -684,7 +664,7 @@ _FILESTATE = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='State', full_name='agro_pb.FileState.State', index=0,
+      name='state', full_name='agro_pb.FileState.state', index=0,
       number=1, type=14, cpp_type=8, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -702,8 +682,8 @@ _FILESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1009,
-  serialized_end=1051,
+  serialized_start=1015,
+  serialized_end=1057,
 )
 
 
@@ -715,21 +695,21 @@ _READREQUEST = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='ID', full_name='agro_pb.ReadRequest.ID', index=0,
+      name='id', full_name='agro_pb.ReadRequest.id', index=0,
       number=1, type=9, cpp_type=9, label=2,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Start', full_name='agro_pb.ReadRequest.Start', index=1,
+      name='start', full_name='agro_pb.ReadRequest.start', index=1,
       number=2, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='Size', full_name='agro_pb.ReadRequest.Size', index=2,
+      name='size', full_name='agro_pb.ReadRequest.size', index=2,
       number=3, type=3, cpp_type=2, label=2,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
@@ -747,76 +727,40 @@ _READREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1053,
-  serialized_end=1107,
+  serialized_start=1059,
+  serialized_end=1113,
 )
 
-_JOBSTATUS.fields_by_name['State'].enum_type = _STATE
-_TASKSTATUS.fields_by_name['State'].enum_type = _STATE
-_FILEARGUMENT.fields_by_name['Type'].enum_type = _FILEARGUMENT_FILEARGTYPE
+_TASK.fields_by_name['args'].message_type = _CMDARGUMENT
+_TASK.fields_by_name['state'].enum_type = _STATE
+_JOB.fields_by_name['args'].message_type = _CMDARGUMENT
+_JOB.fields_by_name['state'].enum_type = _STATE
+_JOBSTATUS.fields_by_name['state'].enum_type = _STATE
+_TASKSTATUS.fields_by_name['state'].enum_type = _STATE
+_CMDARGUMENT.fields_by_name['file_arg'].message_type = _FILEARGUMENT
+_CMDARGUMENT.oneofs_by_name['Value'].fields.append(
+  _CMDARGUMENT.fields_by_name['arg'])
+_CMDARGUMENT.fields_by_name['arg'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
+_CMDARGUMENT.oneofs_by_name['Value'].fields.append(
+  _CMDARGUMENT.fields_by_name['file_arg'])
+_CMDARGUMENT.fields_by_name['file_arg'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
+_FILEARGUMENT.fields_by_name['type'].enum_type = _FILEARGUMENT_FILEARGTYPE
 _FILEARGUMENT_FILEARGTYPE.containing_type = _FILEARGUMENT
-_CMDARGUMENT.fields_by_name['FileArg'].message_type = _FILEARGUMENT
-_CMDARGUMENT.oneofs_by_name['Value'].fields.append(
-  _CMDARGUMENT.fields_by_name['Arg'])
-_CMDARGUMENT.fields_by_name['Arg'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
-_CMDARGUMENT.oneofs_by_name['Value'].fields.append(
-  _CMDARGUMENT.fields_by_name['FileArg'])
-_CMDARGUMENT.fields_by_name['FileArg'].containing_oneof = _CMDARGUMENT.oneofs_by_name['Value']
-_TASK.fields_by_name['Args'].message_type = _CMDARGUMENT
-_TASK.fields_by_name['State'].enum_type = _STATE
-_JOB.fields_by_name['Args'].message_type = _CMDARGUMENT
-_JOB.fields_by_name['State'].enum_type = _STATE
-_FILESTATE.fields_by_name['State'].enum_type = _STATE
-DESCRIPTOR.message_types_by_name['IDQuery'] = _IDQUERY
-DESCRIPTOR.message_types_by_name['JobStatus'] = _JOBSTATUS
-DESCRIPTOR.message_types_by_name['TaskStatus'] = _TASKSTATUS
-DESCRIPTOR.message_types_by_name['FileArgument'] = _FILEARGUMENT
-DESCRIPTOR.message_types_by_name['CmdArgument'] = _CMDARGUMENT
+_FILESTATE.fields_by_name['state'].enum_type = _STATE
 DESCRIPTOR.message_types_by_name['Task'] = _TASK
 DESCRIPTOR.message_types_by_name['Job'] = _JOB
+DESCRIPTOR.message_types_by_name['JobStatus'] = _JOBSTATUS
+DESCRIPTOR.message_types_by_name['TaskStatus'] = _TASKSTATUS
+DESCRIPTOR.message_types_by_name['CmdArgument'] = _CMDARGUMENT
+DESCRIPTOR.message_types_by_name['FileArgument'] = _FILEARGUMENT
 DESCRIPTOR.message_types_by_name['TagArray'] = _TAGARRAY
-DESCRIPTOR.message_types_by_name['TaskInfo'] = _TASKINFO
+DESCRIPTOR.message_types_by_name['IDQuery'] = _IDQUERY
 DESCRIPTOR.message_types_by_name['DataBlock'] = _DATABLOCK
 DESCRIPTOR.message_types_by_name['FileInfo'] = _FILEINFO
 DESCRIPTOR.message_types_by_name['FileID'] = _FILEID
 DESCRIPTOR.message_types_by_name['FileState'] = _FILESTATE
 DESCRIPTOR.message_types_by_name['ReadRequest'] = _READREQUEST
 DESCRIPTOR.enum_types_by_name['State'] = _STATE
-
-IDQuery = _reflection.GeneratedProtocolMessageType('IDQuery', (_message.Message,), dict(
-  DESCRIPTOR = _IDQUERY,
-  __module__ = 'agro_pb2'
-  # @@protoc_insertion_point(class_scope:agro_pb.IDQuery)
-  ))
-_sym_db.RegisterMessage(IDQuery)
-
-JobStatus = _reflection.GeneratedProtocolMessageType('JobStatus', (_message.Message,), dict(
-  DESCRIPTOR = _JOBSTATUS,
-  __module__ = 'agro_pb2'
-  # @@protoc_insertion_point(class_scope:agro_pb.JobStatus)
-  ))
-_sym_db.RegisterMessage(JobStatus)
-
-TaskStatus = _reflection.GeneratedProtocolMessageType('TaskStatus', (_message.Message,), dict(
-  DESCRIPTOR = _TASKSTATUS,
-  __module__ = 'agro_pb2'
-  # @@protoc_insertion_point(class_scope:agro_pb.TaskStatus)
-  ))
-_sym_db.RegisterMessage(TaskStatus)
-
-FileArgument = _reflection.GeneratedProtocolMessageType('FileArgument', (_message.Message,), dict(
-  DESCRIPTOR = _FILEARGUMENT,
-  __module__ = 'agro_pb2'
-  # @@protoc_insertion_point(class_scope:agro_pb.FileArgument)
-  ))
-_sym_db.RegisterMessage(FileArgument)
-
-CmdArgument = _reflection.GeneratedProtocolMessageType('CmdArgument', (_message.Message,), dict(
-  DESCRIPTOR = _CMDARGUMENT,
-  __module__ = 'agro_pb2'
-  # @@protoc_insertion_point(class_scope:agro_pb.CmdArgument)
-  ))
-_sym_db.RegisterMessage(CmdArgument)
 
 Task = _reflection.GeneratedProtocolMessageType('Task', (_message.Message,), dict(
   DESCRIPTOR = _TASK,
@@ -832,6 +776,34 @@ Job = _reflection.GeneratedProtocolMessageType('Job', (_message.Message,), dict(
   ))
 _sym_db.RegisterMessage(Job)
 
+JobStatus = _reflection.GeneratedProtocolMessageType('JobStatus', (_message.Message,), dict(
+  DESCRIPTOR = _JOBSTATUS,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.JobStatus)
+  ))
+_sym_db.RegisterMessage(JobStatus)
+
+TaskStatus = _reflection.GeneratedProtocolMessageType('TaskStatus', (_message.Message,), dict(
+  DESCRIPTOR = _TASKSTATUS,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.TaskStatus)
+  ))
+_sym_db.RegisterMessage(TaskStatus)
+
+CmdArgument = _reflection.GeneratedProtocolMessageType('CmdArgument', (_message.Message,), dict(
+  DESCRIPTOR = _CMDARGUMENT,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.CmdArgument)
+  ))
+_sym_db.RegisterMessage(CmdArgument)
+
+FileArgument = _reflection.GeneratedProtocolMessageType('FileArgument', (_message.Message,), dict(
+  DESCRIPTOR = _FILEARGUMENT,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.FileArgument)
+  ))
+_sym_db.RegisterMessage(FileArgument)
+
 TagArray = _reflection.GeneratedProtocolMessageType('TagArray', (_message.Message,), dict(
   DESCRIPTOR = _TAGARRAY,
   __module__ = 'agro_pb2'
@@ -839,12 +811,12 @@ TagArray = _reflection.GeneratedProtocolMessageType('TagArray', (_message.Messag
   ))
 _sym_db.RegisterMessage(TagArray)
 
-TaskInfo = _reflection.GeneratedProtocolMessageType('TaskInfo', (_message.Message,), dict(
-  DESCRIPTOR = _TASKINFO,
+IDQuery = _reflection.GeneratedProtocolMessageType('IDQuery', (_message.Message,), dict(
+  DESCRIPTOR = _IDQUERY,
   __module__ = 'agro_pb2'
-  # @@protoc_insertion_point(class_scope:agro_pb.TaskInfo)
+  # @@protoc_insertion_point(class_scope:agro_pb.IDQuery)
   ))
-_sym_db.RegisterMessage(TaskInfo)
+_sym_db.RegisterMessage(IDQuery)
 
 DataBlock = _reflection.GeneratedProtocolMessageType('DataBlock', (_message.Message,), dict(
   DESCRIPTOR = _DATABLOCK,
@@ -888,7 +860,7 @@ from grpc.early_adopter import implementations as early_adopter_implementations
 from grpc.framework.alpha import utilities as alpha_utilities
 from grpc.framework.common import cardinality
 from grpc.framework.interfaces.face import utilities as face_utilities
-class EarlyAdopterAgroServicer(object):
+class EarlyAdopterSchedulerServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
@@ -903,7 +875,7 @@ class EarlyAdopterAgroServicer(object):
   @abc.abstractmethod
   def GetJobStatus(self, request, context):
     raise NotImplementedError()
-class EarlyAdopterAgroServer(object):
+class EarlyAdopterSchedulerServer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
@@ -912,7 +884,7 @@ class EarlyAdopterAgroServer(object):
   @abc.abstractmethod
   def stop(self):
     raise NotImplementedError()
-class EarlyAdopterAgroStub(object):
+class EarlyAdopterSchedulerStub(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
@@ -931,7 +903,7 @@ class EarlyAdopterAgroStub(object):
   def GetJobStatus(self, request):
     raise NotImplementedError()
   GetJobStatus.async = None
-def early_adopter_create_Agro_server(servicer, port, private_key=None, certificate_chain=None):
+def early_adopter_create_Scheduler_server(servicer, port, private_key=None, certificate_chain=None):
   import agro_pb2
   import agro_pb2
   import agro_pb2
@@ -959,11 +931,11 @@ def early_adopter_create_Agro_server(servicer, port, private_key=None, certifica
     "SearchTasks": alpha_utilities.unary_stream_service_description(
       servicer.SearchTasks,
       agro_pb2.TagArray.FromString,
-      agro_pb2.TaskInfo.SerializeToString,
+      agro_pb2.Task.SerializeToString,
     ),
   }
-  return early_adopter_implementations.server("agro_pb.Agro", method_service_descriptions, port, private_key=private_key, certificate_chain=certificate_chain)
-def early_adopter_create_Agro_stub(host, port, metadata_transformer=None, secure=False, root_certificates=None, private_key=None, certificate_chain=None, server_host_override=None):
+  return early_adopter_implementations.server("agro_pb.Scheduler", method_service_descriptions, port, private_key=private_key, certificate_chain=certificate_chain)
+def early_adopter_create_Scheduler_stub(host, port, metadata_transformer=None, secure=False, root_certificates=None, private_key=None, certificate_chain=None, server_host_override=None):
   import agro_pb2
   import agro_pb2
   import agro_pb2
@@ -987,12 +959,12 @@ def early_adopter_create_Agro_stub(host, port, metadata_transformer=None, secure
     ),
     "SearchTasks": alpha_utilities.unary_stream_invocation_description(
       agro_pb2.TagArray.SerializeToString,
-      agro_pb2.TaskInfo.FromString,
+      agro_pb2.Task.FromString,
     ),
   }
-  return early_adopter_implementations.stub("agro_pb.Agro", method_invocation_descriptions, host, port, metadata_transformer=metadata_transformer, secure=secure, root_certificates=root_certificates, private_key=private_key, certificate_chain=certificate_chain, server_host_override=server_host_override)
+  return early_adopter_implementations.stub("agro_pb.Scheduler", method_invocation_descriptions, host, port, metadata_transformer=metadata_transformer, secure=secure, root_certificates=root_certificates, private_key=private_key, certificate_chain=certificate_chain, server_host_override=server_host_override)
 
-class BetaAgroServicer(object):
+class BetaSchedulerServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
@@ -1008,7 +980,7 @@ class BetaAgroServicer(object):
   def GetJobStatus(self, request, context):
     raise NotImplementedError()
 
-class BetaAgroStub(object):
+class BetaSchedulerStub(object):
   """The interface to which stubs will conform."""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
@@ -1025,7 +997,7 @@ class BetaAgroStub(object):
   def GetJobStatus(self, request, timeout):
     raise NotImplementedError()
 
-def beta_create_Agro_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
+def beta_create_Scheduler_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
   import agro_pb2
   import agro_pb2
   import agro_pb2
@@ -1035,27 +1007,27 @@ def beta_create_Agro_server(servicer, pool=None, pool_size=None, default_timeout
   import agro_pb2
   import agro_pb2
   request_deserializers = {
-    ('agro_pb.Agro', 'AddTask'): agro_pb2.Task.FromString,
-    ('agro_pb.Agro', 'GetJobStatus'): agro_pb2.IDQuery.FromString,
-    ('agro_pb.Agro', 'GetTaskStatus'): agro_pb2.IDQuery.FromString,
-    ('agro_pb.Agro', 'SearchTasks'): agro_pb2.TagArray.FromString,
+    ('agro_pb.Scheduler', 'AddTask'): agro_pb2.Task.FromString,
+    ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.IDQuery.FromString,
+    ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.IDQuery.FromString,
+    ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.TagArray.FromString,
   }
   response_serializers = {
-    ('agro_pb.Agro', 'AddTask'): agro_pb2.TaskStatus.SerializeToString,
-    ('agro_pb.Agro', 'GetJobStatus'): agro_pb2.JobStatus.SerializeToString,
-    ('agro_pb.Agro', 'GetTaskStatus'): agro_pb2.TaskStatus.SerializeToString,
-    ('agro_pb.Agro', 'SearchTasks'): agro_pb2.TaskInfo.SerializeToString,
+    ('agro_pb.Scheduler', 'AddTask'): agro_pb2.TaskStatus.SerializeToString,
+    ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.JobStatus.SerializeToString,
+    ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.TaskStatus.SerializeToString,
+    ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.Task.SerializeToString,
   }
   method_implementations = {
-    ('agro_pb.Agro', 'AddTask'): face_utilities.unary_unary_inline(servicer.AddTask),
-    ('agro_pb.Agro', 'GetJobStatus'): face_utilities.unary_stream_inline(servicer.GetJobStatus),
-    ('agro_pb.Agro', 'GetTaskStatus'): face_utilities.unary_stream_inline(servicer.GetTaskStatus),
-    ('agro_pb.Agro', 'SearchTasks'): face_utilities.unary_stream_inline(servicer.SearchTasks),
+    ('agro_pb.Scheduler', 'AddTask'): face_utilities.unary_unary_inline(servicer.AddTask),
+    ('agro_pb.Scheduler', 'GetJobStatus'): face_utilities.unary_stream_inline(servicer.GetJobStatus),
+    ('agro_pb.Scheduler', 'GetTaskStatus'): face_utilities.unary_stream_inline(servicer.GetTaskStatus),
+    ('agro_pb.Scheduler', 'SearchTasks'): face_utilities.unary_stream_inline(servicer.SearchTasks),
   }
   server_options = beta_implementations.server_options(request_deserializers=request_deserializers, response_serializers=response_serializers, thread_pool=pool, thread_pool_size=pool_size, default_timeout=default_timeout, maximum_timeout=maximum_timeout)
   return beta_implementations.server(method_implementations, options=server_options)
 
-def beta_create_Agro_stub(channel, host=None, metadata_transformer=None, pool=None, pool_size=None):
+def beta_create_Scheduler_stub(channel, host=None, metadata_transformer=None, pool=None, pool_size=None):
   import agro_pb2
   import agro_pb2
   import agro_pb2
@@ -1065,16 +1037,16 @@ def beta_create_Agro_stub(channel, host=None, metadata_transformer=None, pool=No
   import agro_pb2
   import agro_pb2
   request_serializers = {
-    ('agro_pb.Agro', 'AddTask'): agro_pb2.Task.SerializeToString,
-    ('agro_pb.Agro', 'GetJobStatus'): agro_pb2.IDQuery.SerializeToString,
-    ('agro_pb.Agro', 'GetTaskStatus'): agro_pb2.IDQuery.SerializeToString,
-    ('agro_pb.Agro', 'SearchTasks'): agro_pb2.TagArray.SerializeToString,
+    ('agro_pb.Scheduler', 'AddTask'): agro_pb2.Task.SerializeToString,
+    ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.IDQuery.SerializeToString,
+    ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.IDQuery.SerializeToString,
+    ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.TagArray.SerializeToString,
   }
   response_deserializers = {
-    ('agro_pb.Agro', 'AddTask'): agro_pb2.TaskStatus.FromString,
-    ('agro_pb.Agro', 'GetJobStatus'): agro_pb2.JobStatus.FromString,
-    ('agro_pb.Agro', 'GetTaskStatus'): agro_pb2.TaskStatus.FromString,
-    ('agro_pb.Agro', 'SearchTasks'): agro_pb2.TaskInfo.FromString,
+    ('agro_pb.Scheduler', 'AddTask'): agro_pb2.TaskStatus.FromString,
+    ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.JobStatus.FromString,
+    ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.TaskStatus.FromString,
+    ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.Task.FromString,
   }
   cardinalities = {
     'AddTask': cardinality.Cardinality.UNARY_UNARY,
@@ -1083,7 +1055,7 @@ def beta_create_Agro_stub(channel, host=None, metadata_transformer=None, pool=No
     'SearchTasks': cardinality.Cardinality.UNARY_STREAM,
   }
   stub_options = beta_implementations.stub_options(host=host, metadata_transformer=metadata_transformer, request_serializers=request_serializers, response_deserializers=response_deserializers, thread_pool=pool, thread_pool_size=pool_size)
-  return beta_implementations.dynamic_stub(channel, 'agro_pb.Agro', cardinalities, options=stub_options)
+  return beta_implementations.dynamic_stub(channel, 'agro_pb.Scheduler', cardinalities, options=stub_options)
 class EarlyAdopterFileStoreServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta

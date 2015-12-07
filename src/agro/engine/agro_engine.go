@@ -67,8 +67,8 @@ func (self *WorkEngine) CreateTaskJob(task *agro_pb.Task) {
   u, _ := uuid.NewV4() 
   s := agro_pb.State_QUEUED
   job := &agro_pb.Job{
-    ID: proto.String(u.String()),
-    TaskID:task.ID,
+    Id: proto.String(u.String()),
+    TaskId:task.Id,
     State:&s,
     Command : task.Command,
     Container: task.Container,
@@ -93,11 +93,11 @@ func (self *WorkEngine) JobScan() {
   //self.dbi.JobQueryCount(agro_pb.State_QUEUED)
   v := agro_pb.State_QUEUED  
   for job := range self.dbi.JobQuery(&v) {
-    if _, in1 := self.readyJobs[*job.ID]; !in1 {
-      if _, in2 := self.runningJobs[*job.ID]; !in2 {
+    if _, in1 := self.readyJobs[*job.Id]; !in1 {
+      if _, in2 := self.runningJobs[*job.Id]; !in2 {
         local := job //copy for loop value to local copy, so the pointer won't be on a changing copy
-        self.readyJobs[*job.ID] = &local
-        self.activeTasks[*job.TaskID] = &local
+        self.readyJobs[*job.Id] = &local
+        self.activeTasks[*job.TaskId] = &local
       }
     }
   }
@@ -108,10 +108,10 @@ func (self *WorkEngine) TaskScan() {
   v := agro_pb.State_QUEUED
   i := 0
   for task := range self.dbi.TaskQuery(&v) {
-    if _, ok := self.activeTasks[*task.ID]; !ok {
-      log.Printf("Found task %s", *task.ID)
+    if _, ok := self.activeTasks[*task.Id]; !ok {
+      log.Printf("Found task %s", *task.Id)
       complete_count := 0
-      for job := range self.dbi.GetTaskJobs(*task.ID) {
+      for job := range self.dbi.GetTaskJobs(*task.Id) {
           if *job.State == agro_pb.State_OK {
             complete_count += 1
           }
@@ -120,7 +120,7 @@ func (self *WorkEngine) TaskScan() {
         self.CreateTaskJob(&task)
         i += 1
       } else {
-        self.UpdateTaskState(*task.ID, agro_pb.State_OK)
+        self.UpdateTaskState(*task.Id, agro_pb.State_OK)
       }
     }
   }
@@ -141,7 +141,7 @@ func (self *WorkEngine) FinishJob(jobID string) {
   log.Printf("Finishing %s", job)
   
   //finish the task as well
-  taskID := *job.TaskID
+  taskID := *job.TaskId
   delete(self.runningJobs, jobID)
   delete(self.activeTasks, taskID)
 }
@@ -177,7 +177,7 @@ DBI interface
 */
 
 func (self *WorkEngine) AddTask(task *agro_pb.Task) error {
-  log.Printf("Adding new Task %s", task.ID)
+  log.Printf("Adding new Task %s", task.Id)
   err := self.dbi.AddTask(task)
   if err != nil { return err }
   /*
@@ -204,7 +204,7 @@ func (self *WorkEngine) JobQuery(state *agro_pb.State) chan agro_pb.Job {
   return self.dbi.JobQuery(state)
 }
 
-func (self *WorkEngine) SearchTasks(tags *agro_pb.TagArray) chan agro_pb.TaskInfo {
+func (self *WorkEngine) SearchTasks(tags *agro_pb.TagArray) chan agro_pb.Task {
   return self.dbi.SearchTasks(tags)
 }
 

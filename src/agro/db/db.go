@@ -8,7 +8,7 @@ import (
 type AgroDB interface {
   AddTask(*agro_pb.Task) error
   AddJob(*agro_pb.Job) error
-  SearchTasks(*agro_pb.TagArray) chan agro_pb.TaskInfo
+  SearchTasks(*agro_pb.TagArray) chan agro_pb.Task
 
   TaskQuery(*agro_pb.State) chan agro_pb.Task
   JobQuery(*agro_pb.State) chan agro_pb.Job
