@@ -130,16 +130,17 @@ func (self *WorkEngine) TaskScan() {
 }
 
 
-func (self *WorkEngine) FinishJob(jobID string) {
-  self.UpdateJobState(jobID, agro_pb.State_OK)
+func (self *WorkEngine) FinishJob(jobID string, state agro_pb.State) {
+  self.UpdateJobState(jobID, state)
   job := self.dbi.GetJob(jobID)
   if job == nil {
     log.Printf("Job %s not found", jobID)
     return
   }
-  self.dbi.UpdateTaskState(jobID, agro_pb.State_OK)
-  log.Printf("Finishing %s", job)
-  
+  if state == agro_pb.State_OK {
+    self.dbi.UpdateTaskState(jobID, agro_pb.State_OK)
+    log.Printf("Finishing %s", job)
+  }
   //finish the task as well
   taskID := *job.TaskId
   delete(self.runningJobs, jobID)

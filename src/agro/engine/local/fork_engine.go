@@ -24,11 +24,10 @@ func (self *ForkManager) worker(inchan chan agro_pb.Job) {
     err := agro_engine.RunJob(&job, self.workdir, self.engine.GetDBI())
 
     if err != nil {
-      self.engine.UpdateJobState(*job.Id, agro_pb.State_OK)
+      self.engine.FinishJob(*job.Id, agro_pb.State_ERROR)
     } else {
-      self.engine.UpdateJobState(*job.Id, agro_pb.State_ERROR)      
+      self.engine.FinishJob(*job.Id, agro_pb.State_OK)
     }
-    self.engine.FinishJob(*job.Id)
   }
 }
 
