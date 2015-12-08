@@ -17,7 +17,8 @@ message Task {
   repeated CmdArgument args = 4;   /// The array of command line arguments
   optional string container = 5;   /// Container ID to run the code in
   repeated string tags = 6;        /// An array of customizable tags to enable task queries
-  optional State state = 7;        /// The State of the Task
+  repeated TaskRequirement requirements = 7; /// An array of system/authorization requirements needed to deploy the task
+  optional State state = 8;        /// The State of the Task
 }
 
 /**
@@ -65,6 +66,16 @@ message TaskStatus {
   required State state = 2;          /// The State of the Task
   optional string completed_job = 3;  /// If in State=OK, which Job ID represents the successful run
   repeated string runs = 4;          /// An array of all State != OK jobs that have been attempted
+}
+
+/**
+ * Task requirements
+ * describes the requirements (mem, cpu count, diskspace) required for the task to be run
+ */
+message TaskRequirement {
+  /// Right now requirement is done as a string, to allow for customization
+  required string name = 1;  /// name of requirement type: includes "ram", "cpus", "disk"
+  required string value = 2; /// value of requirement in string form
 }
 
 /**
