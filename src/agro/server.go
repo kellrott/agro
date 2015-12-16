@@ -56,7 +56,7 @@ func (self AgroSchedServer) AddTask(ctx context.Context, task *agro_pb.Task) (*a
   log.Printf("Received: %s\n", task)
   a := agro_pb.State_QUEUED
   task.State = &a
-  err := self.engine.AddTask(task)
+  err := self.engine.GetDBI().AddTask(task)
   if err != nil {
     log.Printf("Error: %s\n", err)
   }
@@ -86,7 +86,6 @@ func (self AgroSchedServer) GetTaskStatus(in *agro_pb.IDQuery, stream agro_pb.Sc
     }
   }
   return nil
-  
 }
 
 func (self AgroSchedServer) GetJobStatus(in *agro_pb.IDQuery, stream agro_pb.Scheduler_GetJobStatusServer) (error) {

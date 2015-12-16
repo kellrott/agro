@@ -19,6 +19,7 @@ message Task {
   repeated string tags = 6;        /// An array of customizable tags to enable task queries
   repeated TaskRequirement requirements = 7; /// An array of system/authorization requirements needed to deploy the task
   optional State state = 8;        /// The State of the Task
+  optional int32 max_retry = 9 ;  /// Number of times to retry before failure 
 }
 
 /**

@@ -19,10 +19,8 @@ type ForkManager struct {
 func (self *ForkManager) worker(inchan chan agro_pb.Job) {
   for job := range inchan {
     log.Printf("Launch job: %s", job)
-    self.engine.UpdateJobState(*job.Id, agro_pb.State_RUNNING)
-
+    self.engine.GetDBI().UpdateJobState(*job.Id, agro_pb.State_RUNNING)
     err := agro_engine.RunJob(&job, self.workdir, self.engine.GetDBI())
-
     if err != nil {
       self.engine.FinishJob(*job.Id, agro_pb.State_ERROR)
     } else {

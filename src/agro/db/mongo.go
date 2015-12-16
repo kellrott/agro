@@ -227,25 +227,23 @@ func (self *MongoInterface) TaskQuery(state *agro_pb.State) chan agro_pb.Task {
   return out
 }
 
-func (self *MongoInterface) JobQuery(state *agro_pb.State) chan agro_pb.Job {
-  if *state == agro_pb.State_QUEUED {
-    //log.Printf("Scanning For QUEUED jobs")
-    out := make(chan agro_pb.Job)
-    go func() {
-      i := self.db.C("job").Find( bson.M{"state" : agro_pb.State_QUEUED.String()} ).Iter()
-      result := make(map[string]interface{})
-      for i.Next(&result) {
-        pout := agro_pb.Job{}
-        MongoToProto(result,&pout, true)
-        out <- pout
-      }
-      close(out)
-    }()
-    return out
-  }
-  //collection.Find(bson.M{"state": id})
+func (self *MongoInterface) JobQuery(state *agro_pb.State, max int) chan agro_pb.Job {
   out := make(chan agro_pb.Job)
-  defer close(out)
+  count := 0
+  go func() {
+    i := self.db.C("job").Find( bson.M{"state" : state.String()} ).Iter()
+    result := make(map[string]interface{})
+    for i.Next(&result) {
+      pout := agro_pb.Job{}
+      MongoToProto(result,&pout, true)
+      out <- pout
+      count += 1 
+      if max > 0 && count >= max {
+        break
+      }
+    }
+    close(out)
+  }()
   return out
 }
 
@@ -293,7 +291,7 @@ func (self *MongoInterface) GetTaskJobs(taskID string) chan agro_pb.Job {
 }
  
 func (self *MongoInterface) GetTaskStatus(taskID string) agro_pb.TaskStatus { 
-  //task := self.GetTask(taskID)
+  /*
   runs := make([]string, 0, 10)
   var completed *string = nil
   var state = agro_pb.State_QUEUED
@@ -321,12 +319,18 @@ func (self *MongoInterface) GetTaskStatus(taskID string) agro_pb.TaskStatus {
     Runs: runs,
   }
   return *out
+  */
   /*
   required string ID = 1;  
   required State State = 2;
   optional string CompletedJob = 6;
   repeated string Runs = 7;  
   */
+  task := self.GetTask(taskID)
+  return agro_pb.TaskStatus{
+    Id: &taskID,
+    State: task.State,
+  }
 }
 
 func (self *MongoInterface) SetJobLogs(jobID string,stdout []byte,stderr []byte) {

@@ -11,7 +11,7 @@ type AgroDB interface {
   SearchTasks(*agro_pb.TagArray) chan agro_pb.Task
 
   TaskQuery(*agro_pb.State) chan agro_pb.Task
-  JobQuery(*agro_pb.State) chan agro_pb.Job
+  JobQuery(state *agro_pb.State, max int) chan agro_pb.Job
   
   GetTaskJobs(taskID string) chan agro_pb.Job
 

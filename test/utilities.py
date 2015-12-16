@@ -7,12 +7,12 @@ import time
 import socket
 import subprocess
 
-SETUP_MONGO = False
-SETUP_AGRO = False
+SETUP_MONGO = True
+SETUP_AGRO = True
 MONGO_IMAGE = "mongo"
 MONGO_NAME = "agro_mongo"
 CONFIG_SUDO = False
-
+WORK_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "test_work" )
 TEST_MONGO="localhost"
 
 MONGO_PORT="27017"
@@ -151,10 +151,12 @@ class ServerTest(unittest.TestCase):
             )
             time.sleep(5) 
             if SETUP_AGRO:
-                self.agro_server = subprocess.Popen(["./bin/agro-local", "--mongo", self.host_ip])
+                cmd = ["./bin/agro-local", "--mongo", self.host_ip, "--workdir", WORK_DIR]
+                logging.info("Running %s" % (" ".join(cmd)))
+                self.agro_server = subprocess.Popen(cmd)
         else:
             if SETUP_AGRO:
-                self.agro_server = subprocess.Popen(["./bin/agro-local", "--mongo", TEST_MONGO])
+                self.agro_server = subprocess.Popen(["./bin/agro-local", "--mongo", TEST_MONGO, "--workdir", WORK_DIR])
                 time.sleep(5)        
             
 

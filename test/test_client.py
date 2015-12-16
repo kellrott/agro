@@ -7,7 +7,7 @@ import time
 
 from grpc.beta import implementations
 from pyagro import agro_pb2
-
+import pyagro
 
 class TestAgroClient(utilities.ServerTest):
 
@@ -37,17 +37,8 @@ class TestAgroClient(utilities.ServerTest):
             print "Found", a
         
         count = 0
-        while 1:
-            status_list = list(stub.GetTaskStatus(agro_pb2.IDQuery(ids=task_ids), 10))
-            ok_count = 0
-            for status in status_list:
-                print "Task Status '%s'" % (status)
-                if count >= 10 or status.state == agro_pb2.OK:
-                    ok_count += 1
-            if ok_count == len(status_list):
-                break
-            time.sleep(2)
-            count += 1
+        c = pyagro.wait(stub, task_ids)
+        assert(c == 0)
         print "Quiting"
         channel = None
         stub = None
