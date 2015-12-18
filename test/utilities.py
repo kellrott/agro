@@ -136,6 +136,7 @@ class ServerTest(unittest.TestCase):
         if not os.path.exists("./test_tmp"):
             os.mkdir("test_tmp")
         self.service = None
+        self.mongo_url = TEST_MONGO
         if SETUP_MONGO:
             if 'DOCKER_HOST' in os.environ:
                 n = urlparse(os.environ['DOCKER_HOST'])
@@ -150,14 +151,16 @@ class ServerTest(unittest.TestCase):
                 name=MONGO_NAME,
             )
             time.sleep(5) 
-            if SETUP_AGRO:
-                cmd = ["./bin/agro-local", "--mongo", self.host_ip, "--workdir", WORK_DIR]
-                logging.info("Running %s" % (" ".join(cmd)))
-                self.agro_server = subprocess.Popen(cmd)
-        else:
-            if SETUP_AGRO:
-                self.agro_server = subprocess.Popen(["./bin/agro-local", "--mongo", TEST_MONGO, "--workdir", WORK_DIR])
-                time.sleep(5)        
+            self.mongo_url = self.host_ip
+
+        if SETUP_AGRO:
+            cmd = ["./bin/agro-manager", "--mongo", self.mongo_url]
+            logging.info("Running %s" % (" ".join(cmd)))
+            self.agro_server = subprocess.Popen(cmd)
+            time.sleep(3)        
+            cmd = ["./bin/agro-worker", "--workdir", WORK_DIR]
+            logging.info("Running %s" % (" ".join(cmd)))
+            self.agro_server = subprocess.Popen(cmd)
             
 
     def tearDown(self):

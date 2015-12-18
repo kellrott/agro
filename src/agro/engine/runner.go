@@ -5,7 +5,6 @@ import (
   "os/exec"
   "path"
   //"bytes"
-  "agro/db"
   "log"
   "fmt"
   "os"
@@ -14,6 +13,7 @@ import (
   "io/ioutil"
   proto "github.com/golang/protobuf/proto"
   //"path"
+  "golang.org/x/net/context"
 )
 
 const BLOCK_SIZE = int64(10485760)
@@ -28,15 +28,15 @@ func read_file_head(path string) []byte {
 }
 
 
-func download_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
+func download_file(fileID string, filePath string, dbi agro_pb.FileStoreClient) error {
   f, err := os.Create(filePath)
   if err != nil {
     log.Printf("Unable to create workfile")
     return err
   }
-  info := dbi.GetFileInfo( agro_pb.FileID{Id: proto.String(fileID) } )
+  info, err := dbi.GetFileInfo( context.Background(), &agro_pb.FileID{Id: proto.String(fileID) } )
   for i := int64(0); i < *info.Size; i+= BLOCK_SIZE {
-    block := dbi.ReadFile(agro_pb.ReadRequest{
+    block, _ := dbi.ReadFile(context.Background(), &agro_pb.ReadRequest{
       Id: info.Id,
       Start: &i, 
       Size: proto.Int64(BLOCK_SIZE),
@@ -48,7 +48,7 @@ func download_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
 }
 
 
-func upload_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
+func upload_file(fileID string, filePath string, dbi agro_pb.FileStoreClient) error {
 
   file, _ := os.Open(filePath)
   
@@ -56,7 +56,7 @@ func upload_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
     Name: proto.String(path.Base(filePath)),
     Id: proto.String(fileID),
   }
-  dbi.CreateFile(finfo)
+  dbi.CreateFile(context.Background(), &finfo)
   buffer := make([]byte, BLOCK_SIZE)
   bytes_written := int64(0)
   for {
@@ -68,20 +68,20 @@ func upload_file(fileID string, filePath string, dbi agro_db.AgroDB) error {
       Len: proto.Int64(int64(n)),
       Data: buffer[:n],
     }
-    dbi.WriteFile(packet)
+    dbi.WriteFile(context.Background(), &packet)
     bytes_written += int64(n)
   }
   file.Close()
-  dbi.CommitFile( agro_pb.FileID{Id:proto.String(fileID)} )
+  dbi.CommitFile(context.Background(), &agro_pb.FileID{Id:proto.String(fileID)} )
   return nil
 }
 
 
-func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
+func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]byte, []byte, error) {
   wdir, err := ioutil.TempDir(workdir, "agrojob_")
   if err != nil {
     log.Printf("Unable to create workdir")
-    return err
+    return []byte(""), []byte(""), err
   }
   args := make([]string, 0, len(job.Args) + 1)
   args = append(args, *job.Command)
@@ -96,7 +96,7 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
         f, err := ioutil.TempFile(wdir, "workfile_")
         if err != nil {
           log.Printf("Unable to create workfile")
-          return err
+          return []byte(""), []byte(""), err
         }
         log.Printf("Setting up file: %s", f.Name())
         filePath = f.Name()
@@ -128,18 +128,20 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
     client, err := docker.NewClientFromEnv()
     if err != nil {
       log.Printf("Docker Error\n")
-      return fmt.Errorf("Docker Error")
+      return []byte(""), []byte(""), fmt.Errorf("Docker Error")
     }
     
     container, err := client.CreateContainer(docker.CreateContainerOptions{
       Config: &docker.Config{
         Image:*job.Container,
         Cmd:args,
+        AttachStderr:true,
+        AttachStdout:true,
       },
     })  
     if err != nil {
       log.Printf("Docker run Error: %s", err)
-      return err
+      return []byte(""), []byte(""), err
     }
     
     binds := []string{
@@ -151,9 +153,11 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
   	})
     if err != nil {
       log.Printf("Docker run Error: %s", err)
-      return err    
+      return []byte(""), []byte(""), err
     }
-    client.AttachToContainer(docker.AttachToContainerOptions{
+    log.Printf("Attaching Container: %s", container.ID)
+    /*
+    err = client.AttachToContainer(docker.AttachToContainerOptions{
       Container:container.ID,
       OutputStream:stdout,
       ErrorStream:stderr,
@@ -162,6 +166,14 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
       Stdout:true,
       Stderr:true,
     })
+    */
+    client.WaitContainer(container.ID)
+    client.Logs(docker.LogsOptions{Container:container.ID, Stderr:true, Stdout:true, OutputStream:stdout, ErrorStream:stderr})
+    if err != nil {
+      log.Printf("docker %s error: %s", container.ID, err)
+    } else {
+      log.Printf("docker %s complete", container.ID, err)
+    }
   } else {
     cmd := exec.Cmd{
       Path:*job.Command,
@@ -190,10 +202,8 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_db.AgroDB) error {
       }
     }
   }
-  
+
   stderr_text := read_file_head(stderr_path)
   stdout_text := read_file_head(stdout_path)
-  
-  dbi.SetJobLogs(*job.Id, stdout_text, stderr_text)
-  return err
+  return stdout_text, stderr_text, err
 }
