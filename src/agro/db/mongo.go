@@ -5,16 +5,15 @@ package agro_db
 import (
   "log"
   "fmt"
-  //"strings"
-  //"reflect"
-  uuid "github.com/nu7hatch/gouuid"
   "gopkg.in/mgo.v2"
   "gopkg.in/mgo.v2/bson"
   "agro/proto"
   "encoding/json"
+  uuid "github.com/nu7hatch/gouuid"
   proto "github.com/golang/protobuf/proto"
   proto_json "github.com/golang/protobuf/jsonpb"
   context "golang.org/x/net/context"
+  "strconv"
 )
 
 
@@ -541,4 +540,186 @@ func (self *MongoInterface) GetJobToRun(request *agro_pb.JobRequest, stream agro
   log.Printf("No Jobs Found")
   go self.workScan()
   return nil
+}
+
+
+/**
+ * Document Interface
+ */
+
+func populate_obj(data interface{}, path []string, field *agro_pb.Field) {
+  //log.Printf("Populate: %#v %#v %#v", path, data, field)
+  if len(path) > 1 {
+    if v, ok := data.(map[string]interface{}); ok {
+      //log.Printf("Entering map %#v", data)
+      if a, ok := v[path[0]].(map[string]interface{}); ok {
+        populate_obj(a, path[1:], field)
+      } else if a, ok := v[path[0]].([]interface{}); ok {
+        populate_obj(&a, path[1:], field)
+      } else {
+        log.Printf("Unpacking Weird Data")
+      }
+    } else {
+      if v, ok := data.(*[]interface{}); ok {
+        //log.Printf("Entering Array %#v", data)
+        i, _ := strconv.Atoi(path[0])
+        if a, ok := (*v)[i].(map[string]interface{}); ok {
+          populate_obj(a, path[1:], field)
+        } else if a, ok := (*v)[i].([]interface{}); ok {
+          populate_obj(&a, path[1:], field)
+        } else {
+          log.Printf("Unpacking Weird Data")
+        }
+      }
+    }
+  } else if len(path) == 1 {
+    //log.Printf("Setting: %#v %#v", path, field)
+    if v, ok := field.Value.(*agro_pb.Field_ListDeclare); ok {
+      if t, ok := (data).(*[]interface{}); ok {
+        i, _ := strconv.Atoi(path[0])
+        (*t)[i] = make([]interface{}, v.ListDeclare, v.ListDeclare)
+      } else if t, ok := (data).(map[string]interface{}); ok {
+        (t)[path[0]] = make([]interface{}, v.ListDeclare, v.ListDeclare)
+      } else {
+        log.Printf("Unpacking Weird Data")
+      }
+    } else if v, ok := field.Value.(*agro_pb.Field_MapDeclare); ok {
+      //log.Printf("Map Declare")
+      if t, ok := (data).(*[]interface{}); ok {
+        i, _ := strconv.Atoi(path[0])
+        (*t)[i] = make(map[string]interface{}, v.MapDeclare)
+      } else if t, ok := (data).(map[string]interface{}); ok {
+        (t)[path[0]] = make(map[string]interface{}, v.MapDeclare)
+      } else {
+        log.Printf("Unpacking Weird Data")
+      }
+    } else {
+      var i interface{} = nil
+      if v, ok := field.Value.(*agro_pb.Field_BoolValue); ok {
+        i = v.BoolValue
+      } else if v, ok := field.Value.(*agro_pb.Field_StrValue); ok {
+        i = v.StrValue
+      } else if v, ok := field.Value.(*agro_pb.Field_FloatValue); ok {
+        i = v.FloatValue
+      } else if v, ok := field.Value.(*agro_pb.Field_IntValue); ok {
+        i = v.IntValue
+      } else {
+        i = nil
+      }
+      if v, ok := (data).(*[]interface{}); ok {
+        c, _ := strconv.Atoi(path[0])
+        (*v)[c] = i
+      } else if v, ok := (data).(map[string]interface{}); ok {
+        (v)[path[0]] = i
+      } else {
+        log.Printf("Unpacking Weird Data")
+      }
+    }
+  }
+}
+
+func (self *MongoInterface) CreateDoc(ctx context.Context, doc *agro_pb.Document) (*agro_pb.FileState, error) {
+  o := UnpackDoc(doc)
+  self.db.C("doc").Insert(o)
+  return &agro_pb.FileState{ State:agro_pb.State_OK.Enum() }, nil
+}
+
+func (self *MongoInterface) DeleteDoc(ctx context.Context, doc *agro_pb.FileID) (*agro_pb.FileState, error) {
+  self.db.C("doc").RemoveId(doc.Id)
+  return &agro_pb.FileState{ State:agro_pb.State_OK.Enum() }, nil
+}
+
+func quick_copy(src []string) []string {
+  dst := make([]string, len(src))
+  copy(dst, src)
+  return dst
+}
+
+func pack_data(data interface{}, prefix []string, output chan agro_pb.Field) {
+  switch f := data.(type) {
+  case map[string]interface{}:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_MapDeclare{MapDeclare: int64(len(f))}}
+    for key, value := range f {
+      pack_data(value, append(prefix, key), output)
+    }
+  case []interface{}:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_ListDeclare{ListDeclare: int64(len(f))}}
+    for i, v := range f {
+      a := strconv.Itoa(i)
+      pack_data(v, append(prefix, a), output)
+    }
+  case string:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_StrValue{StrValue:f} }
+  case int:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_IntValue{IntValue:int64(f)} }
+  case int32:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_IntValue{IntValue:int64(f)} }
+  case int64:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_IntValue{IntValue:int64(f)} }
+  case float32:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_FloatValue{FloatValue:float64(f)} }
+  case float64:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_FloatValue{FloatValue:float64(f)} }
+  case bool:
+    output <- agro_pb.Field{Path:quick_copy(prefix), Value:&agro_pb.Field_BoolValue{BoolValue:f} }
+  case nil:
+    output <- agro_pb.Field{Path:quick_copy(prefix)}
+  default:
+    log.Printf("Packing unknown type: %T %#v", data, data)
+  }
+}
+
+
+func StreamFields(doc map[string]interface{}) chan agro_pb.Field {
+  f_chan := make(chan agro_pb.Field)
+  go func() {
+    pack_data(doc, []string{}, f_chan)
+    close(f_chan)
+  } ()
+  return f_chan
+}
+
+func PackDoc(id string, doc map[string]interface{}) *agro_pb.Document {
+  fields := make([]*agro_pb.Field,0)
+  for f := range StreamFields(doc) {
+    a := f
+    if len(a.Path) != 1 || a.Path[0] != "_id" {
+      fields = append(fields, &a)
+    }
+  }
+
+  //for _, f := range fields {
+  //  log.Printf("Got: %#v %s", f.Path, f.Value)
+  //}
+
+  //log.Printf("OutFields: %d", len(fields))
+  return &agro_pb.Document{Id:proto.String(id), Fields:fields}
+}
+
+
+func UnpackDoc(doc *agro_pb.Document) map[string]interface{} {
+  //populate the map
+  o := make(map[string]interface{})
+  //log.Printf("In fields: %d", len(doc.Fields))
+  for _, field := range doc.Fields {
+    populate_obj(o, field.Path, field)
+  }
+  o["_id"] = doc.Id
+  return o
+}
+
+
+func (self *MongoInterface) GetDoc(ctx context.Context, doc_id *agro_pb.FileID) (*agro_pb.Document, error) {
+  result := make(map[string]interface{})
+  self.db.C("doc").Find( bson.M{"_id" : doc_id.Id}).One(&result)
+
+  doc := PackDoc(*doc_id.Id, result)
+  return doc, nil
+}
+
+
+func (self *MongoInterface) UpdateDoc(ctx context.Context, doc *agro_pb.Document) (*agro_pb.FileState, error) {
+  o := UnpackDoc(doc)
+  self.db.C("doc").UpdateId(doc.Id, o)
+  return &agro_pb.FileState{ State:agro_pb.State_OK.Enum() }, nil
 }

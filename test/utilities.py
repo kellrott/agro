@@ -7,8 +7,8 @@ import time
 import socket
 import subprocess
 
-SETUP_MONGO = True
-SETUP_AGRO = True
+SETUP_MONGO = False
+SETUP_AGRO = False
 MONGO_IMAGE = "mongo"
 MONGO_NAME = "agro_mongo"
 CONFIG_SUDO = False

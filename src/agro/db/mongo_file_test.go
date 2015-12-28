@@ -9,6 +9,7 @@ import (
   proto "github.com/golang/protobuf/proto"
   "os"
   "io/ioutil"
+  "github.com/mesos/mesos-go/examples/Godeps/_workspace/src/golang.org/x/net/context"
 )
 
 
@@ -25,29 +26,29 @@ func TestFileTest(t *testing.T) {
   
   finfo := agro_pb.FileInfo{
     Name: proto.String("README"),
-    UUID: proto.String(file_id),
+    Id: proto.String(file_id),
   }
   w, _ := os.Getwd()
   fmt.Printf("Dis: %s\n", w)
   data, _ := ioutil.ReadFile("../../../README")
-  dbi.CreateFile(finfo)
+  dbi.CreateFile(context.Background(), &finfo)
   
   fmt.Printf("Sending: %s\n", data)
   
   packet := agro_pb.DataBlock {
-    UUID: proto.String(file_id),
+    Id: proto.String(file_id),
     Start: proto.Int64(0),
     Len: proto.Int64(int64(len(data))),
     Data: data,
   }
-  dbi.WriteFile(packet)
-  dbi.CommitFile( agro_pb.FileID{UUID:proto.String(file_id)} )
+  dbi.WriteFile(context.Background(), &packet)
+  dbi.CommitFile(context.Background(), &agro_pb.FileID{Id:proto.String(file_id)} )
   
-  info := dbi.GetFileInfo( agro_pb.FileID{UUID:proto.String(file_id)} )
+  info, _ := dbi.GetFileInfo(context.Background(), &agro_pb.FileID{Id:proto.String(file_id)} )
   fmt.Printf("FileSize: %d\n", *info.Size)
   
-  block := dbi.ReadFile( agro_pb.ReadRequest{
-      UUID:  proto.String(file_id),
+  block, _ := dbi.ReadFile(context.Background(), &agro_pb.ReadRequest{
+      Id:  proto.String(file_id),
       Start: proto.Int64(0),
       Size:  info.Size,
   })

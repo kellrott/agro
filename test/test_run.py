@@ -16,7 +16,9 @@ BASE_DIR = os.path.dirname(__file__)
 class TestAgroClient(utilities.ServerTest):
 
     def test_program(self):
-        channel = implementations.insecure_channel('localhost', 9713)
+        #channel = implementations.insecure_channel('localhost', 9713)
+        channel = implementations.insecure_channel('192.168.99.100', 9713)
+        
         print "Connected"
         sched = agro_pb2.beta_create_Scheduler_stub(channel)
         filestore = agro_pb2.beta_create_FileStore_stub(channel)

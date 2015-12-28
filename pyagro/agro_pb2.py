@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='agro.proto',
   package='agro_pb',
   syntax='proto2',
-  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\xe0\x01\n\x04Task\x12\n\n\x02id\x18\x01 \x02(\t\x12\x14\n\x0ctask_depends\x18\x02 \x03(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x0c\n\x04tags\x18\x06 \x03(\t\x12.\n\x0crequirements\x18\x07 \x03(\x0b\x32\x18.agro_pb.TaskRequirement\x12\x1d\n\x05state\x18\x08 \x01(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tmax_retry\x18\t \x01(\x05\"\xb9\x01\n\x03Job\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0f\n\x07task_id\x18\x02 \x02(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x1d\n\x05state\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06stdout\x18\x07 \x01(\t\x12\x0e\n\x06stderr\x18\x08 \x01(\t\x12\x0e\n\x06worker\x18\t \x01(\t\"6\n\tJobStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"\\\n\nTaskStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x15\n\rcompleted_job\x18\x03 \x01(\t\x12\x0c\n\x04runs\x18\x04 \x03(\t\".\n\x0fTaskRequirement\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\"P\n\x0b\x43mdArgument\x12\r\n\x03\x61rg\x18\x01 \x01(\tH\x00\x12)\n\x08\x66ile_arg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\xdc\x01\n\x0c\x46ileArgument\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05input\x18\x02 \x02(\x08\x12/\n\x04type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08name_key\x18\x05 \x01(\t\x12\x0e\n\x06silent\x18\x06 \x01(\x08\"P\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\x12\t\n\x05STDIN\x10\x06\"\x18\n\x08TagArray\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\x16\n\x07IDQuery\x12\x0b\n\x03ids\x18\x01 \x03(\t\"R\n\x12UpdateStateRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tworker_id\x18\x03 \x01(\t\"4\n\x06JobLog\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0e\n\x06stdout\x18\x02 \x02(\x0c\x12\x0e\n\x06stderr\x18\x03 \x02(\x0c\":\n\nJobRequest\x12\x11\n\tworker_id\x18\x01 \x02(\t\x12\x0b\n\x03max\x18\x02 \x02(\x05\x12\x0c\n\x04tags\x18\x03 \x03(\t\"A\n\tDataBlock\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0b\n\x03len\x18\x03 \x02(\x03\x12\x0c\n\x04\x64\x61ta\x18\x04 \x02(\x0c\"@\n\x08\x46ileInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\n\n\x02id\x18\x02 \x02(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x12\x0c\n\x04urls\x18\x04 \x03(\t\"\x14\n\x06\x46ileID\x12\n\n\x02id\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05state\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0c\n\x04size\x18\x03 \x02(\x03*W\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\t\n\x05READY\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\n\n\x06QUEUED\x10\x04\x12\x0b\n\x07RUNNING\x10\x05\x12\x06\n\x02OK\x10\x06\x32\x97\x03\n\tScheduler\x12\x34\n\x0bGetJobToRun\x12\x13.agro_pb.JobRequest\x1a\x0c.agro_pb.Job\"\x00\x30\x01\x12\x33\n\nSetJobLogs\x12\x0f.agro_pb.JobLog\x1a\x12.agro_pb.JobStatus\"\x00\x12\x33\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\r.agro_pb.Task\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x12\x43\n\x0eUpdateJobState\x12\x1b.agro_pb.UpdateStateRequest\x1a\x12.agro_pb.JobStatus\"\x00\x32\x9b\x02\n\tFileStore\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
+  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\xe0\x01\n\x04Task\x12\n\n\x02id\x18\x01 \x02(\t\x12\x14\n\x0ctask_depends\x18\x02 \x03(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x0c\n\x04tags\x18\x06 \x03(\t\x12.\n\x0crequirements\x18\x07 \x03(\x0b\x32\x18.agro_pb.TaskRequirement\x12\x1d\n\x05state\x18\x08 \x01(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tmax_retry\x18\t \x01(\x05\"\xb9\x01\n\x03Job\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0f\n\x07task_id\x18\x02 \x02(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x1d\n\x05state\x18\x06 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06stdout\x18\x07 \x01(\t\x12\x0e\n\x06stderr\x18\x08 \x01(\t\x12\x0e\n\x06worker\x18\t \x01(\t\"6\n\tJobStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"\\\n\nTaskStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x15\n\rcompleted_job\x18\x03 \x01(\t\x12\x0c\n\x04runs\x18\x04 \x03(\t\".\n\x0fTaskRequirement\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\"P\n\x0b\x43mdArgument\x12\r\n\x03\x61rg\x18\x01 \x01(\tH\x00\x12)\n\x08\x66ile_arg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\xdc\x01\n\x0c\x46ileArgument\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05input\x18\x02 \x02(\x08\x12/\n\x04type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08name_key\x18\x05 \x01(\t\x12\x0e\n\x06silent\x18\x06 \x01(\x08\"P\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\x12\t\n\x05STDIN\x10\x06\"\x18\n\x08TagArray\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\x16\n\x07IDQuery\x12\x0b\n\x03ids\x18\x01 \x03(\t\"R\n\x12UpdateStateRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tworker_id\x18\x03 \x01(\t\"4\n\x06JobLog\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0e\n\x06stdout\x18\x02 \x02(\x0c\x12\x0e\n\x06stderr\x18\x03 \x02(\x0c\":\n\nJobRequest\x12\x11\n\tworker_id\x18\x01 \x02(\t\x12\x0b\n\x03max\x18\x02 \x02(\x05\x12\x0c\n\x04tags\x18\x03 \x03(\t\"A\n\tDataBlock\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0b\n\x03len\x18\x03 \x02(\x03\x12\x0c\n\x04\x64\x61ta\x18\x04 \x02(\x0c\"@\n\x08\x46ileInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\n\n\x02id\x18\x02 \x02(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x12\x0c\n\x04urls\x18\x04 \x03(\t\"\xa4\x01\n\x05\x46ield\x12\x0c\n\x04path\x18\x01 \x03(\t\x12\x13\n\tstr_value\x18\x02 \x01(\tH\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x15\n\x0b\x66loat_value\x18\x04 \x01(\x01H\x00\x12\x14\n\nbool_value\x18\x05 \x01(\x08H\x00\x12\x16\n\x0clist_declare\x18\x06 \x01(\x03H\x00\x12\x15\n\x0bmap_declare\x18\x07 \x01(\x03H\x00\x42\x07\n\x05Value\"6\n\x08\x44ocument\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1e\n\x06\x66ields\x18\x02 \x03(\x0b\x32\x0e.agro_pb.Field\"\x14\n\x06\x46ileID\x12\n\n\x02id\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05state\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0c\n\x04size\x18\x03 \x02(\x03*W\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\t\n\x05READY\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\n\n\x06QUEUED\x10\x04\x12\x0b\n\x07RUNNING\x10\x05\x12\x06\n\x02OK\x10\x06\x32\x97\x03\n\tScheduler\x12\x34\n\x0bGetJobToRun\x12\x13.agro_pb.JobRequest\x1a\x0c.agro_pb.Job\"\x00\x30\x01\x12\x33\n\nSetJobLogs\x12\x0f.agro_pb.JobLog\x1a\x12.agro_pb.JobStatus\"\x00\x12\x33\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\r.agro_pb.Task\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x12\x43\n\x0eUpdateJobState\x12\x1b.agro_pb.UpdateStateRequest\x1a\x12.agro_pb.JobStatus\"\x00\x32\xeb\x03\n\tFileStore\x12\x34\n\tCreateDoc\x12\x11.agro_pb.Document\x1a\x12.agro_pb.FileState\"\x00\x12.\n\x06GetDoc\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.Document\"\x00\x12\x34\n\tUpdateDoc\x12\x11.agro_pb.Document\x1a\x12.agro_pb.FileState\"\x00\x12\x32\n\tDeleteDoc\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00'
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -59,8 +59,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1444,
-  serialized_end=1531,
+  serialized_start=1667,
+  serialized_end=1754,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -824,6 +824,120 @@ _FILEINFO = _descriptor.Descriptor(
 )
 
 
+_FIELD = _descriptor.Descriptor(
+  name='Field',
+  full_name='agro_pb.Field',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='path', full_name='agro_pb.Field.path', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='str_value', full_name='agro_pb.Field.str_value', index=1,
+      number=2, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='int_value', full_name='agro_pb.Field.int_value', index=2,
+      number=3, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='float_value', full_name='agro_pb.Field.float_value', index=3,
+      number=4, type=1, cpp_type=5, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='bool_value', full_name='agro_pb.Field.bool_value', index=4,
+      number=5, type=8, cpp_type=7, label=1,
+      has_default_value=False, default_value=False,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='list_declare', full_name='agro_pb.Field.list_declare', index=5,
+      number=6, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='map_declare', full_name='agro_pb.Field.map_declare', index=6,
+      number=7, type=3, cpp_type=2, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+    _descriptor.OneofDescriptor(
+      name='Value', full_name='agro_pb.Field.Value',
+      index=0, containing_type=None, fields=[]),
+  ],
+  serialized_start=1323,
+  serialized_end=1487,
+)
+
+
+_DOCUMENT = _descriptor.Descriptor(
+  name='Document',
+  full_name='agro_pb.Document',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='id', full_name='agro_pb.Document.id', index=0,
+      number=1, type=9, cpp_type=9, label=2,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='fields', full_name='agro_pb.Document.fields', index=1,
+      number=2, type=11, cpp_type=10, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  options=None,
+  is_extendable=False,
+  syntax='proto2',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=1489,
+  serialized_end=1543,
+)
+
+
 _FILEID = _descriptor.Descriptor(
   name='FileID',
   full_name='agro_pb.FileID',
@@ -850,8 +964,8 @@ _FILEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1322,
-  serialized_end=1342,
+  serialized_start=1545,
+  serialized_end=1565,
 )
 
 
@@ -881,8 +995,8 @@ _FILESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1344,
-  serialized_end=1386,
+  serialized_start=1567,
+  serialized_end=1609,
 )
 
 
@@ -926,8 +1040,8 @@ _READREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1388,
-  serialized_end=1442,
+  serialized_start=1611,
+  serialized_end=1665,
 )
 
 _TASK.fields_by_name['args'].message_type = _CMDARGUMENT
@@ -947,6 +1061,25 @@ _CMDARGUMENT.fields_by_name['file_arg'].containing_oneof = _CMDARGUMENT.oneofs_b
 _FILEARGUMENT.fields_by_name['type'].enum_type = _FILEARGUMENT_FILEARGTYPE
 _FILEARGUMENT_FILEARGTYPE.containing_type = _FILEARGUMENT
 _UPDATESTATEREQUEST.fields_by_name['state'].enum_type = _STATE
+_FIELD.oneofs_by_name['Value'].fields.append(
+  _FIELD.fields_by_name['str_value'])
+_FIELD.fields_by_name['str_value'].containing_oneof = _FIELD.oneofs_by_name['Value']
+_FIELD.oneofs_by_name['Value'].fields.append(
+  _FIELD.fields_by_name['int_value'])
+_FIELD.fields_by_name['int_value'].containing_oneof = _FIELD.oneofs_by_name['Value']
+_FIELD.oneofs_by_name['Value'].fields.append(
+  _FIELD.fields_by_name['float_value'])
+_FIELD.fields_by_name['float_value'].containing_oneof = _FIELD.oneofs_by_name['Value']
+_FIELD.oneofs_by_name['Value'].fields.append(
+  _FIELD.fields_by_name['bool_value'])
+_FIELD.fields_by_name['bool_value'].containing_oneof = _FIELD.oneofs_by_name['Value']
+_FIELD.oneofs_by_name['Value'].fields.append(
+  _FIELD.fields_by_name['list_declare'])
+_FIELD.fields_by_name['list_declare'].containing_oneof = _FIELD.oneofs_by_name['Value']
+_FIELD.oneofs_by_name['Value'].fields.append(
+  _FIELD.fields_by_name['map_declare'])
+_FIELD.fields_by_name['map_declare'].containing_oneof = _FIELD.oneofs_by_name['Value']
+_DOCUMENT.fields_by_name['fields'].message_type = _FIELD
 _FILESTATE.fields_by_name['state'].enum_type = _STATE
 DESCRIPTOR.message_types_by_name['Task'] = _TASK
 DESCRIPTOR.message_types_by_name['Job'] = _JOB
@@ -962,6 +1095,8 @@ DESCRIPTOR.message_types_by_name['JobLog'] = _JOBLOG
 DESCRIPTOR.message_types_by_name['JobRequest'] = _JOBREQUEST
 DESCRIPTOR.message_types_by_name['DataBlock'] = _DATABLOCK
 DESCRIPTOR.message_types_by_name['FileInfo'] = _FILEINFO
+DESCRIPTOR.message_types_by_name['Field'] = _FIELD
+DESCRIPTOR.message_types_by_name['Document'] = _DOCUMENT
 DESCRIPTOR.message_types_by_name['FileID'] = _FILEID
 DESCRIPTOR.message_types_by_name['FileState'] = _FILESTATE
 DESCRIPTOR.message_types_by_name['ReadRequest'] = _READREQUEST
@@ -1064,6 +1199,20 @@ FileInfo = _reflection.GeneratedProtocolMessageType('FileInfo', (_message.Messag
   # @@protoc_insertion_point(class_scope:agro_pb.FileInfo)
   ))
 _sym_db.RegisterMessage(FileInfo)
+
+Field = _reflection.GeneratedProtocolMessageType('Field', (_message.Message,), dict(
+  DESCRIPTOR = _FIELD,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.Field)
+  ))
+_sym_db.RegisterMessage(Field)
+
+Document = _reflection.GeneratedProtocolMessageType('Document', (_message.Message,), dict(
+  DESCRIPTOR = _DOCUMENT,
+  __module__ = 'agro_pb2'
+  # @@protoc_insertion_point(class_scope:agro_pb.Document)
+  ))
+_sym_db.RegisterMessage(Document)
 
 FileID = _reflection.GeneratedProtocolMessageType('FileID', (_message.Message,), dict(
   DESCRIPTOR = _FILEID,
@@ -1403,6 +1552,18 @@ class EarlyAdopterFileStoreServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
   @abc.abstractmethod
+  def CreateDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def GetDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def UpdateDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def DeleteDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
   def CreateFile(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
@@ -1429,6 +1590,22 @@ class EarlyAdopterFileStoreServer(object):
 class EarlyAdopterFileStoreStub(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
+  @abc.abstractmethod
+  def CreateDoc(self, request):
+    raise NotImplementedError()
+  CreateDoc.async = None
+  @abc.abstractmethod
+  def GetDoc(self, request):
+    raise NotImplementedError()
+  GetDoc.async = None
+  @abc.abstractmethod
+  def UpdateDoc(self, request):
+    raise NotImplementedError()
+  UpdateDoc.async = None
+  @abc.abstractmethod
+  def DeleteDoc(self, request):
+    raise NotImplementedError()
+  DeleteDoc.async = None
   @abc.abstractmethod
   def CreateFile(self, request):
     raise NotImplementedError()
@@ -1460,16 +1637,39 @@ def early_adopter_create_FileStore_server(servicer, port, private_key=None, cert
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   method_service_descriptions = {
     "CommitFile": alpha_utilities.unary_unary_service_description(
       servicer.CommitFile,
       agro_pb2.FileID.FromString,
       agro_pb2.FileState.SerializeToString,
     ),
+    "CreateDoc": alpha_utilities.unary_unary_service_description(
+      servicer.CreateDoc,
+      agro_pb2.Document.FromString,
+      agro_pb2.FileState.SerializeToString,
+    ),
     "CreateFile": alpha_utilities.unary_unary_service_description(
       servicer.CreateFile,
       agro_pb2.FileInfo.FromString,
       agro_pb2.FileState.SerializeToString,
+    ),
+    "DeleteDoc": alpha_utilities.unary_unary_service_description(
+      servicer.DeleteDoc,
+      agro_pb2.FileID.FromString,
+      agro_pb2.FileState.SerializeToString,
+    ),
+    "GetDoc": alpha_utilities.unary_unary_service_description(
+      servicer.GetDoc,
+      agro_pb2.FileID.FromString,
+      agro_pb2.Document.SerializeToString,
     ),
     "GetFileInfo": alpha_utilities.unary_unary_service_description(
       servicer.GetFileInfo,
@@ -1480,6 +1680,11 @@ def early_adopter_create_FileStore_server(servicer, port, private_key=None, cert
       servicer.ReadFile,
       agro_pb2.ReadRequest.FromString,
       agro_pb2.DataBlock.SerializeToString,
+    ),
+    "UpdateDoc": alpha_utilities.unary_unary_service_description(
+      servicer.UpdateDoc,
+      agro_pb2.Document.FromString,
+      agro_pb2.FileState.SerializeToString,
     ),
     "WriteFile": alpha_utilities.unary_unary_service_description(
       servicer.WriteFile,
@@ -1499,14 +1704,34 @@ def early_adopter_create_FileStore_stub(host, port, metadata_transformer=None, s
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   method_invocation_descriptions = {
     "CommitFile": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.FileID.SerializeToString,
       agro_pb2.FileState.FromString,
     ),
+    "CreateDoc": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.Document.SerializeToString,
+      agro_pb2.FileState.FromString,
+    ),
     "CreateFile": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.FileInfo.SerializeToString,
       agro_pb2.FileState.FromString,
+    ),
+    "DeleteDoc": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.FileID.SerializeToString,
+      agro_pb2.FileState.FromString,
+    ),
+    "GetDoc": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.FileID.SerializeToString,
+      agro_pb2.Document.FromString,
     ),
     "GetFileInfo": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.FileID.SerializeToString,
@@ -1515,6 +1740,10 @@ def early_adopter_create_FileStore_stub(host, port, metadata_transformer=None, s
     "ReadFile": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.ReadRequest.SerializeToString,
       agro_pb2.DataBlock.FromString,
+    ),
+    "UpdateDoc": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.Document.SerializeToString,
+      agro_pb2.FileState.FromString,
     ),
     "WriteFile": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.DataBlock.SerializeToString,
@@ -1526,6 +1755,18 @@ def early_adopter_create_FileStore_stub(host, port, metadata_transformer=None, s
 class BetaFileStoreServicer(object):
   """<fill me in later!>"""
   __metaclass__ = abc.ABCMeta
+  @abc.abstractmethod
+  def CreateDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def GetDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def UpdateDoc(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def DeleteDoc(self, request, context):
+    raise NotImplementedError()
   @abc.abstractmethod
   def CreateFile(self, request, context):
     raise NotImplementedError()
@@ -1545,6 +1786,22 @@ class BetaFileStoreServicer(object):
 class BetaFileStoreStub(object):
   """The interface to which stubs will conform."""
   __metaclass__ = abc.ABCMeta
+  @abc.abstractmethod
+  def CreateDoc(self, request, timeout):
+    raise NotImplementedError()
+  CreateDoc.future = None
+  @abc.abstractmethod
+  def GetDoc(self, request, timeout):
+    raise NotImplementedError()
+  GetDoc.future = None
+  @abc.abstractmethod
+  def UpdateDoc(self, request, timeout):
+    raise NotImplementedError()
+  UpdateDoc.future = None
+  @abc.abstractmethod
+  def DeleteDoc(self, request, timeout):
+    raise NotImplementedError()
+  DeleteDoc.future = None
   @abc.abstractmethod
   def CreateFile(self, request, timeout):
     raise NotImplementedError()
@@ -1577,25 +1834,45 @@ def beta_create_FileStore_server(servicer, pool=None, pool_size=None, default_ti
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   request_deserializers = {
     ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileID.FromString,
+    ('agro_pb.FileStore', 'CreateDoc'): agro_pb2.Document.FromString,
     ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileInfo.FromString,
+    ('agro_pb.FileStore', 'DeleteDoc'): agro_pb2.FileID.FromString,
+    ('agro_pb.FileStore', 'GetDoc'): agro_pb2.FileID.FromString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileID.FromString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.ReadRequest.FromString,
+    ('agro_pb.FileStore', 'UpdateDoc'): agro_pb2.Document.FromString,
     ('agro_pb.FileStore', 'WriteFile'): agro_pb2.DataBlock.FromString,
   }
   response_serializers = {
     ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileState.SerializeToString,
+    ('agro_pb.FileStore', 'CreateDoc'): agro_pb2.FileState.SerializeToString,
     ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileState.SerializeToString,
+    ('agro_pb.FileStore', 'DeleteDoc'): agro_pb2.FileState.SerializeToString,
+    ('agro_pb.FileStore', 'GetDoc'): agro_pb2.Document.SerializeToString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileInfo.SerializeToString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.DataBlock.SerializeToString,
+    ('agro_pb.FileStore', 'UpdateDoc'): agro_pb2.FileState.SerializeToString,
     ('agro_pb.FileStore', 'WriteFile'): agro_pb2.FileState.SerializeToString,
   }
   method_implementations = {
     ('agro_pb.FileStore', 'CommitFile'): face_utilities.unary_unary_inline(servicer.CommitFile),
+    ('agro_pb.FileStore', 'CreateDoc'): face_utilities.unary_unary_inline(servicer.CreateDoc),
     ('agro_pb.FileStore', 'CreateFile'): face_utilities.unary_unary_inline(servicer.CreateFile),
+    ('agro_pb.FileStore', 'DeleteDoc'): face_utilities.unary_unary_inline(servicer.DeleteDoc),
+    ('agro_pb.FileStore', 'GetDoc'): face_utilities.unary_unary_inline(servicer.GetDoc),
     ('agro_pb.FileStore', 'GetFileInfo'): face_utilities.unary_unary_inline(servicer.GetFileInfo),
     ('agro_pb.FileStore', 'ReadFile'): face_utilities.unary_unary_inline(servicer.ReadFile),
+    ('agro_pb.FileStore', 'UpdateDoc'): face_utilities.unary_unary_inline(servicer.UpdateDoc),
     ('agro_pb.FileStore', 'WriteFile'): face_utilities.unary_unary_inline(servicer.WriteFile),
   }
   server_options = beta_implementations.server_options(request_deserializers=request_deserializers, response_serializers=response_serializers, thread_pool=pool, thread_pool_size=pool_size, default_timeout=default_timeout, maximum_timeout=maximum_timeout)
@@ -1612,25 +1889,45 @@ def beta_create_FileStore_stub(channel, host=None, metadata_transformer=None, po
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   request_serializers = {
     ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileID.SerializeToString,
+    ('agro_pb.FileStore', 'CreateDoc'): agro_pb2.Document.SerializeToString,
     ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileInfo.SerializeToString,
+    ('agro_pb.FileStore', 'DeleteDoc'): agro_pb2.FileID.SerializeToString,
+    ('agro_pb.FileStore', 'GetDoc'): agro_pb2.FileID.SerializeToString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileID.SerializeToString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.ReadRequest.SerializeToString,
+    ('agro_pb.FileStore', 'UpdateDoc'): agro_pb2.Document.SerializeToString,
     ('agro_pb.FileStore', 'WriteFile'): agro_pb2.DataBlock.SerializeToString,
   }
   response_deserializers = {
     ('agro_pb.FileStore', 'CommitFile'): agro_pb2.FileState.FromString,
+    ('agro_pb.FileStore', 'CreateDoc'): agro_pb2.FileState.FromString,
     ('agro_pb.FileStore', 'CreateFile'): agro_pb2.FileState.FromString,
+    ('agro_pb.FileStore', 'DeleteDoc'): agro_pb2.FileState.FromString,
+    ('agro_pb.FileStore', 'GetDoc'): agro_pb2.Document.FromString,
     ('agro_pb.FileStore', 'GetFileInfo'): agro_pb2.FileInfo.FromString,
     ('agro_pb.FileStore', 'ReadFile'): agro_pb2.DataBlock.FromString,
+    ('agro_pb.FileStore', 'UpdateDoc'): agro_pb2.FileState.FromString,
     ('agro_pb.FileStore', 'WriteFile'): agro_pb2.FileState.FromString,
   }
   cardinalities = {
     'CommitFile': cardinality.Cardinality.UNARY_UNARY,
+    'CreateDoc': cardinality.Cardinality.UNARY_UNARY,
     'CreateFile': cardinality.Cardinality.UNARY_UNARY,
+    'DeleteDoc': cardinality.Cardinality.UNARY_UNARY,
+    'GetDoc': cardinality.Cardinality.UNARY_UNARY,
     'GetFileInfo': cardinality.Cardinality.UNARY_UNARY,
     'ReadFile': cardinality.Cardinality.UNARY_UNARY,
+    'UpdateDoc': cardinality.Cardinality.UNARY_UNARY,
     'WriteFile': cardinality.Cardinality.UNARY_UNARY,
   }
   stub_options = beta_implementations.stub_options(host=host, metadata_transformer=metadata_transformer, request_serializers=request_serializers, response_deserializers=response_deserializers, thread_pool=pool, thread_pool_size=pool_size)

@@ -174,6 +174,7 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
     } else {
       log.Printf("docker %s complete", container.ID, err)
     }
+    client.RemoveContainer(docker.RemoveContainerOptions{ID:container.ID,RemoveVolumes:true})
   } else {
     cmd := exec.Cmd{
       Path:*job.Command,

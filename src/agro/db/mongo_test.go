@@ -36,7 +36,7 @@ func TestProtoConvert_1(t *testing.T) {
   state := agro_pb.State_OK
   container := "ubuntu"
   a := &agro_pb.Task{
-    ID : &id,
+    Id : &id,
     Command : &cmd,
     Container: &container,
     State: &state,
@@ -48,7 +48,7 @@ func TestProtoConvert_1(t *testing.T) {
 
 func TestProtoConvert_2(t *testing.T) {
   a := &agro_pb.Task{
-    ID:proto.String("test"),
+    Id:proto.String("test"),
     Command:proto.String("/bin/echo Testing"),
     Container:proto.String("ubuntu"),
   }

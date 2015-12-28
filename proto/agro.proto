@@ -192,6 +192,28 @@ message FileInfo {
 }
 
 /**
+ * MetaData API
+ */
+
+message Field {
+  repeated string path = 1;
+  oneof Value {
+    string str_value = 2;
+    int64  int_value = 3;
+    double float_value = 4;
+    bool   bool_value = 5;
+    int64  list_declare = 6;
+    int64  map_declare = 7;
+  }
+} 
+
+message Document {
+  required string id = 1;
+  repeated Field  fields = 2;
+}
+
+
+/**
  * Request structures for the API
  */
 
@@ -226,6 +248,11 @@ message ReadRequest {
  * API to work with files
  */
 service FileStore {
+  rpc CreateDoc(Document) returns (FileState) {}
+  rpc GetDoc(FileID) returns (Document) {}
+  rpc UpdateDoc(Document) returns (FileState) {}
+  rpc DeleteDoc(FileID) returns (FileState) {}
+
   rpc CreateFile(FileInfo) returns (FileState) {}  /// Request the creation of a file, the file does not need to be made available until CommitFile is called
   rpc WriteFile(DataBlock) returns (FileState) {}  /// Append a datablock to the end of a file
   rpc CommitFile(FileID) returns (FileState) {}    /// Mark the end of the data upload, now the file should be available for reading
