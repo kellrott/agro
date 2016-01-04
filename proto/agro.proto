@@ -189,6 +189,7 @@ message FileInfo {
   required string id = 2;   /// Unique ID of file, UUID
   optional int64  size = 3; /// Size of file
   repeated string urls = 4; /// Alternate locations where the file can be downloaded
+  optional State state = 5; /// State of the file
 }
 
 /**

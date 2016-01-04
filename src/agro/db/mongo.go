@@ -412,11 +412,19 @@ func (self *MongoInterface) CommitFile(ctx context.Context, f *agro_pb.FileID) (
 }
 
 func (self *MongoInterface) GetFileInfo(ctx context.Context, i *agro_pb.FileID) (*agro_pb.FileInfo, error) {
-  f,_ := self.db.GridFS("fs").OpenId(*i.Id)
+  f, err := self.db.GridFS("fs").OpenId(*i.Id)
+  if err != nil {
+    return &agro_pb.FileInfo{
+      Name: proto.String(""),
+      Id:   i.Id,
+      State: agro_pb.State_ERROR.Enum(),
+    }, nil
+  }
   o := agro_pb.FileInfo{
     Name: proto.String(f.Name()),
     Id:   proto.String(f.Id().(string)),
     Size: proto.Int64(f.Size()),
+    State: agro_pb.State_OK.Enum(),
   }
   f.Close()
   return &o, nil

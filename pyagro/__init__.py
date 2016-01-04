@@ -20,7 +20,9 @@ class AgroFileStore:
         if hasattr(self.stub, name):
             f = getattr(self.stub, name)
             def wrapper(*args, **kwargs):
-                return f(*args, timeout=10, **kwargs)
+                if 'timeout' not in kwargs:
+                    kwargs['timeout'] = 10
+                return f(*args, **kwargs)
             return wrapper                
         else:
             raise AttributeError
@@ -65,7 +67,7 @@ def scan_value(value, prefix=[]):
 
 def pack_doc(id, doc):
     fields = list(scan_value(doc))
-    print "outfields: ", len(fields)
+    #print "outfields: ", len(fields)
     return agro_pb2.Document(id=id, fields=fields)
 
 def populate_obj(data, path, field):
@@ -104,7 +106,7 @@ def populate_obj(data, path, field):
 
 def unpack_doc(doc):
     o = {}
-    print "in fields", len(doc.fields)
+    #print "in fields", len(doc.fields)
     for f in doc.fields:
         populate_obj(o, f.path, f)
     o['_id'] = doc.id
@@ -117,7 +119,7 @@ def upload_file(agro, file_id, file_path):
             name=os.path.basename(file_path),
             id=file_id,
         )
-        agro.CreateFile(finfo, TIMEOUT) 
+        agro.CreateFile(finfo, timeout=TIMEOUT) 
         pos = 0
         while True:
             data = handle.read(BLOCK_SIZE)
@@ -129,10 +131,16 @@ def upload_file(agro, file_id, file_path):
                len=len(data),
                data=data,
             )
-            agro.WriteFile(packet, TIMEOUT)
+            agro.WriteFile(packet, timeout=TIMEOUT)
             pos += len(data)
-        agro.CommitFile( agro_pb2.FileID(id=file_id), TIMEOUT )
+        agro.CommitFile( agro_pb2.FileID(id=file_id), timeout=TIMEOUT )
 
+def download_file(agro, file_id, file_path):
+    with open(file_path, "wb") as handle:
+        info = agro.GetFileInfo(agro_pb2.FileID(id=file_id), timeout=TIMEOUT)
+        for i in xrange(0, info.size, BLOCK_SIZE):
+            block = agro.ReadFile(agro_pb2.ReadRequest(id=file_id, start=i, size=BLOCK_SIZE))
+            handle.write(block.data)
              
 def wait(sched, task_ids):
     while True:

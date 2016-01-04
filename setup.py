@@ -9,7 +9,7 @@ def go_prep():
 
 setup(
     name='pyagro',
-    version='0.1dev',
+    version='0.1.dev0',
     packages=[
         'pyagro'
     ],
