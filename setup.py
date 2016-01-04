@@ -15,7 +15,7 @@ setup(
     ],
     install_requires=["protobuf==3.0.0b1.post2", "grpcio"],
     license='Apache',
-    long_description=open('README.md').read(),
+    long_description=open('README').read(),
 )
 
 
