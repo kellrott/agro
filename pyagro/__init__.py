@@ -29,7 +29,12 @@ class AgroFileStore:
 
 class AgroClient:
     def __init__(self, addr="localhost:9713"):
-        self.host, self.port = addr.split(":")
+        tmp = addr.split(":")
+        self.host = tmp[0]
+        if len(tmp) > 1:
+            self.port = tmp[1]
+        else:
+            self.port = "9713"
         self.channel = implementations.insecure_channel(self.host, int(self.port))
 
     def scheduler(self):
