@@ -259,4 +259,5 @@ service FileStore {
   rpc CommitFile(FileID) returns (FileState) {}    /// Mark the end of the data upload, now the file should be available for reading
   rpc GetFileInfo(FileID) returns (FileInfo) {}    /// Get information about the file
   rpc ReadFile(ReadRequest) returns (DataBlock) {} /// Read a block of data from a file
+  rpc DeleteFile(FileID) returns (FileState) {}    /// Delete the file
 }

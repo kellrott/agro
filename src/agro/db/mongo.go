@@ -393,14 +393,19 @@ func (self *MongoInterface) UpdateTaskState(taskID string, state agro_pb.State) 
 func (self *MongoInterface) CreateFile(ctx context.Context, info *agro_pb.FileInfo) (*agro_pb.FileState, error) {
   f,_ := self.db.GridFS("fs").Create(*info.Name)
   f.SetId(info.Id)
-  f.SetChunkSize(16777216)
+  //f.SetChunkSize(16777216)
+  f.SetChunkSize(15728640)
   self.openFiles[*info.Id] = f
   return &agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }, nil
 }
 
 func (self *MongoInterface) WriteFile(ctx context.Context, block *agro_pb.DataBlock) (*agro_pb.FileState, error) {
-  self.openFiles[*block.Id].Write(block.Data)
-  log.Printf("Writing: %s", block.Data)
+  written, err := self.openFiles[*block.Id].Write(block.Data)
+  if err != nil {
+    log.Println(err)
+    return nil, err
+  }
+  log.Printf("Writing: %d of %d", written, len(block.Data))
   return &agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }, nil
 }
 
@@ -415,7 +420,7 @@ func (self *MongoInterface) GetFileInfo(ctx context.Context, i *agro_pb.FileID) 
   f, err := self.db.GridFS("fs").OpenId(*i.Id)
   if err != nil {
     return &agro_pb.FileInfo{
-      Name: proto.String(""),
+      Name: proto.String(fmt.Sprintf("%s error: %s", *i.Id, err)),
       Id:   i.Id,
       State: agro_pb.State_ERROR.Enum(),
     }, nil
@@ -446,6 +451,17 @@ func (self *MongoInterface) ReadFile(ctx context.Context, req *agro_pb.ReadReque
   return &o, nil
 }
 
+func (self *MongoInterface) DeleteFile(ctx context.Context, req *agro_pb.FileID) (*agro_pb.FileState, error) {
+  err := self.db.GridFS("fs").RemoveId(*req.Id)
+  if err != nil {
+    return &agro_pb.FileState{
+      State: agro_pb.State_ERROR.Enum(),
+    }, nil
+  }
+  return &agro_pb.FileState{
+    State: agro_pb.State_OK.Enum(),
+  }, nil
+}
 
 func (self *MongoInterface) CreateTaskJob(task *agro_pb.Task) {
   u, _ := uuid.NewV4() 
