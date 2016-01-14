@@ -4,6 +4,7 @@ import time
 from copy import copy
 from pyagro import agro_pb2
 from grpc.beta import implementations
+from cStringIO import StringIO
 
 BLOCK_SIZE = 10485760 #10MB
 TIMEOUT = 10
@@ -11,6 +12,18 @@ TIMEOUT = 10
 class AgroScheduler:
     def __init__(self, stub):
         self.stub = stub
+    
+    def __getattr__(self, name):
+        if hasattr(self.stub, name):
+            f = getattr(self.stub, name)
+            def wrapper(*args, **kwargs):
+                if 'timeout' not in kwargs:
+                    kwargs['timeout'] = 10
+                return f(*args, **kwargs)
+            return wrapper                
+        else:
+            raise AttributeError
+
         
 class AgroFileStore:
     def __init__(self, stub):
@@ -118,27 +131,36 @@ def unpack_doc(doc):
     return o
     
 
-def upload_file(agro, file_id, file_path):
+def upload_file(agro, file_id, file_path, name=None):
+    if name is None:
+        name = os.path.basename(file_path)
     with open(file_path) as handle:
-        finfo  = agro_pb2.FileInfo(
-            name=os.path.basename(file_path),
-            id=file_id,
+        upload_file_handle(agro, file_id, handle, name)
+
+def upload_file_str(agro, file_id, txt, name):
+    handle = StringIO(txt)
+    upload_file_handle(agro, file_id, handle, name)
+        
+def upload_file_handle(agro, file_id, handle, name):
+    finfo  = agro_pb2.FileInfo(
+        name=name,
+        id=file_id,
+    )
+    agro.CreateFile(finfo, timeout=TIMEOUT) 
+    pos = 0
+    while True:
+        data = handle.read(BLOCK_SIZE)
+        if not data:
+            break
+        packet = agro_pb2.DataBlock(
+           id=file_id,
+           start=pos,
+           len=len(data),
+           data=data,
         )
-        agro.CreateFile(finfo, timeout=TIMEOUT) 
-        pos = 0
-        while True:
-            data = handle.read(BLOCK_SIZE)
-            if not data:
-                break
-            packet = agro_pb2.DataBlock(
-               id=file_id,
-               start=pos,
-               len=len(data),
-               data=data,
-            )
-            agro.WriteFile(packet, timeout=TIMEOUT)
-            pos += len(data)
-        agro.CommitFile( agro_pb2.FileID(id=file_id), timeout=TIMEOUT )
+        agro.WriteFile(packet, timeout=TIMEOUT)
+        pos += len(data)
+    agro.CommitFile( agro_pb2.FileID(id=file_id), timeout=TIMEOUT )
 
 def download_file(agro, file_id, file_path):
     with open(file_path, "wb") as handle:
@@ -151,7 +173,7 @@ def wait(sched, task_ids):
     while True:
         if isinstance(task_ids, basestring):
             task_ids = [task_ids]
-        status_list = list(sched.GetTaskStatus(agro_pb2.IDQuery(ids=task_ids), 10))
+        status_list = list(sched.GetTaskStatus(agro_pb2.IDQuery(ids=task_ids), timeout=10))
         #print status_list, list( status.state for status in status_list )
         if sum(list( status.state == agro_pb2.OK for status in status_list )) == len(status_list):
             return 0
