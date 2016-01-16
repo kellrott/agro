@@ -471,6 +471,7 @@ func (self *MongoInterface) CreateTaskJob(task *agro_pb.Task) {
     State:agro_pb.State_WAITING.Enum(),
     Command : task.Command,
     Container: task.Container,
+    Requirements: task.Requirements,
     Args: task.Args,
   }
   log.Printf("Creating job %s", job)

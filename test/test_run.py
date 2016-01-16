@@ -55,4 +55,30 @@ class TestAgroClient(utilities.ServerTest):
         
         sched = None
         filestore = None
+    
+    def test_docker_client(self):
+        channel = implementations.insecure_channel('localhost', 9713)
+        
+        print "Connected"
+        sched = agro_pb2.beta_create_Scheduler_stub(channel)
+        
+        task = agro_pb2.Task()
+        task_id = str(uuid.uuid4())
+        task.id = task_id
+        task.command = "/usr/local/bin/docker"
+        task.container = "docker"
+        task.requirements.extend( [agro_pb2.TaskRequirement(
+            name="docker_socket",
+            value="/var/run/docker.sock"
+        ) ] )
+
+        task.args.add( arg="images" )
+        print "Adding task"
+        sched.AddTask(task, 10)
+        print "Waiting"
+        e = pyagro.wait(sched, task_id)
+        assert(e == 0)
+        
+        sched = None
+        filestore = None
         

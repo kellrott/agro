@@ -130,14 +130,23 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
       log.Printf("Docker Error\n")
       return []byte(""), []byte(""), fmt.Errorf("Docker Error")
     }
-    
+    create_config := docker.Config{
+      Image:*job.Container,
+      Cmd:args,
+      AttachStderr:true,
+      AttachStdout:true,
+    }
+    host_config := docker.HostConfig{}
+    for _, req := range job.Requirements {
+      if *req.Name == "docker_socket" {
+        //TODO: make sure this is allowed
+        host_config.Binds = []string{"/var/run/docker.sock:/var/run/docker.sock"}
+      }
+    }
+    log.Printf("Starting Docker: %#v", create_config)
     container, err := client.CreateContainer(docker.CreateContainerOptions{
-      Config: &docker.Config{
-        Image:*job.Container,
-        Cmd:args,
-        AttachStderr:true,
-        AttachStdout:true,
-      },
+      Config: &create_config,
+      HostConfig:&host_config,
     })  
     if err != nil {
       log.Printf("Docker run Error: %s", err)

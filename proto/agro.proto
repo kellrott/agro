@@ -33,10 +33,11 @@ message Job {
   required string command = 3;     /// The path of the executable to be run
   repeated CmdArgument args = 4;   /// The array of command line arguments
   optional string container = 5;   /// Container ID to run the code in
-  required State state = 6;        /// The State of the Job
-  optional string stdout = 7;      /// Captured Stdout
-  optional string stderr = 8;      /// Captured Stderr
-  optional string worker = 9;      /// Where the work was assigned
+  repeated TaskRequirement requirements = 6; /// An array of system/authorization requirements needed to deploy the task
+  required State state = 7;        /// The State of the Job
+  optional string stdout = 8;      /// Captured Stdout
+  optional string stderr = 9;      /// Captured Stderr
+  optional string worker = 10;      /// Where the work was assigned
 }
 
 
