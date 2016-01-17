@@ -13,7 +13,7 @@ setup(
     packages=[
         'pyagro'
     ],
-    install_requires=["protobuf==3.0.0b1.post2", "grpcio"],
+    install_requires=["protobuf==3.0.0b1.post2", "grpcio==0.11.0b1"],
     license='Apache',
     long_description=open('README').read(),
 )
