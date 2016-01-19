@@ -136,19 +136,13 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
       AttachStderr:true,
       AttachStdout:true,
     }
-    //host_config := docker.HostConfig{}
+    binds := []string{
+      fmt.Sprintf("%s:%s", wdir, wdir),
+    }
     for _, req := range job.Requirements {
       if *req.Name == "docker_socket" {
         //TODO: make sure this is allowed
-        //host_config.Binds = []string{"/var/run/docker.sock:/var/run/docker.sock"}
-        create_config.Mounts = []docker.Mount{
-          docker.Mount{
-            Source : "/var/run/docker.sock",
-            Destination:"/var/run/docker.sock",
-            Driver:"local",
-            RW: true,
-          },
-        }
+        binds = append(binds, "/var/run/docker.sock:/var/run/docker.sock")
       }
     }
     log.Printf("Starting Docker: %#v", create_config)
@@ -160,9 +154,9 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
       return []byte(""), []byte(""), err
     }
     
-    binds := []string{
-      fmt.Sprintf("%s:%s", wdir, wdir),
-    }
+
+
+
     log.Printf("Starting Docker: %s", strings.Join(args, " "))
     err = client.StartContainer(container.ID, &docker.HostConfig {
   		Binds: binds,
