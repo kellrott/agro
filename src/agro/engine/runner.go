@@ -144,6 +144,10 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
         //TODO: make sure this is allowed
         binds = append(binds, "/var/run/docker.sock:/var/run/docker.sock")
       }
+      if *req.Name == "work_dir" {
+        w, _ := ioutil.TempDir(workdir, "workdir_")
+        binds = append(binds, fmt.Sprintf("%s:%s", w, *req.Value))
+      }
     }
     log.Printf("Starting Docker: %#v", create_config)
     container, err := client.CreateContainer(docker.CreateContainerOptions{
@@ -153,8 +157,6 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
       log.Printf("Docker run Error: %s", err)
       return []byte(""), []byte(""), err
     }
-    
-
 
 
     log.Printf("Starting Docker: %s", strings.Join(args, " "))
