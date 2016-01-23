@@ -14,6 +14,7 @@ import (
   proto_json "github.com/golang/protobuf/jsonpb"
   context "golang.org/x/net/context"
   "strconv"
+  "time"
 )
 
 
@@ -310,7 +311,7 @@ func (self *MongoInterface) GetTaskStatus(ids *agro_pb.IDQuery, stream agro_pb.S
       }
     }
   }
-  
+
   out := &agro_pb.TaskStatus{
     Id: &taskID,
     State: &state,
@@ -320,10 +321,10 @@ func (self *MongoInterface) GetTaskStatus(ids *agro_pb.IDQuery, stream agro_pb.S
   return *out
   */
   /*
-  required string ID = 1;  
+  required string ID = 1;
   required State State = 2;
   optional string CompletedJob = 6;
-  repeated string Runs = 7;  
+  repeated string Runs = 7;
   */
 
   i := self.db.C("task").Find( bson.M{"_id" : bson.M{ "$in" : ids.Ids} } ).Iter()
@@ -388,6 +389,19 @@ func (self *MongoInterface) GetJobStatus(ids *agro_pb.IDQuery, stream agro_pb.Sc
 func (self *MongoInterface) UpdateTaskState(taskID string, state agro_pb.State) {
   log.Printf("Task %s to %s", taskID, state)
   self.db.C("task").Update(bson.M{"_id" : taskID}, bson.M{"$set" : bson.M{"state" : state.String()}})
+}
+
+
+func (self *MongoInterface) WorkerPing(context context.Context, worker *agro_pb.WorkerInfo) (*agro_pb.WorkerInfo, error) {
+  t := time.Now().Unix()
+  worker.LastPing = &t
+  w := ProtoToMongo(worker, true)
+  self.db.C("worker").UpsertId( worker.Id, w )
+  return worker, nil
+}
+
+func (self *MongoInterface) pingWorker(worker_id string) {
+  self.db.C("worker").UpsertId(worker_id, bson.M{ "last_ping" : time.Now().Unix() })
 }
 
 func (self *MongoInterface) CreateFile(ctx context.Context, info *agro_pb.FileInfo) (*agro_pb.FileState, error) {
@@ -552,8 +566,17 @@ func (self *MongoInterface) generateTaskJobs() {
 }
 
 func (self *MongoInterface) GetJobToRun(request *agro_pb.JobRequest, stream agro_pb.Scheduler_GetJobToRunServer) (error) {
+  w := ProtoToMongo(request.Worker, true)
+  self.db.C("worker").UpsertId( request.Worker.Id, w )
   for id, job := range self.jobCache {
-    self.UpdateJobState(context.Background(), &agro_pb.UpdateStateRequest{Id:job.Id, State:agro_pb.State_QUEUED.Enum(), WorkerId:request.WorkerId})
+    self.UpdateJobState(context.Background(),
+      &agro_pb.UpdateStateRequest{
+        Id:job.Id,
+        State:agro_pb.State_QUEUED.Enum(),
+        WorkerId:request.Worker.Id,
+      },
+    )
+
     delete(self.jobCache, id)
     log.Printf("Sending job: %s", *job.Id)
     if err := stream.Send(job); err != nil {

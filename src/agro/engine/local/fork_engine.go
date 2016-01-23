@@ -10,6 +10,7 @@ import (
   context "golang.org/x/net/context"
   //"github.com/gogo/protobuf/proto"
   proto "github.com/gogo/protobuf/proto"
+  "os"
 )
 
 
@@ -50,6 +51,7 @@ func (self *ForkManager) worker(inchan chan agro_pb.Job) {
 func (self *ForkManager) watcher(sched agro_pb.SchedulerClient, filestore agro_pb.FileStoreClient) {
   self.sched = sched
   self.files = filestore
+  hostname, _ := os.Hostname()
   jobchan := make(chan agro_pb.Job, 10)
   for i := 0; i < self.procCount; i++ {
     go self.worker(jobchan)
@@ -59,7 +61,15 @@ func (self *ForkManager) watcher(sched agro_pb.SchedulerClient, filestore agro_p
     if self.check_func != nil {
       self.check_func(self.status)
     }
-    job_stream, _ := self.sched.GetJobToRun(self.ctx, &agro_pb.JobRequest{Max:proto.Int32(1), WorkerId:proto.String(self.workerId)})
+    job_stream, _ := self.sched.GetJobToRun(self.ctx,
+      &agro_pb.JobRequest{
+        Max:proto.Int32(1),
+        Worker: &agro_pb.WorkerInfo{
+          Id:proto.String(self.workerId),
+          Hostname:proto.String(hostname),
+          LastPing:proto.Int64(time.Now().Unix()),
+        },
+      })
     job, _ := job_stream.Recv()
     if job != nil {
         sleep_size = 1

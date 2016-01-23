@@ -37,7 +37,7 @@ message Job {
   required State state = 7;        /// The State of the Job
   optional string stdout = 8;      /// Captured Stdout
   optional string stderr = 9;      /// Captured Stderr
-  optional string worker = 10;      /// Where the work was assigned
+  optional string worker = 10; /// Where the work was assigned
 }
 
 
@@ -116,6 +116,14 @@ message FileArgument {
   optional bool silent = 6;       /// This argument is not copied into the command line
 }
 
+/**
+ * Worker Info
+ */
+message WorkerInfo {
+  required string id = 1;  /// UUID of the worker
+  required int64  last_ping = 2;  /// Last time contacted
+  required string hostname = 3;
+}
 
 /**
  * Structures used for Queries
@@ -149,7 +157,7 @@ message JobLog {
 }
 
 message JobRequest {
-  required string worker_id = 1;
+  required WorkerInfo worker = 1;
   required int32 max = 2;
   repeated string tags = 3;
 }
@@ -165,7 +173,7 @@ service Scheduler {
   rpc GetTaskStatus(IDQuery) returns (stream TaskStatus) {}  /// Get the status if a Task
   rpc GetJobStatus(IDQuery) returns (stream JobStatus) {}    /// Get information about a specific job
   rpc UpdateJobState(UpdateStateRequest) returns (JobStatus) {};
-
+  rpc WorkerPing(WorkerInfo) returns (WorkerInfo) {};
 }
 
 /**
