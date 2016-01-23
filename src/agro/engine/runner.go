@@ -9,7 +9,6 @@ import (
   "fmt"
   "os"
   "strings"
-  "github.com/fsouza/go-dockerclient"
   "io/ioutil"
   proto "github.com/golang/protobuf/proto"
   //"path"
@@ -125,17 +124,6 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
   stderr_path := stderr.Name()
 
   if job.Container != nil {
-    client, err := docker.NewClientFromEnv()
-    if err != nil {
-      log.Printf("Docker Error\n")
-      return []byte(""), []byte(""), fmt.Errorf("Docker Error")
-    }
-    create_config := docker.Config{
-      Image:*job.Container,
-      Cmd:args,
-      AttachStderr:true,
-      AttachStdout:true,
-    }
     binds := []string{
       fmt.Sprintf("%s:%s", wdir, wdir),
     }
@@ -149,44 +137,10 @@ func RunJob(job *agro_pb.Job, workdir string, dbi agro_pb.FileStoreClient) ([]by
         binds = append(binds, fmt.Sprintf("%s:%s", w, *req.Value))
       }
     }
-    log.Printf("Starting Docker: %#v", create_config)
-    container, err := client.CreateContainer(docker.CreateContainerOptions{
-      Config: &create_config,
-    })  
-    if err != nil {
-      log.Printf("Docker run Error: %s", err)
-      return []byte(""), []byte(""), err
-    }
 
+    dclient := NewDockerDirect()
+    dclient.Run(*job.Container, args, binds, true, stdout, stderr )
 
-    log.Printf("Starting Docker: %s", strings.Join(args, " "))
-    err = client.StartContainer(container.ID, &docker.HostConfig {
-  		Binds: binds,
-  	})
-    if err != nil {
-      log.Printf("Docker run Error: %s", err)
-      return []byte(""), []byte(""), err
-    }
-    log.Printf("Attaching Container: %s", container.ID)
-    /*
-    err = client.AttachToContainer(docker.AttachToContainerOptions{
-      Container:container.ID,
-      OutputStream:stdout,
-      ErrorStream:stderr,
-      Logs:true,
-      Stream:true,
-      Stdout:true,
-      Stderr:true,
-    })
-    */
-    client.WaitContainer(container.ID)
-    client.Logs(docker.LogsOptions{Container:container.ID, Stderr:true, Stdout:true, OutputStream:stdout, ErrorStream:stderr})
-    if err != nil {
-      log.Printf("docker %s error: %s", container.ID, err)
-    } else {
-      log.Printf("docker %s complete", container.ID, err)
-    }
-    client.RemoveContainer(docker.RemoveContainerOptions{ID:container.ID,RemoveVolumes:true})
   } else {
     cmd := exec.Cmd{
       Path:*job.Command,
