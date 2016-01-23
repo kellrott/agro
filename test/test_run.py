@@ -3,6 +3,8 @@
 import os
 import unittest
 import uuid
+import subprocess
+from urlparse import urlparse
 import utilities
 import time
 
@@ -13,11 +15,33 @@ from pyagro import agro_pb2
 
 BASE_DIR = os.path.dirname(__file__)
 
+def get_abspath(path):
+    return os.path.join(os.path.dirname(__file__), path)
+
 class TestAgroClient(utilities.ServerTest):
+
+    def setUp(self):
+        cmd = "docker-compose -f %s up -d" % (get_abspath("../docker-compose/agro/docker-compose.yml"))
+        subprocess.check_call(cmd, shell=True)
+        
+        self.agro_server = "localhost"
+        if 'DOCKER_HOST' in os.environ:
+            self.agro_server = urlparse(os.environ['DOCKER_HOST']).netloc.split(":")[0]
+        
+        if not os.path.exists("./test_tmp"):
+            os.mkdir("test_tmp")
+        self.service = None
+
+    def tearDown(self):
+        return
+        cmd = "docker-compose -f %s stop" % (get_abspath("../docker-compose/agro/docker-compose.yml"))
+        subprocess.check_call(cmd, shell=True)
+        cmd = "docker-compose -f %s rm -fv" % (get_abspath("../docker-compose/agro/docker-compose.yml"))
+        subprocess.check_call(cmd, shell=True)
 
     def test_program(self):
         #channel = implementations.insecure_channel('localhost', 9713)
-        channel = implementations.insecure_channel('192.168.99.100', 9713)
+        channel = implementations.insecure_channel(self.agro_server, 9713)
         
         print "Connected"
         sched = agro_pb2.beta_create_Scheduler_stub(channel)
@@ -57,7 +81,7 @@ class TestAgroClient(utilities.ServerTest):
         filestore = None
     
     def test_docker_client(self):
-        channel = implementations.insecure_channel('localhost', 9713)
+        channel = implementations.insecure_channel(self.agro_server, 9713)
         
         print "Connected"
         sched = agro_pb2.beta_create_Scheduler_stub(channel)
