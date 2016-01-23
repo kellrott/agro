@@ -6,10 +6,12 @@ import (
   "agro/proto"
   "time"
   "log"
+  "sync/atomic"
   context "golang.org/x/net/context"
   //"github.com/gogo/protobuf/proto"
   proto "github.com/gogo/protobuf/proto"
 )
+
 
 type ForkManager struct {
   procCount int
@@ -19,11 +21,15 @@ type ForkManager struct {
   workdir string
   workerId string
   ctx context.Context
+  check_func func(status agro_engine.EngineStatus)
+  status agro_engine.EngineStatus
 }
 
 
 func (self *ForkManager) worker(inchan chan agro_pb.Job) {
   for job := range inchan {
+    atomic.AddInt32(&self.status.ActiveJobs, 1)
+    atomic.AddInt32(&self.status.JobCount, 1)
     log.Printf("Launch job: %s", job)
     s := agro_pb.State_RUNNING
     self.sched.UpdateJobState(self.ctx, &agro_pb.UpdateStateRequest{Id:job.Id, State:&s})
@@ -37,6 +43,7 @@ func (self *ForkManager) worker(inchan chan agro_pb.Job) {
       s = agro_pb.State_OK
     }
     self.sched.UpdateJobState(self.ctx, &agro_pb.UpdateStateRequest{Id:job.Id, State:&s})
+    atomic.AddInt32(&self.status.ActiveJobs, -1)
   }
 }
 
@@ -48,7 +55,10 @@ func (self *ForkManager) watcher(sched agro_pb.SchedulerClient, filestore agro_p
     go self.worker(jobchan)
   }
   var sleep_size int64 = 1
-  for self.running { 
+  for self.running {
+    if self.check_func != nil {
+      self.check_func(self.status)
+    }
     job_stream, _ := self.sched.GetJobToRun(self.ctx, &agro_pb.JobRequest{Max:proto.Int32(1), WorkerId:proto.String(self.workerId)})
     job, _ := job_stream.Recv()
     if job != nil {
@@ -74,6 +84,9 @@ func (self *ForkManager) Run(engine agro_pb.SchedulerClient, files agro_pb.FileS
   self.watcher(engine, files)
 }
 
+func (self *ForkManager) SetStatusCheck( check_func func(status agro_engine.EngineStatus)) {
+  self.check_func = check_func
+}
 
 func NewLocalManager(procCount int, workdir string, workerId string) (*ForkManager, error) {
   return &ForkManager{
