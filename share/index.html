@@ -1,0 +1,18 @@
+<!doctype html>
+<html ng-app="AgroApp">
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.9/angular.min.js"></script>
+    <script src="static/app.js"></script>
+  </head>
+  <body ng-controller="TaskListController">
+    <div>
+      <h1>AGRO</h1>
+      <hr>
+      <div id="container" >
+      	<table ng-repeat="item in tasks" content="item">
+    		<tr><td>{{item.id}}</td><td>{{item.command}}</td><td>{{item.state}}</td></tr>
+    	</table>
+	  </div>
+    </div>
+  </body>
+</html>

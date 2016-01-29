@@ -3,15 +3,14 @@ package agro_db
 
 
 import (
+  "agro"
   "log"
   "fmt"
   "gopkg.in/mgo.v2"
   "gopkg.in/mgo.v2/bson"
   "agro/proto"
-  "encoding/json"
   uuid "github.com/nu7hatch/gouuid"
   proto "github.com/golang/protobuf/proto"
-  proto_json "github.com/golang/protobuf/jsonpb"
   context "golang.org/x/net/context"
   "strconv"
   "time"
@@ -26,143 +25,6 @@ type MongoInterface struct {
   jobCache map[string]*agro_pb.Job
 }
 
-func ProtoToMongo(pb proto.Message, idFix bool) map[string]interface{} {
-    marshaler := proto_json.Marshaler{}
-    s, _ := marshaler.MarshalToString(pb)
-    out := make(map[string]interface{})
-    json.Unmarshal([]byte(s), &out)
-    if idFix {
-      if _, ok := out["id"]; ok {
-        out["_id"] = out["id"]
-        delete(out, "id")
-      }
-    }
-    return out
-}
-
-func MongoToProto(in map[string]interface{}, pb proto.Message, idFix bool) {
-    if idFix {
-      if _, ok := in["_id"]; ok {
-        in["id"] = in["_id"]
-        delete(in, "_id")
-      }
-    }
-    s, _ := json.Marshal(in)
-    proto_json.UnmarshalString(string(s), pb)
-}
-
-/*
-func ProtoToMongo(pb proto.Message, idFix bool) map[string]interface{} {
-  ref := reflect.ValueOf(pb)
-  out := make(map[string]interface{})
-  s := ref.Elem()
-  for i := 0; i < s.NumField(); i++ {
-    value := s.Field(i)
-    valueField := s.Type().Field(i)
-    if !strings.HasPrefix(valueField.Name, "XXX_") && !strings.HasPrefix(valueField.Name, "xxx_") {
-      if value.Kind() == reflect.Struct {
-        out[valueField.Name] = ProtoToMongo(value.Addr().Interface().(proto.Message), false)
-      } else {
-        if idFix && valueField.Name == "ID" {
-          out["_id"] = value.Interface()
-        } else {
-          out[valueField.Name] = value.Interface()
-        }
-      }
-    }
-  }
-  return out
-}
-
-func MongoToProto(in interface{}, pb proto.Message, idFix bool) {
-  elm := reflect.ValueOf(pb).Elem()
-  elmType := elm.Type()
-  for i := 0; i < elm.NumField(); i++ {
-    f := elm.Field(i)
-    ft := elmType.Field(i)
-    if strings.HasPrefix(ft.Name, "XXX_") || strings.HasPrefix(ft.Name, "xxx_") {
-      continue
-    }
-    name := ft.Name
-    if idFix && name == "ID"{
-      name = "_id"
-    }
-    if inVal, ok := in.(map[string]interface{})[name]; ok {
-      if f.Kind() == reflect.Struct { 
-        MongoToProto(inVal, f.Addr().Interface().(proto.Message), false)
-      } else {
-        mongoToValue(inVal, f )
-        //f.Set( reflect.ValueOf(inVal) ) 
-      }
-    }
-  }  
-}
-
-func mongoToValue(in interface{}, val reflect.Value) {
-  if val.Type().Kind() == reflect.Ptr && in != nil {
-    val.Set(reflect.New(val.Type().Elem()))
-		mongoToValue(in, val.Elem())
-    return
-  }
-  if val.Type().Kind() == reflect.Ptr && in == nil {
-    return
-  }
-  if val.Type().Kind() == reflect.String {
-    val.SetString(in.(string))
-    return
-  }
-  if val.Type().Kind() == reflect.Struct && in != nil{
-    MongoToProto(in, val.Addr().Interface().(proto.Message), false)
-    return
-  }
-  if val.Type().Kind() == reflect.Slice {
-    if (in != nil) { 
-      slc := in.([]interface{})
-      len := len(slc)
-      val.Set(reflect.MakeSlice(val.Type(), len, len))
-  		for i := 0; i < len; i++ {
-  			mongoToValue(slc[i], val.Index(i))
-      }
-    }
-    return
-  }
-  if val.Type().Kind() == reflect.Uint64 || val.Type().Kind() == reflect.Int64 {
-    val.SetInt( toInt64(in) )
-    return
-  }
-  if val.Type().Kind() == reflect.Uint32 || val.Type().Kind() == reflect.Int32 {
-    val.SetInt( toInt64(in) )
-    return
-  }
-  if val.Type().Kind() == reflect.Interface {
-    log.Printf("%s", val.Type())
-    log.Printf("%s", val.Type().Kind())    
-    log.Printf("%s", proto.GetProperties(val.Type()))
-  }
-  log.Printf("Unknown proto type %s", val.Type().Kind())
-}
-
-func toInt64(in interface{}) int64 {
-  switch (reflect.ValueOf(in).Type().Kind()) {
-  case reflect.Int:
-    return int64( in.(int) )
-  case reflect.Int32:
-    return int64( in.(int32) )
-  case reflect.Uint32:
-    return int64( in.(uint32) )
-  case reflect.Int64:
-    return int64( in.(int64) )
-  case reflect.Uint64:
-    return int64( in.(uint64) )
-  case reflect.Float32:
-    return int64( in.(float32) )
-  case reflect.Float64:
-    return int64( in.(float64) )
-  }
-  fmt.Println("Oh noes:", in, reflect.ValueOf(in).Type().Kind())
-  return 0
-}
-*/
 
 func NewMongo(url string) (*MongoInterface, error) {
   session, err := mgo.Dial(url)
@@ -181,7 +43,7 @@ func NewMongo(url string) (*MongoInterface, error) {
 
 func (self *MongoInterface) AddTask(ctx context.Context, task *agro_pb.Task) (*agro_pb.TaskStatus, error) {
   task.State = agro_pb.State_WAITING.Enum()
-  e := ProtoToMongo(task, true)
+  e := agro.ProtoToMap(task, true)
   err := self.db.C("task").Insert(e)
   s := agro_pb.State_OK
   if err != nil {
@@ -195,7 +57,7 @@ func (self *MongoInterface) AddTask(ctx context.Context, task *agro_pb.Task) (*a
 }
 
 func (self *MongoInterface) AddJob(job *agro_pb.Job) error {
-  e := ProtoToMongo(job, true)
+  e := agro.ProtoToMap(job, true)
   return self.db.C("job").Insert(e)
 }
 
@@ -206,7 +68,7 @@ func (self *MongoInterface) GetJob(jobID string) *agro_pb.Job {
     return nil
   }
   out := &agro_pb.Job{}
-  MongoToProto(result, out, true)
+  agro.MapToProto(result, out, true)
   return out
 }
 
@@ -223,7 +85,7 @@ func (self *MongoInterface) TaskQuery(states []agro_pb.State) chan agro_pb.Task 
       result := make(map[string]interface{})
       for i.Next(&result) {
         pout := agro_pb.Task{}
-        MongoToProto(result,&pout, true)
+        agro.MapToProto(result,&pout, true)
         out <- pout
       }
       close(out)
@@ -239,7 +101,7 @@ func (self *MongoInterface) JobQuery(state *agro_pb.State, max int) chan agro_pb
     result := make(map[string]interface{})
     for i.Next(&result) {
       pout := agro_pb.Job{}
-      MongoToProto(result,&pout, true)
+      agro.MapToProto(result,&pout, true)
       out <- pout
       count += 1 
       if max > 0 && count >= max {
@@ -261,7 +123,7 @@ func (self *MongoInterface) SearchTasks(tags *agro_pb.TagArray, stream agro_pb.S
   result := make(map[string]interface{})
   for iter.Next(&result) {
     pout := agro_pb.Task{}
-    MongoToProto(result,&pout, true)
+    agro.MapToProto(result, &pout, true)
     stream.Send(&pout)
   }
   return nil
@@ -271,7 +133,7 @@ func (self *MongoInterface) GetTask(taskID string) agro_pb.Task {
   result := make(map[string]interface{})  
   self.db.C("task").Find( bson.M{"_id" : taskID}).One(&result)
   out := agro_pb.Task{}
-  MongoToProto(result, &out, true)
+  agro.MapToProto(result, &out, true)
   return out
 }
 
@@ -282,7 +144,7 @@ func (self *MongoInterface) GetTaskJobs(taskID string) chan agro_pb.Job {
     result := make(map[string]interface{})    
     for iter.Next(&result) {
       pout := agro_pb.Job{}
-      MongoToProto(result,&pout, true)
+      agro.MapToProto(result,&pout, true)
       out <- pout
     }
     close(out)
@@ -395,7 +257,7 @@ func (self *MongoInterface) UpdateTaskState(taskID string, state agro_pb.State) 
 func (self *MongoInterface) WorkerPing(context context.Context, worker *agro_pb.WorkerInfo) (*agro_pb.WorkerInfo, error) {
   t := time.Now().Unix()
   worker.LastPing = &t
-  w := ProtoToMongo(worker, true)
+  w := agro.ProtoToMap(worker, true)
   self.db.C("worker").UpsertId( worker.Id, w )
   return worker, nil
 }
@@ -566,7 +428,7 @@ func (self *MongoInterface) generateTaskJobs() {
 }
 
 func (self *MongoInterface) GetJobToRun(request *agro_pb.JobRequest, stream agro_pb.Scheduler_GetJobToRunServer) (error) {
-  w := ProtoToMongo(request.Worker, true)
+  w := agro.ProtoToMap(request.Worker, true)
   self.db.C("worker").UpsertId( request.Worker.Id, w )
   for id, job := range self.jobCache {
     self.UpdateJobState(context.Background(),
