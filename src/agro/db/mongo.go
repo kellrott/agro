@@ -61,7 +61,11 @@ func (self *MongoInterface) AddJob(job *agro_pb.Job) error {
   return self.db.C("job").Insert(e)
 }
 
-func (self *MongoInterface) GetJob(jobID string) *agro_pb.Job {
+func (self *MongoInterface) GetJob(ctx context.Context, jobID *agro_pb.IDQuery) (*agro_pb.Job, error) {
+  return self.getJob(jobID.Ids[0]), nil
+}
+
+func (self *MongoInterface) getJob(jobID string) *agro_pb.Job {
   result := make(map[string]interface{})
   err := self.db.C("job").Find( bson.M{"_id" : jobID} ).One(&result)
   if err != nil {
@@ -129,12 +133,18 @@ func (self *MongoInterface) SearchTasks(tags *agro_pb.TagArray, stream agro_pb.S
   return nil
 }
 
-func (self *MongoInterface) GetTask(taskID string) agro_pb.Task {
-  result := make(map[string]interface{})  
-  self.db.C("task").Find( bson.M{"_id" : taskID}).One(&result)
+
+func (self *MongoInterface) getTask(id string) agro_pb.Task {
+  result := make(map[string]interface{})
+  self.db.C("task").Find( bson.M{"_id" : id}).One(&result)
   out := agro_pb.Task{}
   agro.MapToProto(result, &out, true)
   return out
+}
+
+func (self *MongoInterface) GetTask(ctx context.Context, taskID *agro_pb.IDQuery) (*agro_pb.Task, error) {
+  c := self.getTask(taskID.Ids[0])
+  return &c, nil
 }
 
 func (self *MongoInterface) GetTaskJobs(taskID string) chan agro_pb.Job {
@@ -153,49 +163,28 @@ func (self *MongoInterface) GetTaskJobs(taskID string) chan agro_pb.Job {
 }
  
 func (self *MongoInterface) GetTaskStatus(ids *agro_pb.IDQuery, stream agro_pb.Scheduler_GetTaskStatusServer) error {
-  /*
-  runs := make([]string, 0, 10)
-  var completed *string = nil
-  var state = agro_pb.State_QUEUED
-  for job := range self.GetTaskJobs(taskID) {
-    runs = append(runs, *job.Id)
-    if *job.State == agro_pb.State_OK {
-      completed = job.Id
-      state = *job.State
-    }
-    if state != agro_pb.State_OK {
-      if state != agro_pb.State_RUNNING {
-        if *job.State == agro_pb.State_RUNNING {
-          state = *job.State
-        }
-      } else {
-        state = agro_pb.State_QUEUED
+  i_task := self.db.C("task").Find( bson.M{"_id" : bson.M{ "$in" : ids.Ids} } ).Iter()
+  result := make(map[string]interface{})
+  for i_task.Next(&result) {
+
+    i_job := self.db.C("job").Find( bson.M{"task_id" : result["_id"]} ).Iter()
+    runs := make([]string, 0)
+    var completed *string = nil
+
+    job_result := make(map[string]interface{})
+    for i_job.Next(&job_result) {
+      runs = append(runs, string(job_result["_id"].(string)))
+      if job_result["state"] == "OK" {
+        s := string(job_result["_id"].(string))
+        completed = &s
       }
     }
-  }
-
-  out := &agro_pb.TaskStatus{
-    Id: &taskID,
-    State: &state,
-    CompletedJob: completed,
-    Runs: runs,
-  }
-  return *out
-  */
-  /*
-  required string ID = 1;
-  required State State = 2;
-  optional string CompletedJob = 6;
-  repeated string Runs = 7;
-  */
-
-  i := self.db.C("task").Find( bson.M{"_id" : bson.M{ "$in" : ids.Ids} } ).Iter()
-  result := make(map[string]interface{})
-  for i.Next(&result) {
     s := agro_pb.State(agro_pb.State_value[result["state"].(string)])
     a := &agro_pb.TaskStatus{
       Id: proto.String(string(result["_id"].(string))),
       State:&s,
+      Runs: runs,
+      CompletedJob:completed,
     }
     stream.Send(a)
   }
@@ -213,7 +202,7 @@ func (self *MongoInterface) SetJobLogs(ctx context.Context, log *agro_pb.JobLog)
 }
 
 func (self *MongoInterface) UpdateJobState(ctx context.Context, req *agro_pb.UpdateStateRequest) (*agro_pb.JobStatus, error) {
-  job := self.GetJob(*req.Id)
+  job := self.getJob(*req.Id)
   if job == nil {
     log.Printf("Job %s not found", req.Id)
     return nil, fmt.Errorf("Job %s not found", req.Id)
@@ -262,6 +251,23 @@ func (self *MongoInterface) WorkerPing(context context.Context, worker *agro_pb.
   return worker, nil
 }
 
+func (self *MongoInterface) SearchWorkers(tags *agro_pb.TagArray, stream agro_pb.Scheduler_SearchWorkersServer) error {
+  var iter *mgo.Iter = nil
+  if (len(tags.Tags) > 0) {
+    iter = self.db.C("worker").Find( bson.M{"tags":bson.M{"$all" : tags.Tags } }).Iter()
+  } else {
+    iter = self.db.C("worker").Find( nil ).Iter()
+  }
+  result := make(map[string]interface{})
+  for iter.Next(&result) {
+    out := agro_pb.WorkerInfo{}
+    agro.MapToProto(result, &out, true)
+    stream.Send(&out)
+  }
+  return nil
+}
+
+
 func (self *MongoInterface) pingWorker(worker_id string) {
   self.db.C("worker").UpsertId(worker_id, bson.M{ "last_ping" : time.Now().Unix() })
 }
@@ -269,7 +275,6 @@ func (self *MongoInterface) pingWorker(worker_id string) {
 func (self *MongoInterface) CreateFile(ctx context.Context, info *agro_pb.FileInfo) (*agro_pb.FileState, error) {
   f,_ := self.db.GridFS("fs").Create(*info.Name)
   f.SetId(info.Id)
-  //f.SetChunkSize(16777216)
   f.SetChunkSize(15728640)
   self.openFiles[*info.Id] = f
   return &agro_pb.FileState{ State:agro_pb.State_RUNNING.Enum() }, nil
@@ -379,7 +384,7 @@ func (self *MongoInterface) scanTaskUpdate() {
   for task := range self.TaskQuery( []agro_pb.State{agro_pb.State_WAITING} ) {
     ready := true
     for _, i := range task.TaskDepends {
-      t := self.GetTask(i)
+      t := self.getTask(i)
       if *t.State != agro_pb.State_OK {
         ready = false
       }

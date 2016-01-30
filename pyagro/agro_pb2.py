@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='agro.proto',
   package='agro_pb',
   syntax='proto2',
-  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\xe0\x01\n\x04Task\x12\n\n\x02id\x18\x01 \x02(\t\x12\x14\n\x0ctask_depends\x18\x02 \x03(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x0c\n\x04tags\x18\x06 \x03(\t\x12.\n\x0crequirements\x18\x07 \x03(\x0b\x32\x18.agro_pb.TaskRequirement\x12\x1d\n\x05state\x18\x08 \x01(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tmax_retry\x18\t \x01(\x05\"\xe9\x01\n\x03Job\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0f\n\x07task_id\x18\x02 \x02(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12.\n\x0crequirements\x18\x06 \x03(\x0b\x32\x18.agro_pb.TaskRequirement\x12\x1d\n\x05state\x18\x07 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06stdout\x18\x08 \x01(\t\x12\x0e\n\x06stderr\x18\t \x01(\t\x12\x0e\n\x06worker\x18\n \x01(\t\"6\n\tJobStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"\\\n\nTaskStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x15\n\rcompleted_job\x18\x03 \x01(\t\x12\x0c\n\x04runs\x18\x04 \x03(\t\".\n\x0fTaskRequirement\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\"P\n\x0b\x43mdArgument\x12\r\n\x03\x61rg\x18\x01 \x01(\tH\x00\x12)\n\x08\x66ile_arg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\xdc\x01\n\x0c\x46ileArgument\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05input\x18\x02 \x02(\x08\x12/\n\x04type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08name_key\x18\x05 \x01(\t\x12\x0e\n\x06silent\x18\x06 \x01(\x08\"P\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\x12\t\n\x05STDIN\x10\x06\"=\n\nWorkerInfo\x12\n\n\x02id\x18\x01 \x02(\t\x12\x11\n\tlast_ping\x18\x02 \x02(\x03\x12\x10\n\x08hostname\x18\x03 \x02(\t\"\x18\n\x08TagArray\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\x16\n\x07IDQuery\x12\x0b\n\x03ids\x18\x01 \x03(\t\"R\n\x12UpdateStateRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tworker_id\x18\x03 \x01(\t\"4\n\x06JobLog\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0e\n\x06stdout\x18\x02 \x02(\x0c\x12\x0e\n\x06stderr\x18\x03 \x02(\x0c\"L\n\nJobRequest\x12#\n\x06worker\x18\x01 \x02(\x0b\x32\x13.agro_pb.WorkerInfo\x12\x0b\n\x03max\x18\x02 \x02(\x05\x12\x0c\n\x04tags\x18\x03 \x03(\t\"A\n\tDataBlock\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0b\n\x03len\x18\x03 \x02(\x03\x12\x0c\n\x04\x64\x61ta\x18\x04 \x02(\x0c\"_\n\x08\x46ileInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\n\n\x02id\x18\x02 \x02(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x12\x0c\n\x04urls\x18\x04 \x03(\t\x12\x1d\n\x05state\x18\x05 \x01(\x0e\x32\x0e.agro_pb.State\"\xa4\x01\n\x05\x46ield\x12\x0c\n\x04path\x18\x01 \x03(\t\x12\x13\n\tstr_value\x18\x02 \x01(\tH\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x15\n\x0b\x66loat_value\x18\x04 \x01(\x01H\x00\x12\x14\n\nbool_value\x18\x05 \x01(\x08H\x00\x12\x16\n\x0clist_declare\x18\x06 \x01(\x03H\x00\x12\x15\n\x0bmap_declare\x18\x07 \x01(\x03H\x00\x42\x07\n\x05Value\"6\n\x08\x44ocument\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1e\n\x06\x66ields\x18\x02 \x03(\x0b\x32\x0e.agro_pb.Field\"\x14\n\x06\x46ileID\x12\n\n\x02id\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05state\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0c\n\x04size\x18\x03 \x02(\x03*W\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\t\n\x05READY\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\n\n\x06QUEUED\x10\x04\x12\x0b\n\x07RUNNING\x10\x05\x12\x06\n\x02OK\x10\x06\x32\xd1\x03\n\tScheduler\x12\x34\n\x0bGetJobToRun\x12\x13.agro_pb.JobRequest\x1a\x0c.agro_pb.Job\"\x00\x30\x01\x12\x33\n\nSetJobLogs\x12\x0f.agro_pb.JobLog\x1a\x12.agro_pb.JobStatus\"\x00\x12\x33\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\r.agro_pb.Task\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x12\x43\n\x0eUpdateJobState\x12\x1b.agro_pb.UpdateStateRequest\x1a\x12.agro_pb.JobStatus\"\x00\x12\x38\n\nWorkerPing\x12\x13.agro_pb.WorkerInfo\x1a\x13.agro_pb.WorkerInfo\"\x00\x32\xa0\x04\n\tFileStore\x12\x34\n\tCreateDoc\x12\x11.agro_pb.Document\x1a\x12.agro_pb.FileState\"\x00\x12.\n\x06GetDoc\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.Document\"\x00\x12\x34\n\tUpdateDoc\x12\x11.agro_pb.Document\x1a\x12.agro_pb.FileState\"\x00\x12\x32\n\tDeleteDoc\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00\x12\x33\n\nDeleteFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00'
+  serialized_pb=b'\n\nagro.proto\x12\x07\x61gro_pb\"\xe0\x01\n\x04Task\x12\n\n\x02id\x18\x01 \x02(\t\x12\x14\n\x0ctask_depends\x18\x02 \x03(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12\x0c\n\x04tags\x18\x06 \x03(\t\x12.\n\x0crequirements\x18\x07 \x03(\x0b\x32\x18.agro_pb.TaskRequirement\x12\x1d\n\x05state\x18\x08 \x01(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tmax_retry\x18\t \x01(\x05\"\xe9\x01\n\x03Job\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0f\n\x07task_id\x18\x02 \x02(\t\x12\x0f\n\x07\x63ommand\x18\x03 \x02(\t\x12\"\n\x04\x61rgs\x18\x04 \x03(\x0b\x32\x14.agro_pb.CmdArgument\x12\x11\n\tcontainer\x18\x05 \x01(\t\x12.\n\x0crequirements\x18\x06 \x03(\x0b\x32\x18.agro_pb.TaskRequirement\x12\x1d\n\x05state\x18\x07 \x02(\x0e\x32\x0e.agro_pb.State\x12\x0e\n\x06stdout\x18\x08 \x01(\t\x12\x0e\n\x06stderr\x18\t \x01(\t\x12\x0e\n\x06worker\x18\n \x01(\t\"6\n\tJobStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\"\\\n\nTaskStatus\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x15\n\rcompleted_job\x18\x03 \x01(\t\x12\x0c\n\x04runs\x18\x04 \x03(\t\".\n\x0fTaskRequirement\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\r\n\x05value\x18\x02 \x02(\t\"P\n\x0b\x43mdArgument\x12\r\n\x03\x61rg\x18\x01 \x01(\tH\x00\x12)\n\x08\x66ile_arg\x18\x02 \x01(\x0b\x32\x15.agro_pb.FileArgumentH\x00\x42\x07\n\x05Value\"\xdc\x01\n\x0c\x46ileArgument\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05input\x18\x02 \x02(\x08\x12/\n\x04type\x18\x03 \x02(\x0e\x32!.agro_pb.FileArgument.FileArgType\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x10\n\x08name_key\x18\x05 \x01(\t\x12\x0e\n\x06silent\x18\x06 \x01(\x08\"P\n\x0b\x46ileArgType\x12\x08\n\x04PATH\x10\x01\x12\t\n\x05NAMED\x10\x02\x12\t\n\x05REGEX\x10\x03\x12\n\n\x06STDOUT\x10\x04\x12\n\n\x06STDERR\x10\x05\x12\t\n\x05STDIN\x10\x06\"K\n\nWorkerInfo\x12\n\n\x02id\x18\x01 \x02(\t\x12\x11\n\tlast_ping\x18\x02 \x02(\x03\x12\x10\n\x08hostname\x18\x03 \x02(\t\x12\x0c\n\x04tags\x18\x04 \x03(\t\"\x18\n\x08TagArray\x12\x0c\n\x04tags\x18\x01 \x03(\t\"\x16\n\x07IDQuery\x12\x0b\n\x03ids\x18\x01 \x03(\t\"R\n\x12UpdateStateRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1d\n\x05state\x18\x02 \x02(\x0e\x32\x0e.agro_pb.State\x12\x11\n\tworker_id\x18\x03 \x01(\t\"4\n\x06JobLog\x12\n\n\x02id\x18\x01 \x02(\t\x12\x0e\n\x06stdout\x18\x02 \x02(\x0c\x12\x0e\n\x06stderr\x18\x03 \x02(\x0c\"L\n\nJobRequest\x12#\n\x06worker\x18\x01 \x02(\x0b\x32\x13.agro_pb.WorkerInfo\x12\x0b\n\x03max\x18\x02 \x02(\x05\x12\x0c\n\x04tags\x18\x03 \x03(\t\"A\n\tDataBlock\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0b\n\x03len\x18\x03 \x02(\x03\x12\x0c\n\x04\x64\x61ta\x18\x04 \x02(\x0c\"_\n\x08\x46ileInfo\x12\x0c\n\x04name\x18\x01 \x02(\t\x12\n\n\x02id\x18\x02 \x02(\t\x12\x0c\n\x04size\x18\x03 \x01(\x03\x12\x0c\n\x04urls\x18\x04 \x03(\t\x12\x1d\n\x05state\x18\x05 \x01(\x0e\x32\x0e.agro_pb.State\"\xa4\x01\n\x05\x46ield\x12\x0c\n\x04path\x18\x01 \x03(\t\x12\x13\n\tstr_value\x18\x02 \x01(\tH\x00\x12\x13\n\tint_value\x18\x03 \x01(\x03H\x00\x12\x15\n\x0b\x66loat_value\x18\x04 \x01(\x01H\x00\x12\x14\n\nbool_value\x18\x05 \x01(\x08H\x00\x12\x16\n\x0clist_declare\x18\x06 \x01(\x03H\x00\x12\x15\n\x0bmap_declare\x18\x07 \x01(\x03H\x00\x42\x07\n\x05Value\"6\n\x08\x44ocument\x12\n\n\x02id\x18\x01 \x02(\t\x12\x1e\n\x06\x66ields\x18\x02 \x03(\x0b\x32\x0e.agro_pb.Field\"\x14\n\x06\x46ileID\x12\n\n\x02id\x18\x01 \x02(\t\"*\n\tFileState\x12\x1d\n\x05state\x18\x01 \x02(\x0e\x32\x0e.agro_pb.State\"6\n\x0bReadRequest\x12\n\n\x02id\x18\x01 \x02(\t\x12\r\n\x05start\x18\x02 \x02(\x03\x12\x0c\n\x04size\x18\x03 \x02(\x03*W\n\x05State\x12\t\n\x05\x45RROR\x10\x00\x12\x0b\n\x07WAITING\x10\x01\x12\t\n\x05READY\x10\x02\x12\n\n\x06PAUSED\x10\x03\x12\n\n\x06QUEUED\x10\x04\x12\x0b\n\x07RUNNING\x10\x05\x12\x06\n\x02OK\x10\x06\x32\xe8\x04\n\tScheduler\x12\x34\n\x0bGetJobToRun\x12\x13.agro_pb.JobRequest\x1a\x0c.agro_pb.Job\"\x00\x30\x01\x12*\n\x06GetJob\x12\x10.agro_pb.IDQuery\x1a\x0c.agro_pb.Job\"\x00\x12\x33\n\nSetJobLogs\x12\x0f.agro_pb.JobLog\x1a\x12.agro_pb.JobStatus\"\x00\x12\x33\n\x0bSearchTasks\x12\x11.agro_pb.TagArray\x1a\r.agro_pb.Task\"\x00\x30\x01\x12/\n\x07\x41\x64\x64Task\x12\r.agro_pb.Task\x1a\x13.agro_pb.TaskStatus\"\x00\x12,\n\x07GetTask\x12\x10.agro_pb.IDQuery\x1a\r.agro_pb.Task\"\x00\x12:\n\rGetTaskStatus\x12\x10.agro_pb.IDQuery\x1a\x13.agro_pb.TaskStatus\"\x00\x30\x01\x12\x38\n\x0cGetJobStatus\x12\x10.agro_pb.IDQuery\x1a\x12.agro_pb.JobStatus\"\x00\x30\x01\x12\x43\n\x0eUpdateJobState\x12\x1b.agro_pb.UpdateStateRequest\x1a\x12.agro_pb.JobStatus\"\x00\x12\x38\n\nWorkerPing\x12\x13.agro_pb.WorkerInfo\x1a\x13.agro_pb.WorkerInfo\"\x00\x12;\n\rSearchWorkers\x12\x11.agro_pb.TagArray\x1a\x13.agro_pb.WorkerInfo\"\x00\x30\x01\x32\xa0\x04\n\tFileStore\x12\x34\n\tCreateDoc\x12\x11.agro_pb.Document\x1a\x12.agro_pb.FileState\"\x00\x12.\n\x06GetDoc\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.Document\"\x00\x12\x34\n\tUpdateDoc\x12\x11.agro_pb.Document\x1a\x12.agro_pb.FileState\"\x00\x12\x32\n\tDeleteDoc\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\nCreateFile\x12\x11.agro_pb.FileInfo\x1a\x12.agro_pb.FileState\"\x00\x12\x35\n\tWriteFile\x12\x12.agro_pb.DataBlock\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\nCommitFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00\x12\x33\n\x0bGetFileInfo\x12\x0f.agro_pb.FileID\x1a\x11.agro_pb.FileInfo\"\x00\x12\x36\n\x08ReadFile\x12\x14.agro_pb.ReadRequest\x1a\x12.agro_pb.DataBlock\"\x00\x12\x33\n\nDeleteFile\x12\x0f.agro_pb.FileID\x1a\x12.agro_pb.FileState\"\x00'
 )
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
@@ -59,8 +59,8 @@ _STATE = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1827,
-  serialized_end=1914,
+  serialized_start=1841,
+  serialized_end=1928,
 )
 _sym_db.RegisterEnumDescriptor(_STATE)
 
@@ -558,6 +558,13 @@ _WORKERINFO = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
+    _descriptor.FieldDescriptor(
+      name='tags', full_name='agro_pb.WorkerInfo.tags', index=3,
+      number=4, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
   ],
   extensions=[
   ],
@@ -571,7 +578,7 @@ _WORKERINFO = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=989,
-  serialized_end=1050,
+  serialized_end=1064,
 )
 
 
@@ -601,8 +608,8 @@ _TAGARRAY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1052,
-  serialized_end=1076,
+  serialized_start=1066,
+  serialized_end=1090,
 )
 
 
@@ -632,8 +639,8 @@ _IDQUERY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1078,
-  serialized_end=1100,
+  serialized_start=1092,
+  serialized_end=1114,
 )
 
 
@@ -677,8 +684,8 @@ _UPDATESTATEREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1102,
-  serialized_end=1184,
+  serialized_start=1116,
+  serialized_end=1198,
 )
 
 
@@ -722,8 +729,8 @@ _JOBLOG = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1186,
-  serialized_end=1238,
+  serialized_start=1200,
+  serialized_end=1252,
 )
 
 
@@ -767,8 +774,8 @@ _JOBREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1240,
-  serialized_end=1316,
+  serialized_start=1254,
+  serialized_end=1330,
 )
 
 
@@ -819,8 +826,8 @@ _DATABLOCK = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1318,
-  serialized_end=1383,
+  serialized_start=1332,
+  serialized_end=1397,
 )
 
 
@@ -878,8 +885,8 @@ _FILEINFO = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1385,
-  serialized_end=1480,
+  serialized_start=1399,
+  serialized_end=1494,
 )
 
 
@@ -954,8 +961,8 @@ _FIELD = _descriptor.Descriptor(
       name='Value', full_name='agro_pb.Field.Value',
       index=0, containing_type=None, fields=[]),
   ],
-  serialized_start=1483,
-  serialized_end=1647,
+  serialized_start=1497,
+  serialized_end=1661,
 )
 
 
@@ -992,8 +999,8 @@ _DOCUMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1649,
-  serialized_end=1703,
+  serialized_start=1663,
+  serialized_end=1717,
 )
 
 
@@ -1023,8 +1030,8 @@ _FILEID = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1705,
-  serialized_end=1725,
+  serialized_start=1719,
+  serialized_end=1739,
 )
 
 
@@ -1054,8 +1061,8 @@ _FILESTATE = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1727,
-  serialized_end=1769,
+  serialized_start=1741,
+  serialized_end=1783,
 )
 
 
@@ -1099,8 +1106,8 @@ _READREQUEST = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=1771,
-  serialized_end=1825,
+  serialized_start=1785,
+  serialized_end=1839,
 )
 
 _TASK.fields_by_name['args'].message_type = _CMDARGUMENT
@@ -1319,6 +1326,9 @@ class EarlyAdopterSchedulerServicer(object):
   def GetJobToRun(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
+  def GetJob(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
   def SetJobLogs(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
@@ -1326,6 +1336,9 @@ class EarlyAdopterSchedulerServicer(object):
     raise NotImplementedError()
   @abc.abstractmethod
   def AddTask(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def GetTask(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
   def GetTaskStatus(self, request, context):
@@ -1338,6 +1351,9 @@ class EarlyAdopterSchedulerServicer(object):
     raise NotImplementedError()
   @abc.abstractmethod
   def WorkerPing(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def SearchWorkers(self, request, context):
     raise NotImplementedError()
 class EarlyAdopterSchedulerServer(object):
   """<fill me in later!>"""
@@ -1356,6 +1372,10 @@ class EarlyAdopterSchedulerStub(object):
     raise NotImplementedError()
   GetJobToRun.async = None
   @abc.abstractmethod
+  def GetJob(self, request):
+    raise NotImplementedError()
+  GetJob.async = None
+  @abc.abstractmethod
   def SetJobLogs(self, request):
     raise NotImplementedError()
   SetJobLogs.async = None
@@ -1367,6 +1387,10 @@ class EarlyAdopterSchedulerStub(object):
   def AddTask(self, request):
     raise NotImplementedError()
   AddTask.async = None
+  @abc.abstractmethod
+  def GetTask(self, request):
+    raise NotImplementedError()
+  GetTask.async = None
   @abc.abstractmethod
   def GetTaskStatus(self, request):
     raise NotImplementedError()
@@ -1383,7 +1407,17 @@ class EarlyAdopterSchedulerStub(object):
   def WorkerPing(self, request):
     raise NotImplementedError()
   WorkerPing.async = None
+  @abc.abstractmethod
+  def SearchWorkers(self, request):
+    raise NotImplementedError()
+  SearchWorkers.async = None
 def early_adopter_create_Scheduler_server(servicer, port, private_key=None, certificate_chain=None):
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   import agro_pb2
   import agro_pb2
   import agro_pb2
@@ -1406,6 +1440,11 @@ def early_adopter_create_Scheduler_server(servicer, port, private_key=None, cert
       agro_pb2.Task.FromString,
       agro_pb2.TaskStatus.SerializeToString,
     ),
+    "GetJob": alpha_utilities.unary_unary_service_description(
+      servicer.GetJob,
+      agro_pb2.IDQuery.FromString,
+      agro_pb2.Job.SerializeToString,
+    ),
     "GetJobStatus": alpha_utilities.unary_stream_service_description(
       servicer.GetJobStatus,
       agro_pb2.IDQuery.FromString,
@@ -1416,6 +1455,11 @@ def early_adopter_create_Scheduler_server(servicer, port, private_key=None, cert
       agro_pb2.JobRequest.FromString,
       agro_pb2.Job.SerializeToString,
     ),
+    "GetTask": alpha_utilities.unary_unary_service_description(
+      servicer.GetTask,
+      agro_pb2.IDQuery.FromString,
+      agro_pb2.Task.SerializeToString,
+    ),
     "GetTaskStatus": alpha_utilities.unary_stream_service_description(
       servicer.GetTaskStatus,
       agro_pb2.IDQuery.FromString,
@@ -1425,6 +1469,11 @@ def early_adopter_create_Scheduler_server(servicer, port, private_key=None, cert
       servicer.SearchTasks,
       agro_pb2.TagArray.FromString,
       agro_pb2.Task.SerializeToString,
+    ),
+    "SearchWorkers": alpha_utilities.unary_stream_service_description(
+      servicer.SearchWorkers,
+      agro_pb2.TagArray.FromString,
+      agro_pb2.WorkerInfo.SerializeToString,
     ),
     "SetJobLogs": alpha_utilities.unary_unary_service_description(
       servicer.SetJobLogs,
@@ -1460,10 +1509,20 @@ def early_adopter_create_Scheduler_stub(host, port, metadata_transformer=None, s
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   method_invocation_descriptions = {
     "AddTask": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.Task.SerializeToString,
       agro_pb2.TaskStatus.FromString,
+    ),
+    "GetJob": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.IDQuery.SerializeToString,
+      agro_pb2.Job.FromString,
     ),
     "GetJobStatus": alpha_utilities.unary_stream_invocation_description(
       agro_pb2.IDQuery.SerializeToString,
@@ -1473,6 +1532,10 @@ def early_adopter_create_Scheduler_stub(host, port, metadata_transformer=None, s
       agro_pb2.JobRequest.SerializeToString,
       agro_pb2.Job.FromString,
     ),
+    "GetTask": alpha_utilities.unary_unary_invocation_description(
+      agro_pb2.IDQuery.SerializeToString,
+      agro_pb2.Task.FromString,
+    ),
     "GetTaskStatus": alpha_utilities.unary_stream_invocation_description(
       agro_pb2.IDQuery.SerializeToString,
       agro_pb2.TaskStatus.FromString,
@@ -1480,6 +1543,10 @@ def early_adopter_create_Scheduler_stub(host, port, metadata_transformer=None, s
     "SearchTasks": alpha_utilities.unary_stream_invocation_description(
       agro_pb2.TagArray.SerializeToString,
       agro_pb2.Task.FromString,
+    ),
+    "SearchWorkers": alpha_utilities.unary_stream_invocation_description(
+      agro_pb2.TagArray.SerializeToString,
+      agro_pb2.WorkerInfo.FromString,
     ),
     "SetJobLogs": alpha_utilities.unary_unary_invocation_description(
       agro_pb2.JobLog.SerializeToString,
@@ -1503,6 +1570,9 @@ class BetaSchedulerServicer(object):
   def GetJobToRun(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
+  def GetJob(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
   def SetJobLogs(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
@@ -1510,6 +1580,9 @@ class BetaSchedulerServicer(object):
     raise NotImplementedError()
   @abc.abstractmethod
   def AddTask(self, request, context):
+    raise NotImplementedError()
+  @abc.abstractmethod
+  def GetTask(self, request, context):
     raise NotImplementedError()
   @abc.abstractmethod
   def GetTaskStatus(self, request, context):
@@ -1523,6 +1596,9 @@ class BetaSchedulerServicer(object):
   @abc.abstractmethod
   def WorkerPing(self, request, context):
     raise NotImplementedError()
+  @abc.abstractmethod
+  def SearchWorkers(self, request, context):
+    raise NotImplementedError()
 
 class BetaSchedulerStub(object):
   """The interface to which stubs will conform."""
@@ -1530,6 +1606,10 @@ class BetaSchedulerStub(object):
   @abc.abstractmethod
   def GetJobToRun(self, request, timeout):
     raise NotImplementedError()
+  @abc.abstractmethod
+  def GetJob(self, request, timeout):
+    raise NotImplementedError()
+  GetJob.future = None
   @abc.abstractmethod
   def SetJobLogs(self, request, timeout):
     raise NotImplementedError()
@@ -1541,6 +1621,10 @@ class BetaSchedulerStub(object):
   def AddTask(self, request, timeout):
     raise NotImplementedError()
   AddTask.future = None
+  @abc.abstractmethod
+  def GetTask(self, request, timeout):
+    raise NotImplementedError()
+  GetTask.future = None
   @abc.abstractmethod
   def GetTaskStatus(self, request, timeout):
     raise NotImplementedError()
@@ -1555,6 +1639,9 @@ class BetaSchedulerStub(object):
   def WorkerPing(self, request, timeout):
     raise NotImplementedError()
   WorkerPing.future = None
+  @abc.abstractmethod
+  def SearchWorkers(self, request, timeout):
+    raise NotImplementedError()
 
 def beta_create_Scheduler_server(servicer, pool=None, pool_size=None, default_timeout=None, maximum_timeout=None):
   import agro_pb2
@@ -1573,32 +1660,47 @@ def beta_create_Scheduler_server(servicer, pool=None, pool_size=None, default_ti
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   request_deserializers = {
     ('agro_pb.Scheduler', 'AddTask'): agro_pb2.Task.FromString,
+    ('agro_pb.Scheduler', 'GetJob'): agro_pb2.IDQuery.FromString,
     ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.IDQuery.FromString,
     ('agro_pb.Scheduler', 'GetJobToRun'): agro_pb2.JobRequest.FromString,
+    ('agro_pb.Scheduler', 'GetTask'): agro_pb2.IDQuery.FromString,
     ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.IDQuery.FromString,
     ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.TagArray.FromString,
+    ('agro_pb.Scheduler', 'SearchWorkers'): agro_pb2.TagArray.FromString,
     ('agro_pb.Scheduler', 'SetJobLogs'): agro_pb2.JobLog.FromString,
     ('agro_pb.Scheduler', 'UpdateJobState'): agro_pb2.UpdateStateRequest.FromString,
     ('agro_pb.Scheduler', 'WorkerPing'): agro_pb2.WorkerInfo.FromString,
   }
   response_serializers = {
     ('agro_pb.Scheduler', 'AddTask'): agro_pb2.TaskStatus.SerializeToString,
+    ('agro_pb.Scheduler', 'GetJob'): agro_pb2.Job.SerializeToString,
     ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.JobStatus.SerializeToString,
     ('agro_pb.Scheduler', 'GetJobToRun'): agro_pb2.Job.SerializeToString,
+    ('agro_pb.Scheduler', 'GetTask'): agro_pb2.Task.SerializeToString,
     ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.TaskStatus.SerializeToString,
     ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.Task.SerializeToString,
+    ('agro_pb.Scheduler', 'SearchWorkers'): agro_pb2.WorkerInfo.SerializeToString,
     ('agro_pb.Scheduler', 'SetJobLogs'): agro_pb2.JobStatus.SerializeToString,
     ('agro_pb.Scheduler', 'UpdateJobState'): agro_pb2.JobStatus.SerializeToString,
     ('agro_pb.Scheduler', 'WorkerPing'): agro_pb2.WorkerInfo.SerializeToString,
   }
   method_implementations = {
     ('agro_pb.Scheduler', 'AddTask'): face_utilities.unary_unary_inline(servicer.AddTask),
+    ('agro_pb.Scheduler', 'GetJob'): face_utilities.unary_unary_inline(servicer.GetJob),
     ('agro_pb.Scheduler', 'GetJobStatus'): face_utilities.unary_stream_inline(servicer.GetJobStatus),
     ('agro_pb.Scheduler', 'GetJobToRun'): face_utilities.unary_stream_inline(servicer.GetJobToRun),
+    ('agro_pb.Scheduler', 'GetTask'): face_utilities.unary_unary_inline(servicer.GetTask),
     ('agro_pb.Scheduler', 'GetTaskStatus'): face_utilities.unary_stream_inline(servicer.GetTaskStatus),
     ('agro_pb.Scheduler', 'SearchTasks'): face_utilities.unary_stream_inline(servicer.SearchTasks),
+    ('agro_pb.Scheduler', 'SearchWorkers'): face_utilities.unary_stream_inline(servicer.SearchWorkers),
     ('agro_pb.Scheduler', 'SetJobLogs'): face_utilities.unary_unary_inline(servicer.SetJobLogs),
     ('agro_pb.Scheduler', 'UpdateJobState'): face_utilities.unary_unary_inline(servicer.UpdateJobState),
     ('agro_pb.Scheduler', 'WorkerPing'): face_utilities.unary_unary_inline(servicer.WorkerPing),
@@ -1623,32 +1725,47 @@ def beta_create_Scheduler_stub(channel, host=None, metadata_transformer=None, po
   import agro_pb2
   import agro_pb2
   import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
+  import agro_pb2
   request_serializers = {
     ('agro_pb.Scheduler', 'AddTask'): agro_pb2.Task.SerializeToString,
+    ('agro_pb.Scheduler', 'GetJob'): agro_pb2.IDQuery.SerializeToString,
     ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.IDQuery.SerializeToString,
     ('agro_pb.Scheduler', 'GetJobToRun'): agro_pb2.JobRequest.SerializeToString,
+    ('agro_pb.Scheduler', 'GetTask'): agro_pb2.IDQuery.SerializeToString,
     ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.IDQuery.SerializeToString,
     ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.TagArray.SerializeToString,
+    ('agro_pb.Scheduler', 'SearchWorkers'): agro_pb2.TagArray.SerializeToString,
     ('agro_pb.Scheduler', 'SetJobLogs'): agro_pb2.JobLog.SerializeToString,
     ('agro_pb.Scheduler', 'UpdateJobState'): agro_pb2.UpdateStateRequest.SerializeToString,
     ('agro_pb.Scheduler', 'WorkerPing'): agro_pb2.WorkerInfo.SerializeToString,
   }
   response_deserializers = {
     ('agro_pb.Scheduler', 'AddTask'): agro_pb2.TaskStatus.FromString,
+    ('agro_pb.Scheduler', 'GetJob'): agro_pb2.Job.FromString,
     ('agro_pb.Scheduler', 'GetJobStatus'): agro_pb2.JobStatus.FromString,
     ('agro_pb.Scheduler', 'GetJobToRun'): agro_pb2.Job.FromString,
+    ('agro_pb.Scheduler', 'GetTask'): agro_pb2.Task.FromString,
     ('agro_pb.Scheduler', 'GetTaskStatus'): agro_pb2.TaskStatus.FromString,
     ('agro_pb.Scheduler', 'SearchTasks'): agro_pb2.Task.FromString,
+    ('agro_pb.Scheduler', 'SearchWorkers'): agro_pb2.WorkerInfo.FromString,
     ('agro_pb.Scheduler', 'SetJobLogs'): agro_pb2.JobStatus.FromString,
     ('agro_pb.Scheduler', 'UpdateJobState'): agro_pb2.JobStatus.FromString,
     ('agro_pb.Scheduler', 'WorkerPing'): agro_pb2.WorkerInfo.FromString,
   }
   cardinalities = {
     'AddTask': cardinality.Cardinality.UNARY_UNARY,
+    'GetJob': cardinality.Cardinality.UNARY_UNARY,
     'GetJobStatus': cardinality.Cardinality.UNARY_STREAM,
     'GetJobToRun': cardinality.Cardinality.UNARY_STREAM,
+    'GetTask': cardinality.Cardinality.UNARY_UNARY,
     'GetTaskStatus': cardinality.Cardinality.UNARY_STREAM,
     'SearchTasks': cardinality.Cardinality.UNARY_STREAM,
+    'SearchWorkers': cardinality.Cardinality.UNARY_STREAM,
     'SetJobLogs': cardinality.Cardinality.UNARY_UNARY,
     'UpdateJobState': cardinality.Cardinality.UNARY_UNARY,
     'WorkerPing': cardinality.Cardinality.UNARY_UNARY,

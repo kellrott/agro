@@ -28,33 +28,83 @@ func (self *Webserver) MainPage(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, filepath.Join(self.content_dir, "index.html"))
 }
 
+type ClientStreamClient interface {
+	Recv() (*proto.Message, error)
+}
+
+func stream2array(w io.Writer, results chan map[string]interface{} ) {
+	first := true
+	w.Write([]byte("["))
+	for data := range results {
+		if first {
+			first = false
+		} else {
+			w.Write([]byte(","))
+		}
+		t, _ := json.Marshal(data)
+		w.Write(t)
+	}
+	w.Write([]byte("]"))
+}
 
 func (self *Webserver) Tasks(w http.ResponseWriter, r *http.Request) {
 	results, _ := self.client.SearchTasks(context.Background(), &agro_pb.TagArray{})
-	first := true
-	w.Write([]byte("["))
-	for done := false; !done; {
-		task, err := results.Recv()
-		if err == io.EOF {
-			done = true
-		} else {
-			if first {
-				first = false
+	out := make(chan map[string]interface{})
+	go func() {
+		for done := false; !done; {
+			task, err := results.Recv()
+			if err == io.EOF {
+				done = true
 			} else {
-				w.Write([]byte(","))
+				m := agro.ProtoToMap(task, false)
+				out <- m
 			}
-			m := agro.ProtoToMap(task, false)
-			t, _ := json.Marshal(m)
-			w.Write(t)
 		}
-	}
-	w.Write([]byte("]"))
-
+		close(out)
+	}()
+	stream2array(w, out)
 }
 
+func (self *Webserver) GetTask(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	taskId := params["id"]
+	task, _ := self.client.GetTask(context.Background(), &agro_pb.IDQuery{Ids:[]string{taskId}})
+	data := agro.ProtoToMap(task, false)
+
+	status_client, _ := self.client.GetTaskStatus(context.Background(), &agro_pb.IDQuery{Ids:[]string{taskId}})
+	status, _ := status_client.Recv()
+	status_data := agro.ProtoToMap(status, false)
+	data["status"] = status_data
+
+	t, _ := json.Marshal(data)
+	w.Write(t)
+}
+
+func (self *Webserver) GetJob(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	jobId := params["id"]
+	job, _ := self.client.GetJob(context.Background(), &agro_pb.IDQuery{Ids:[]string{jobId}} )
+	data := agro.ProtoToMap(job, false)
+	t, _ := json.Marshal(data)
+	w.Write(t)
+}
 
 func (self *Webserver) Workers(w http.ResponseWriter, r *http.Request) {
-
+	results, _ := self.client.SearchWorkers(context.Background(), &agro_pb.TagArray{})
+	out := make(chan map[string]interface{})
+	go func() {
+		for done := false; !done; {
+			task, err := results.Recv()
+			if err == io.EOF {
+				done = true
+			} else {
+				m := agro.ProtoToMap(task, false)
+				out <- m
+			}
+		}
+		close(out)
+	}()
+	stream2array(w, out)
 }
 
 func (self *Webserver) ListFiles(w http.ResponseWriter, r *http.Request) {
@@ -103,6 +153,8 @@ func main() {
 	r.HandleFunc("/", server.MainPage)
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(dir))))
 	r.HandleFunc("/api/task", server.Tasks)
+	r.HandleFunc("/api/task/{id}", server.GetTask)
+	r.HandleFunc("/api/job/{id}", server.GetJob)
 	r.HandleFunc("/api/worker", server.Workers)
 	r.HandleFunc("/api/file", server.ListFiles)
 	r.HandleFunc("/api/file/{id}", server.GetFile)

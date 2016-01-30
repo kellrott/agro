@@ -1,0 +1,22 @@
+
+<h2>Tasks</h2>
+<div id="task_list" ng-controller="TaskListController">
+    <table ng-repeat="item in tasks" content="item">
+        <tr>
+            <td width="33%"><a href="#/tasks/{{item.id}}">{{item.id}}</a></td>
+            <td width="33%">{{item.command}}</td>
+            <td width="33%">{{item.state}}</td>
+        </tr>
+    </table>
+</div>
+<hr>
+<h2>Workers</h2>
+<div id="worker_list" ng-controller="WorkerListController">
+    <table ng-repeat="item in workers" content="item">
+        <tr>
+            <td width="33%">{{item.id}}</td>
+            <td width="77%">{{item.hostname}}</td>
+        </tr>
+    </table>
+</div>
+<hr>

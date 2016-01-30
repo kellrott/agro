@@ -1,0 +1,33 @@
+<div id="job_info" ng-controller="JobInfoController">
+    <a href="#/tasks/{{job_info.task_id}}">&lt;---</a>
+    <h1>Job {{job_info.id}}</h1>
+
+    <div>Container</div>
+    <div>{{task_info.container}}</div>
+
+    <div>Arguments</div>
+    <div ng-repeat="item in task_info.args" content="item">
+        {{item}}
+    </div>
+
+    <div>Tags</div>
+    <div ng-repeat="item in task_info.tags" content="item">
+        {{item}}
+    </div>
+
+    <div>Requirements</div>
+    <div ng-repeat="item in task_info.requirements" content="item">
+        {{item}}
+    </div>
+
+    <div>State</div>
+    <div>{{task_info.state}}</div>
+
+    <div>STDERR</div>
+    <pre>{{job_info.stderr}}</pre>
+
+    <div>STDOUT</div>
+    <pre>{{job_info.stdout}}</pre>
+
+
+</div>
